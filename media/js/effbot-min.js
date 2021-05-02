@@ -28,24 +28,3 @@ document.onkeypress=function(e)
 document.location.href="/edit/"+effbot_page_id;}}
 
 }
-/*
-     FILE ARCHIVED ON 22:21:03 Nov 10, 2020 AND RETRIEVED FROM THE
-     INTERNET ARCHIVE ON 20:23:48 May 02, 2021.
-     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
-
-     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
-     SECTION 108(a)(3)).
-*/
-/*
-playback timings (ms):
-  esindex: 0.024
-  exclusion.robots: 0.356
-  RedisCDXSource: 1.809
-  exclusion.robots.policy: 0.332
-  captures_list: 192.963
-  PetaboxLoader3.resolve: 121.739 (3)
-  load_resource: 151.252 (2)
-  LoadShardBlock: 133.831 (3)
-  PetaboxLoader3.datanode: 125.602 (5)
-  CDXLines.iter: 37.038 (3)
-*/
