@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+  <link rel="media/img/effbot.ico">
+  <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+  <title>File&nbsp;Dialogs</title>
+</head>
+
+<body data-page-id="2002">
+  <div id="doc2" class="yui-t2">
+    <div id="hd"></div>
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="content">
+            <div class="yui-g">
+              <h1 class="maintitle">File&nbsp;Dialogs</h1>
+            </div>
+            <div class="yui-ge">
+              <div class="yui-u first">
+                <p>The <i>tkFileDialog</i> module can be used to get a filename from the user.
+                  The module provides two convenience functions, one to get an
+                  existing filename so you can open it, and one to get a new
+                  filename, to save things into.</p>
+                <p><tt>tkFileDialog.askopenfilename([options])</tt>. If the dialog
+                  is cancelled by the user, the function returns <i>None</i>.</p>
+                <p><tt>tkFileDialog.asksaveasfilename([options])</tt>.</p>
+                <p><b>Figure 9-6. askopenfilename, asksaveasfilename</b></p>
+                <p><img alt="media/cache/8df285a845f85ba0944b5535943fa6a7.gif" width="426" /></p>
+                <p><img alt="media/cache/8b18494a76c1b1732af9c5d63b5ac729.gif" width="426" /></p>
+                <p>The following options can be used with the <i>
+                    askopenfilename</i> and <i>asksavefilename</i> functions:</p>
+                <p><b>Table 9-4. askopenfilename options</b></p>
+                <table border="1">
+                  <tr>
+                    <th align="LEFT" valign="TOP" width="20%">
+                      <p>Option</p>
+                    </th>
+                    <th align="LEFT" valign="TOP" width="20%">
+                      <p>Type</p>
+                    </th>
+                    <th align="LEFT" valign="TOP" width="60%">
+                      <p>Description</p>
+                    </th>
+                  </tr>
+                  <tr>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p><tt>defaultextension</tt></p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p>string</p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="60%">
+                      <p>An extension to add to the filename, if not explicitly given by
+                        the user. The string should include the leading dot (ignored by the
+                        open dialog).</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p><tt>filetypes</tt></p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p>list</p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="60%">
+                      <p>Sequence of (label, pattern) tuples. The same label may occur
+                        with several patterns. Use &#8220;*&#8221; as the pattern to indicate all
+                        files.</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p><tt>initialdir</tt></p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p>string</p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="60%">
+                      <p>Initial directory.</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p><tt>initialfile</tt></p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p>string</p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="60%">
+                      <p>Initial file (ignored by the open dialog)</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p><tt>parent</tt></p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p>widget</p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="60%">
+                      <p>Which window to place the message box on top of. When the dialog
+                        is closed, the focus is returned to the parent window.</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p><tt>title</tt></p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="20%">
+                      <p>string</p>
+                    </td>
+                    <td align="LEFT" valign="TOP" width="60%">
+                      <p>Message box title.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div class="yui-u">&#160;</div>
+            </div>
+            <div class="yui-g"></div>
+          </div>
+        </div>
+      </div>
+      <div class="yui-b">
+        <div id="menu">
+          <ul>
+            <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+            <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="ft">
+      <p><a href="https://www.djangoproject.com/"><img
+            src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+            style="vertical-align: bottom;" width="80" height="15"></a>
+        rendered by a <a href="https://www.djangoproject.com/">django</a>
+        application. hosted by <a
+          href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+      </p>
+    </div>
+  </div>
+  <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

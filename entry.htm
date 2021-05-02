@@ -1,0 +1,697 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter Entry&nbsp;Widget</title>
+</head>
+
+<body data-page-id="1921">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="checkbutton.htm">back</a>&#160;<a href="frame.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter Entry&nbsp;Widget</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>Entry</b> widget is a standard Tkinter widget used to
+                                    enter or display a single line of text.</p>
+                                <h2>When to use the Entry Widget</h2>
+                                <p>The entry widget is used to enter text strings. This widget
+                                    allows the user to enter one line of text, in a single font.</p>
+                                <p>To enter multiple lines of text, use the <a href="text.htm"><b>Text</b></a> widget.
+                                </p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>To add entry text to the widget, use the <b>insert</b> method. To replace the current
+                                    text, you can call <b>delete</b> before you insert the new text.</p>
+                                <pre class="python">
+e = Entry(master)
+e.pack()
+
+e.delete(0, END)
+e.insert(0, <span class="pystring">"a default value"</span>)</pre>
+                                <p>To fetch the current entry text, use the <b>get</b> method:</p>
+                                <pre class="python">
+s = e.get()</pre>
+                                <p>You can also bind the entry widget to a <b>StringVar</b> instance, and set or get the
+                                    entry text via that variable:</p>
+                                <pre class="python">
+v = StringVar()
+e = Entry(master, textvariable=v)
+e.pack()
+
+v.set(<span class="pystring">"a default value"</span>)
+s = v.get()</pre>
+                                <p>This example creates an Entry widget, and a Button that prints the
+                                    current contents:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+master = Tk()
+
+e = Entry(master)
+e.pack()
+
+e.focus_set()
+
+<span class="pykeyword">def</span> <span class="pyfunction">callback</span>():
+    <span class="pykeyword">print</span> e.get()
+
+b = Button(master, text=<span class="pystring">"get"</span>, width=10, command=callback)
+b.pack()
+
+mainloop()</pre>
+                                <pre class="python">
+e = Entry(master, width=50)
+e.pack()
+
+text = e.get()</pre>
+                                <pre class="python">
+<span class="pykeyword">def</span> <span class="pyfunction">makeentry</span>(parent, caption, width=None, **options):
+    Label(parent, text=caption).pack(side=LEFT)
+    entry = Entry(parent, **options)
+    <span class="pykeyword">if</span> width:
+        entry.config(width=width)
+    entry.pack(side=LEFT)
+    <span class="pykeyword">return</span> entry
+
+user = makeentry(parent, <span class="pystring">"User name:"</span>, 10)
+password = makeentry(parent, <span class="pystring">"Password:"</span>, 10, show=<span class="pystring">"*"</span>)</pre>
+                                <pre class="python">
+content = StringVar()
+entry = Entry(parent, text=caption, textvariable=content)
+
+text = content.get()
+content.set(text)</pre>
+                                <div class="fixme">
+                                    <p>FIXME: More patterns to be added.</p>
+                                    <p>In newer versions, the Entry widget supports custom events.
+                                        Document them, and add examples showing how to bind them.</p>
+                                    <p>Add <a href="zone/tkinter-entry-validate.htm">ValidateEntry</a>
+                                        subclass as an example?</p>
+                                </div>
+                                <h2>Concepts</h2>
+                                <h3>Indexes</h3>
+                                <p>The <i>Entry</i> widget allows you to specify character
+                                    positions in a number of ways:</p>
+                                <ul>
+                                    <li>Numerical indexes</li>
+                                    <li><b>ANCHOR</b></li>
+                                    <li><b>END</b></li>
+                                    <li><b>INSERT</b></li>
+                                    <li>Mouse coordinates (&#8220;@x&#8221;)</li>
+                                </ul>
+                                <p><b>Numerical indexes</b> work just like Python list indexes. The
+                                    characters in the string are numbered from 0 and upwards. You
+                                    specify ranges just like you slice lists in Python: for example,
+                                    (0, 5) corresponds to the first five characters in the entry
+                                    widget.</p>
+                                <p><b>ANCHOR</b> (or the string &#8220;anchor&#8221;) corresponds to the start
+                                    of the selection, if any. You can use the <b>select_from</b> method
+                                    to change this from the program.</p>
+                                <p><b>END</b> (or &#8220;end&#8221;) corresponds to the position just after the
+                                    last character in the entry widget. The range (0, END) corresponds
+                                    to all characters in the widget.</p>
+                                <p><b>INSERT</b> (or &#8220;insert&#8221;) corresponds to the current position
+                                    of the text cursor. You can use the <b>icursor</b> method to change
+                                    this from the program.</p>
+                                <p>Finally, you can use the mouse position for the index, using the
+                                    following syntax:</p>
+                                <pre class="python">
+    <span class="pystring">"@%d"</span> % x</pre>
+                                <p>where <i>x</i> is given in pixels relative to the left edge of
+                                    the entry widget.</p>
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Entry(master=None, **options)</b> (class) [<a
+                                                href="#Tkinter.Entry-class">#</a>]</dt>
+                                        <dd>
+                                            <p>A text entry field.</p>
+                                            <dl>
+                                                <dt><i>master</i></dt>
+                                                <dd>
+                                                    Parent widget.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options. See the description of
+                                                    the <a class="link"
+                                                        href="#entry.Entry.config-method"><b>config</b></a> method for a
+                                                    list of available
+                                                    options.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.config-method"
+                                                name="Tkinter.Entry.config-method"><b>config(**options)</b></a> [<a
+                                                href="#Tkinter.Entry.config-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies one or more widget options. If no options are given,
+                                                the method returns a dictionary containing all current option
+                                                values.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options.</dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                    Widget background. The default is system
+                                                    specific.
+                                                    (the option database name is background, the class is Background)
+                                                </dd>
+                                                <dt><i>bg=</i></dt>
+                                                <dd>
+                                                    Same as <b>background</b>.
+                                                </dd>
+                                                <dt><i>borderwidth=</i></dt>
+                                                <dd>
+                                                    Border width. The default is system specific,
+                                                    but is usually a few pixels.
+                                                    (borderWidth/BorderWidth)</dd>
+                                                <dt><i>bd=</i></dt>
+                                                <dd>
+                                                    Same as <b>borderwidth</b>.
+                                                </dd>
+                                                <dt><i>cursor=</i></dt>
+                                                <dd>
+                                                    Widget cursor. The default is a text insertion
+                                                    cursor (typically an &#8220;I-beam&#8221; cursor, e.g.
+                                                    <b>xterm</b>).
+                                                    (cursor/Cursor)
+                                                </dd>
+                                                <dt><i>disabledbackground=</i></dt>
+                                                <dd>
+                                                    Background to use when the widget is
+                                                    disabled. If omitted or blank, the standard background is used
+                                                    instead.
+                                                    (disabledBackground/DisabledBackground)</dd>
+                                                <dt><i>disabledforeground=</i></dt>
+                                                <dd>
+                                                    Text color to use when the widget is
+                                                    disabled. If omitted or blank, the standard foreground is used
+                                                    instead. (disabledForeground/DisabledForeground)</dd>
+                                                <dt><i>exportselection=</i></dt>
+                                                <dd>
+                                                    If true, selected text is automatically
+                                                    exported to the clipboard. Default is true.
+                                                    (exportSelection/ExportSelection)
+                                                </dd>
+                                                <dt><i>font=</i></dt>
+                                                <dd>
+                                                    Widget font. The default is system specific.
+                                                    (font/Font)</dd>
+                                                <dt><i>foreground=</i></dt>
+                                                <dd>
+                                                    Text color.
+                                                    (foreground/Foreground)</dd>
+                                                <dt><i>fg=</i></dt>
+                                                <dd>
+                                                    Same as <b>foreground</b>.
+                                                </dd>
+                                                <dt><i>highlightbackground=</i></dt>
+                                                <dd>
+                                                    Together with <b>highlightcolor</b>,
+                                                    this option controls how to draw the focus highlight border.
+                                                    This option is used when the widget doesn&#8217;t have focus. The
+                                                    default is system specific.
+                                                    (highlightBackground/HighlightBackground)
+                                                </dd>
+                                                <dt><i>highlightcolor=</i></dt>
+                                                <dd>
+                                                    Same as <b>highlightbackground</b>, but
+                                                    is used when the widget has focus.
+                                                    (highlightColor/HighlightColor)
+                                                </dd>
+                                                <dt><i>highlightthickness=</i></dt>
+                                                <dd>
+                                                    The width of the focus highlight
+                                                    border. Default is typically a few pixels, unless the system
+                                                    indicates focus by modifying the button itself (like on Windows).
+                                                    (highlightThickness/HighlightThickness)</dd>
+                                                <dt><i>insertbackground=</i></dt>
+                                                <dd>
+                                                    Color used for the insertion cursor.
+                                                    (insertBackground/Foreground)</dd>
+                                                <dt><i>insertborderwidth=</i></dt>
+                                                <dd>
+                                                    Width of the insertion cursor&#8217;s border.
+                                                    If this is set to a non-zero value, the cursor is drawn using
+                                                    the <b>RAISED</b> border style.
+                                                    (insertBorderWidth/BorderWidth)
+                                                </dd>
+                                                <dt><i>insertofftime=</i></dt>
+                                                <dd>
+                                                    Together with <b>insertontime</b>, this
+                                                    option controls cursor blinking. Both values are given in
+                                                    milliseconds.
+                                                    (insertOffTime/OffTime)
+                                                </dd>
+                                                <dt><i>insertontime=</i></dt>
+                                                <dd>
+                                                    See <b>insertofftime</b>.
+                                                    (insertOnTime/OnTime)
+                                                </dd>
+                                                <dt><i>insertwidth=</i></dt>
+                                                <dd>
+                                                    Width of the insertion cursor. Usually
+                                                    one or two pixels.
+                                                    (insertWidth/InsertWidth)</dd>
+                                                <dt><i>invalidcommand=</i></dt>
+                                                <dd>
+                                                    FIXME. No default.
+                                                    (invalidCommand/InvalidCommand)</dd>
+                                                <dt><i>invcmd=</i></dt>
+                                                <dd>
+                                                    Same as <b>invalidcommand</b>.
+                                                </dd>
+                                                <dt><i>justify=</i></dt>
+                                                <dd>
+                                                    How to align the text inside the entry field.
+                                                    Use one of <b>LEFT</b>, <b>CENTER</b>, or <b>RIGHT</b>. The
+                                                    default is <b>LEFT</b>.
+                                                    (justify/Justify)
+                                                </dd>
+                                                <dt><i>readonlybackground=</i></dt>
+                                                <dd>
+                                                    The background color to use when the
+                                                    state is &#8220;readonly&#8221;. If omitted or blank, the standard
+                                                    background
+                                                    is used instead.
+                                                    (readonlyBackground/ReadonlyBackground)</dd>
+                                                <dt><i>relief=</i></dt>
+                                                <dd>
+                                                    Border style. The default is <b>SUNKEN</b>.
+                                                    Other possible values are <b>FLAT</b>, <b>RAISED</b>,
+                                                    <b>GROOVE</b>, and <b>RIDGE</b>.
+                                                    (relief/Relief)
+                                                </dd>
+                                                <dt><i>selectbackground=</i></dt>
+                                                <dd>
+                                                    Selection background color. The default
+                                                    is system and display specific.
+                                                    (selectBackground/Foreground)</dd>
+                                                <dt><i>selectborderwidth=</i></dt>
+                                                <dd>
+                                                    Selection border width. The default is
+                                                    system specific.
+                                                    (selectBorderWidth/BorderWidth)te</dd>
+                                                <dt><i>selectforeground=</i></dt>
+                                                <dd>
+                                                    Selection text color. The default is
+                                                    system specific.
+                                                    (selectForeground/Background)</dd>
+                                                <dt><i>show=</i></dt>
+                                                <dd>
+                                                    Controls how to display the contents of the widget.
+                                                    If non-empty, the widget displays a string of characters instead
+                                                    of the actual contents. To get a password entry widget, set this
+                                                    option to &#8220;*&#8221;.
+                                                    (show/Show)</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    The entry state: <b>NORMAL</b>, <b>DISABLED</b>,
+                                                    or &#8220;readonly&#8221; (same as <b>DISABLED</b>, but contents can
+                                                    still
+                                                    be selected and copied). Default is <b>NORMAL</b>.
+                                                    Note that if you set this to <b>DISABLED</b> or
+                                                    &#8220;readonly&#8221;,
+                                                    calls to <a class="link"
+                                                        href="#entry.Entry.insert-method"><b>insert</b></a> and <a
+                                                        class="link" href="#entry.Entry.delete-method"><b>delete</b></a>
+                                                    are
+                                                    ignored.
+                                                    (state/State)
+                                                </dd>
+                                                <dt><i>takefocus=</i></dt>
+                                                <dd>
+                                                    Indicates that the user can use the <b>Tab</b>
+                                                    key to move to this widget. Default is an empty string, which
+                                                    means that the entry widget accepts focus only if it has any
+                                                    keyboard bindings (default is on, in other words).
+                                                    (takeFocus/TakeFocus)
+                                                </dd>
+                                                <dt><i>textvariable=</i></dt>
+                                                <dd>
+                                                    Associates a Tkinter variable (usually
+                                                    a <b>StringVar</b>) to the contents of the entry field.
+                                                    (textVariable/Variable)
+                                                </dd>
+                                                <dt><i>validate=</i></dt>
+                                                <dd>
+                                                    Specifies when validation should be done.
+                                                    You can use &#8220;focus&#8221; to validate whenever the widget gets
+                                                    or loses the focus, &#8220;focusin&#8221; to validate only when it
+                                                    gets focus, &#8220;focusout&#8221; to validate when it loses focus,
+                                                    &#8220;key&#8221; on any modification, and ALL for all situations.
+                                                    Default is <b>NONE</b> (no validation).
+                                                    (validate/Validate)
+                                                </dd>
+                                                <dt><i>validatecommand=</i></dt>
+                                                <dd>
+                                                    A function or method to call to check
+                                                    if the contents is valid. The function should return a true
+                                                    value if the new contents is valid, or false if it isn&#8217;t.
+                                                    Note that this option is only used if the <b>validate</b>
+                                                    option is not <b>NONE</b>.
+                                                    (validateCommand/ValidateCommand)
+                                                </dd>
+                                                <dt><i>vcmd=</i></dt>
+                                                <dd>
+                                                    Same as <b>validatecommand</b>.
+                                                </dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Width of the entry field, in character units.
+                                                    Note that this controlS the size on screen; it does not limit
+                                                    the number of characters that can be typed into the entry
+                                                    field. The default width is 20 character.
+                                                    (width/Width)</dd>
+                                                <dt><i>xscrollcommand=</i></dt>
+                                                <dd>
+                                                    Used to connect an entry field to a
+                                                    horizontal scrollbar. This option should be set to the
+                                                    <b>set</b> method of the corresponding scrollbar.
+                                                    (xScrollCommand/ScrollCommand)
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.delete-method"
+                                                name="Tkinter.Entry.delete-method"><b>delete(first, last=None)</b></a>
+                                            [<a href="#Tkinter.Entry.delete-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Deletes the character at index, or within the given range. Use
+                                                delete(0, END) to delete all text in the widget.</p>
+                                            <dl>
+                                                <dt><i>first</i></dt>
+                                                <dd>
+                                                    Start of range.</dd>
+                                                <dt><i>last</i></dt>
+                                                <dd>
+                                                    Optional end of range. If omitted, only a single
+                                                    character is removed.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.get-method"
+                                                name="Tkinter.Entry.get-method"><b>get()</b></a> [<a
+                                                href="#Tkinter.Entry.get-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Gets the current contents of the entry field.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The widget contents, as a string.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.icursor-method"
+                                                name="Tkinter.Entry.icursor-method"><b>icursor(index)</b></a> [<a
+                                                href="#Tkinter.Entry.icursor-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Moves the insertion cursor to the given index. This also sets
+                                                the <b>INSERT</b> index.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    Where to move the cursor.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.index-method"
+                                                name="Tkinter.Entry.index-method"><b>index(index)</b></a> [<a
+                                                href="#Tkinter.Entry.index-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Gets the numerical position corresponding to the given index.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    An index.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The corresponding numerical index.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.insert-method"
+                                                name="Tkinter.Entry.insert-method"><b>insert(index, string)</b></a> [<a
+                                                href="#Tkinter.Entry.insert-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Inserts text at the given index. Use insert(INSERT, text) to
+                                                insert text at the cursor, insert(END, text) to append text to
+                                                the widget.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    Where to insert the text.</dd>
+                                                <dt><i>string</i></dt>
+                                                <dd>
+                                                    The text to insert.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.scan_dragto-method"
+                                                name="Tkinter.Entry.scan_dragto-method"><b>scan_dragto(x)</b></a> [<a
+                                                href="#Tkinter.Entry.scan_dragto-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Sets the scanning anchor for fast horizontal scrolling to the
+                                                given mouse coordinate.</p>
+                                            <dl>
+                                                <dt><i>x</i></dt>
+                                                <dd>
+                                                    Current horizontal mouse position.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.scan_mark-method"
+                                                name="Tkinter.Entry.scan_mark-method"><b>scan_mark(x)</b></a> [<a
+                                                href="#Tkinter.Entry.scan_mark-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Scrolls the widget contents sideways according to the given mouse
+                                                coordinate. The text is moved 10 times the distance between the
+                                                scanning anchor and the new position.</p>
+                                            <dl>
+                                                <dt><i>x</i></dt>
+                                                <dd>
+                                                    Current horizontal mouse position.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.select_adjust-method"
+                                                name="Tkinter.Entry.select_adjust-method"><b>select_adjust(index)</b></a>
+                                            [<a href="#Tkinter.Entry.select_adjust-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#entry.Entry.selection_adjust-method"><b>selection_adjust</b></a>.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.select_clear-method"
+                                                name="Tkinter.Entry.select_clear-method"><b>select_clear()</b></a> [<a
+                                                href="#Tkinter.Entry.select_clear-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#entry.Entry.selection_clear-method"><b>selection_clear</b></a>.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.select_from-method"
+                                                name="Tkinter.Entry.select_from-method"><b>select_from(index)</b></a>
+                                            [<a href="#Tkinter.Entry.select_from-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#entry.Entry.selection_from-method"><b>selection_from</b></a>.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.select_present-method"
+                                                name="Tkinter.Entry.select_present-method"><b>select_present()</b></a>
+                                            [<a href="#Tkinter.Entry.select_present-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#entry.Entry.selection_present-method"><b>selection_present</b></a>.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.select_range-method"
+                                                name="Tkinter.Entry.select_range-method"><b>select_range(start,
+                                                    end)</b></a> [<a href="#Tkinter.Entry.select_range-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#entry.Entry.selection_range-method"><b>selection_range</b></a>.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.select_to-method"
+                                                name="Tkinter.Entry.select_to-method"><b>select_to(index)</b></a> [<a
+                                                href="#Tkinter.Entry.select_to-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#entry.Entry.selection_to-method"><b>selection_to</b></a>.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.selection_adjust-method"
+                                                name="Tkinter.Entry.selection_adjust-method"><b>selection_adjust(index)</b></a>
+                                            [<a href="#Tkinter.Entry.selection_adjust-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adjusts the selection to include also the given character.
+                                                If index is already selected, do nothing.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    The index.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.selection_clear-method"
+                                                name="Tkinter.Entry.selection_clear-method"><b>selection_clear()</b></a>
+                                            [<a href="#Tkinter.Entry.selection_clear-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Clears the selection.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.selection_from-method"
+                                                name="Tkinter.Entry.selection_from-method"><b>selection_from(index)</b></a>
+                                            [<a href="#Tkinter.Entry.selection_from-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Starts a new selection. This also sets the <b>ANCHOR</b>
+                                                index.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    The index.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.selection_present-method"
+                                                name="Tkinter.Entry.selection_present-method"><b>selection_present()</b></a>
+                                            [<a href="#Tkinter.Entry.selection_present-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Checks if text is selected.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A true value if some part of the text is selected.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.selection_range-method"
+                                                name="Tkinter.Entry.selection_range-method"><b>selection_range(start,
+                                                    end)</b></a> [<a href="#Tkinter.Entry.selection_range-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Explicitly sets the selection range. Start must be smaller than
+                                                end. Use <b>selection_range(0, END)</b> to select all text in
+                                                the widget.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>start</i></dt>
+                                                <dd>
+                                                    Start of selection range.</dd>
+                                                <dt><i>end</i></dt>
+                                                <dd>
+                                                    End of range.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.selection_to-method"
+                                                name="Tkinter.Entry.selection_to-method"><b>selection_to(index)</b></a>
+                                            [<a href="#Tkinter.Entry.selection_to-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Selects all text between <b>ANCHOR</b> and the given index.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.xview-method"
+                                                name="Tkinter.Entry.xview-method"><b>xview(index)</b></a> [<a
+                                                href="#Tkinter.Entry.xview-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Makes sure the given index is visible. The entry view is
+                                                scrolled if necessary.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    An index.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.xview_moveto-method"
+                                                name="Tkinter.Entry.xview_moveto-method"><b>xview_moveto(fraction)</b></a>
+                                            [<a href="#Tkinter.Entry.xview_moveto-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adjusts the entry view so that the given offset is at the
+                                                left edge of the canvas. Offset 0.0 is the beginning of the
+                                                entry string, 1.0 the end.</p>
+                                            <dl>
+                                                <dt><i>fraction</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Entry.xview_scroll-method"
+                                                name="Tkinter.Entry.xview_scroll-method"><b>xview_scroll(number,
+                                                    what)</b></a> [<a href="#Tkinter.Entry.xview_scroll-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Scrolls the entry view horizontally by the given amount.</p>
+                                            <dl>
+                                                <dt><i>number</i></dt>
+                                                <dd>
+                                                    Number of units.</dd>
+                                                <dt><i>what</i></dt>
+                                                <dd>
+                                                    What unit to use. This can be either <b>&#8220;units&#8221;</b>
+                                                    (characters) or <b>&#8220;pages&#8221;</b> (larger steps).
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="checkbutton.htm">back</a>&#160;<a href="frame.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

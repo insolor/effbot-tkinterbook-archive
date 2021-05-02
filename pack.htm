@@ -1,0 +1,366 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter Pack Geometry&nbsp;Manager</title>
+</head>
+
+<body data-page-id="1932">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="grid.htm">back</a>&#160;<a href="place.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter Pack Geometry&nbsp;Manager</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>Pack</b> geometry manager packs widgets in rows or
+                                    columns. You can use options like <b>fill</b>, <b>expand</b>, and
+                                    <b>side</b> to control this geometry manager.</p>
+                                <p>The manager handles all widgets that are packed inside the same
+                                    master widget. The packing algorithm is simple, but a bit tricky
+                                    to describe in words; imagine a sheet of some elastic material,
+                                    with a very small rectangular hole in the middle. For each widget,
+                                    in the order they are packed, the geometry manager makes the hole
+                                    large enough to hold the widget, and then place it against a given
+                                    inner edge (default is the top edge). It then repeats the process
+                                    for all widgets. Finally, when all widgets have been packed into
+                                    the hole, the manager calculates the bounding box for all widgets,
+                                    makes the master widget large enough to hold all widgets, and moves
+                                    them all to the master.</p>
+                                <h2>When to use the Pack Manager</h2>
+                                <p>Compared to the <b>grid</b> manager, the pack manager is
+                                    somewhat limited, but it&#8217;s much easier to use in a few, but quite
+                                    common situations:</p>
+                                <ol>
+                                    <li>Put a widget inside a frame (or any other container widget),
+                                        and have it fill the entire frame</li>
+                                    <li>Place a number of widgets <b>on top of each other</b></li>
+                                    <li>Place a number of widgets <b>side by side</b></li>
+                                </ol>
+                                <p>See the <a href="#patterns"><i>Patterns</i></a> section for code
+                                    examples.</p>
+                                <p>If you need to create more complex layouts, you usually have to
+                                    group the widgets using extra <b>Frame</b> widgets. You can also
+                                    use the <b>grid</b> manager instead.</p>
+                                <p class="note"><b>Note:</b> Don&#8217;t mix grid and pack in the same
+                                    master window. Tkinter will happily spend the rest of your lifetime
+                                    trying to negotiate a solution that both managers are happy with.
+                                    Instead of waiting, kill the application, and take another look at
+                                    your code. A common mistake is to use the wrong parent for some of
+                                    the widgets.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <h3>Filling the entire parent widget</h3>
+                                <p>A common situation is when you want to place a widget inside a
+                                    container widget, and have it fill the entire parent. Here&#8217;s a
+                                    simple example: a listbox placed in the root window:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+listbox = Listbox(root)
+listbox.pack()
+
+<span class="pykeyword">for</span> i <span class="pykeyword">in</span> range(20):
+    listbox.insert(END, str(i))
+
+mainloop()</pre>
+                                <blockquote>
+                                    <img alt="" height="193"
+                                        src="data:image/png;base64, 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 "
+                                        width="136" />
+                                </blockquote>
+                                <p>By default, the listbox is made large enough to show 10 items.
+                                    But this listbox contains twice as many. But if the user attempts
+                                    to show them all by resizing the window, Tkinter will add padding
+                                    around the listbox:</p>
+                                <blockquote>
+                                    <img alt="media/cache/449e335515366bb77a802fbd0a2df51b.png" width="182" />
+                                </blockquote>
+                                <p>To make the widget fill the entire parent, also if the user
+                                    resizes the window, add <b>fill</b> and <b>expand</b> options:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+listbox = Listbox(root)
+listbox.pack(fill=BOTH, expand=1)
+
+<span class="pykeyword">for</span> i <span class="pykeyword">in</span> range(20):
+    listbox.insert(END, str(i))
+
+mainloop()</pre>
+                                <blockquote>
+                                    <img alt="media/cache/c8eafa2f91ebbd080f7e9d1b6a670f11.png" width="160" />
+                                </blockquote>
+                                <p>The <b>fill</b> option tells the manager that the widget wants
+                                    fill the entire space assigned to it. The value controls how to
+                                    fill the space; <b>BOTH</b> means that the widget should expand
+                                    both horisontally and vertically, <b>X</b> means that it should
+                                    expand only horisontally, and <b>Y</b> means that it should expand
+                                    only vertically.</p>
+                                <p>The <b>expand</b> option tells the manager to assign additional
+                                    space to the widget box. If the parent widget is made larger than
+                                    necessary to hold all packed widgets, any exceeding space will be
+                                    distributed among all widgets that have the <b>expand</b> option
+                                    set to a non-zero value.</p>
+                                <h3>Placing a number of widgets on top of each other</h3>
+                                <p>To put a number of widgets in a column, you can use the
+                                    <b>pack</b> method without any options:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+w = Label(root, text=<span class="pystring">"Red"</span>, bg=<span class="pystring">"red"</span>, fg=<span class="pystring">"white"</span>)
+w.pack()
+w = Label(root, text=<span class="pystring">"Green"</span>, bg=<span class="pystring">"green"</span>, fg=<span class="pystring">"black"</span>)
+w.pack()
+w = Label(root, text=<span class="pystring">"Blue"</span>, bg=<span class="pystring">"blue"</span>, fg=<span class="pystring">"white"</span>)
+w.pack()
+
+mainloop()</pre>
+                                <blockquote>
+                                    <img alt="" height="84"
+                                        src="data:image/png;base64, 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 "
+                                        width="112" />
+                                </blockquote>
+                                <p>You can use the <b>fill=X</b> option to make all widgets as wide
+                                    as the parent widget:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+w = Label(root, text=<span class="pystring">"Red"</span>, bg=<span class="pystring">"red"</span>, fg=<span class="pystring">"white"</span>)
+w.pack(fill=X)
+w = Label(root, text=<span class="pystring">"Green"</span>, bg=<span class="pystring">"green"</span>, fg=<span class="pystring">"black"</span>)
+w.pack(fill=X)
+w = Label(root, text=<span class="pystring">"Blue"</span>, bg=<span class="pystring">"blue"</span>, fg=<span class="pystring">"white"</span>)
+w.pack(fill=X)
+
+mainloop()</pre>
+                                <blockquote>
+                                    <img alt="" height="84"
+                                        src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAHAAAABUCAMAAABtA0NZAAADAFBMVEUAAAABAQECAgIDAwMEBAQFBQUGBgYHBwcICAgJCQkAAAAzAABmAACZAADMAAD/AAAAMwAzMwBmMwCZMwDMMwD/MwAAZgAzZgBmZgCZZgDMZgD/ZgAAmQAzmQBmmQCZmQDMmQD/mQAAzAAzzABmzACZzADMzAD/zAAA/wAz/wBm/wCZ/wDM/wD//wAAADMzADNmADOZADPMADP/ADMAMzMzMzNmMzOZMzPMMzP/MzMAZjMzZjNmZjOZZjPMZjP/ZjMAmTMzmTNmmTOZmTPMmTP/mTMAzDMzzDNmzDOZzDPMzDP/zDMA/zMz/zNm/zOZ/zPM/zP//zMAAGYzAGZmAGaZAGbMAGb/AGYAM2YzM2ZmM2aZM2bMM2b/M2YAZmYzZmZmZmaZZmbMZmb/ZmYAmWYzmWZmmWaZmWbMmWb/mWYAzGYzzGZmzGaZzGbMzGb/zGYA/2Yz/2Zm/2aZ/2bM/2b//2YAAJkzAJlmAJmZAJnMAJn/AJkAM5kzM5lmM5mZM5nMM5n/M5kAZpkzZplmZpmZZpnMZpn/ZpkAmZkzmZlmmZmZmZnMmZn/mZkAzJkzzJlmzJmZzJnMzJn/zJkA/5kz/5lm/5mZ/5nM/5n//5kAAMwzAMxmAMyZAMzMAMz/AMwAM8wzM8xmM8yZM8zMM8z/M8wAZswzZsxmZsyZZszMZsz/ZswAmcwzmcxmmcyZmczMmcz/mcwAzMwzzMxmzMyZzMzMzMz/zMwA/8wz/8xm/8yZ/8zM/8z//8wAAP8zAP9mAP+ZAP/MAP//AP8AM/8zM/9mM/+ZM//MM///M/8AZv8zZv9mZv+ZZv/MZv//Zv8Amf8zmf9mmf+Zmf/Mmf//mf8AzP8zzP9mzP+ZzP/MzP//zP8A//8z//9m//+Z///M///////i4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7///9DQRrXAAAEcklEQVR4nGLYRl+QAAAAAP//Ytj2h56gOwEAAAD//wJaSE8PdicAAAAA//+iu4UAAAAA//8CWxiBHUTW1tY2g0FLS8s6CFi/fv3Wm+QCkIUAAAAA//+iu4UAAAAA//8i20K01JCAzsdUAbEQAAAA//8i30K0uEHnY6qAWAgAAAD//4JbyA8BYJv4ERb++UO8hQwwgM9CAAAAAP//glnIz4+wEUxAwgFm4Z8/5FkIYkNImIUAAAAA//9CshDmOSgLaCWpPoRykH0IsgtsK8xCAAAAAP//glsYgW4fwsI/f4j0IRYLt0F8jLAQAAAA//9CxCGM4IdZCbMQiCiwEBqqcAsBAAAA//9CSaUgm/jBEMlCkB+p6EMAAAAA//9CtRBiKWocUmYhRhwCAAAA//9CthDsQX5+NB/CghSGkCyEpUncFmKmUgAAAAD//0KxMAKrhdBEQ4SFxORDAAAAAP//QrIQkgeRkilNShoAAAAA//9CtpC0oq0bBSSg8zFVQCwEAAAA//8iuyxNIAAwVUAsBAAAAP//onv1BAAAAP//oruFAAAAAP//onsTAwAAAP//AlvITycAshAAAAD//6K7hQAAAAD//6K7hQAAAAD//6K7hQAAAAD//6K7hQAAAAD//yLVQnDDA1WENAsBAAAA//8i2UIMO0i0EAAAAP//oruFAAAAAP//IttCSMhiBDBBCwEAAAD//yI3DiEYxiLBQgAAAAD//yLXhxCLybAQAAAA//8i20I4j0QLAQAAAP//osRCsnwIAAAA//+ie6IBAAAA//+ie0kDAAAA//+iu4UAAAAA//+iu4UAAAAA//+iu4UAAAAA//+iu4UAAAAA//8CW6hBJwCyEAAAAP//oruFAAAAAP//oruFAAAAAP//oruFAAAAAP//oruFAAAAAP//IsVCUE+MYgsBAAAA//8iwUIGOEGJhQAAAAD//yLVQooAyEIAAAAA//8iw0JQuEICF0wyaBAd0CALAQAAAP//Is1CqA1guxlgJAPRngdZCAAAAP//IiMOIRYzMMBIDZIsBAAAAP//ItNChACpFgIAAAD//yLRQmxBSpqFAAAAAP//IjEfwm1DTjQkWQgAAAD//6J7SQMAAAD//6K7hQAAAAD//6K7hQAAAAD//6K7hQAAAAD//6K7hQAAAAD//wJbuI9OAGQhAAAA//+iu4UAAAAA//+iu4UAAAAA//+iu4UAAAAA//+iu4UAAAAA//8i0UJQbwlEkW8hAAAA//8i1UIIpsBCAAAAAP//oruFAAAAAP//ItdCGOMPKXaDLAQAAAD//yI3DpFJkiwEAAAA//+izId//pDkRZCFAAAAAP//otBC4nXCLAQAAAD//6LAwj9kBSkAAAD//yI7H/75Q16iAQAAAP//ontJAwAAAP//oruFAAAAAP//oruFAAAAAP//oruFAAAAAP//oruFAAAAAP//ovvMDAAAAP//oruFAAAAAP//YtjWTVeQAAAAAP//YiA0D0htAAAAAP//AwDIXUM+Izm8dgAAAABJRU5ErkJggg== "
+                                        width="112" />
+                                </blockquote>
+                                <h3>Placing a number of widgets side by side</h3>
+                                <p>To pack widgets side by side, use the <b>side</b> option. If you
+                                    wish to make the widgets as high as the parent, use the
+                                    <b>fill=Y</b> option too:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+w = Label(root, text=<span class="pystring">"Red"</span>, bg=<span class="pystring">"red"</span>, fg=<span class="pystring">"white"</span>)
+w.pack(side=LEFT)
+w = Label(root, text=<span class="pystring">"Green"</span>, bg=<span class="pystring">"green"</span>, fg=<span class="pystring">"black"</span>)
+w.pack(side=LEFT)
+w = Label(root, text=<span class="pystring">"Blue"</span>, bg=<span class="pystring">"blue"</span>, fg=<span class="pystring">"white"</span>)
+w.pack(side=LEFT)
+
+mainloop()</pre>
+                                <blockquote>
+                                    <img alt="" height="46"
+                                        src="data:image/png;base64, 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 "
+                                        width="112" />
+                                </blockquote>
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Pack</b> (class) [<a href="#Tkinter.Pack-class">#</a>]</dt>
+                                        <dd>
+                                            <p>Pack geometry manager. This is an implementation class; all the
+                                                methods described below are available on all widget classes.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Pack.pack-method"
+                                                name="Tkinter.Pack.pack-method"><b>pack(**options)</b></a> [<a
+                                                href="#Tkinter.Pack.pack-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Pack the widget as described by the options.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Geometry options.</dd>
+                                                <dt><i>anchor=</i></dt>
+                                                <dd>
+                                                    Where the widget is placed inside the packing
+                                                    box. Default is CENTER.</dd>
+                                                <dt><i>expand=</i></dt>
+                                                <dd>
+                                                    Specifies whether the widgets should be expanded
+                                                    to fill any extra space in the geometry master. If false
+                                                    (default), the widget is not expanded.</dd>
+                                                <dt><i>fill=</i></dt>
+                                                <dd>
+                                                    Specifies whether the widget should occupy all
+                                                    the space provided to it by the master. If <b>NONE</b>
+                                                    (default), keep the widget&#8217;s original size. If <b>X</b>
+                                                    (fill horizontally), <b>Y</b> (fill vertically), or
+                                                    <b>BOTH</b>, fill the given space along that direction.
+                                                    <br />
+                                                    To make a widget fill the entire master widget, set
+                                                    <b>fill</b> to <b>BOTH</b> and <b>expand</b> to a
+                                                    non-zero value.
+                                                </dd>
+                                                <dt><i>in=</i></dt>
+                                                <dd>
+                                                    Pack this widget inside the given widget. You can
+                                                    only pack a widget inside its parent, or in any decendant of
+                                                    its parent. This option should usually be left out, in which
+                                                    case the widget is packed inside its parent.
+                                                    <br />
+                                                    Note that <b>in</b> is a reserved word in Python. To use it
+                                                    as a keyword option, append an underscore (<b>in_</b>).
+                                                </dd>
+                                                <dt><i>ipadx=</i></dt>
+                                                <dd>
+                                                    Internal padding. Default is 0.</dd>
+                                                <dt><i>ipady=</i></dt>
+                                                <dd>
+                                                    Internal padding. Default is 0.</dd>
+                                                <dt><i>padx=</i></dt>
+                                                <dd>
+                                                    External padding. Default is 0.</dd>
+                                                <dt><i>pady=</i></dt>
+                                                <dd>
+                                                    External padding. Default is 0.</dd>
+                                                <dt><i>side=</i></dt>
+                                                <dd>
+                                                    Specifies which side to pack the widget against.
+                                                    To pack widgets vertically, use <b>TOP</b> (default). To
+                                                    pack widgets horizontally, use <b>LEFT</b>.
+                                                    <br />
+                                                    You can also pack widgets along the <b>BOTTOM</b> and
+                                                    <b>RIGHT</b> edges. You can mix sides in a single geometry
+                                                    manager, but the results may not always be what you expect.
+                                                    While you can create pretty complicated layouts by nesting
+                                                    <b>Frame</b> widgets, you may prefer using the <b>grid</b>
+                                                    geometry manager for non-trivial layouts.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Pack.pack_configure-method"
+                                                name="Tkinter.Pack.pack_configure-method"><b>pack_configure(**options)</b></a>
+                                            [<a href="#Tkinter.Pack.pack_configure-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as <a class="link" href="#pack.Pack.pack-method"><b>pack</b></a>.
+
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Pack.pack_forget-method"
+                                                name="Tkinter.Pack.pack_forget-method"><b>pack_forget()</b></a> [<a
+                                                href="#Tkinter.Pack.pack_forget-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Removes the widget from its current manager. The widget is not
+                                                destroyed, and can be displayed again by <b>pack</b> or any other
+                                                manager.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Pack.pack_info-method"
+                                                name="Tkinter.Pack.pack_info-method"><b>pack_info()</b></a> [<a
+                                                href="#Tkinter.Pack.pack_info-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns a dictionary containing the current packer options.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A dictionary mapping packer option names to option
+                                                    values.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Pack.pack_propagate-method"
+                                                name="Tkinter.Pack.pack_propagate-method"><b>pack_propagate(flag)</b></a>
+                                            [<a href="#Tkinter.Pack.pack_propagate-method">#</a>]</dt>
+                                        <dd>
+                                            <p>(Manager method) Controls geometry propagation. If enabled,
+                                                the manager widget will be resized if not large enough to hold
+                                                all the child widgets.
+                                            </p>
+                                            <p>
+                                                Note that this method should be called on the master widget, not
+                                                on an invidivual child widget.
+
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Pack.pack_slaves-method"
+                                                name="Tkinter.Pack.pack_slaves-method"><b>pack_slaves()</b></a> [<a
+                                                href="#Tkinter.Pack.pack_slaves-method">#</a>]</dt>
+                                        <dd>
+                                            <p>(Manager method) Returns a list of all child (&#8220;slave&#8221;)
+                                                widgets
+                                                managed by the packer for this widget.
+                                            </p>
+                                            <p>
+                                                Note that this method should be called on the master widget, not
+                                                on an invidivual child widget.
+
+                                            </p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A list of child widgets.</dd>
+                                            </dl><br />
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="grid.htm">back</a>&#160;<a href="place.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

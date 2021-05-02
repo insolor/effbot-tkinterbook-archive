@@ -1,0 +1,2168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter Canvas&nbsp;Widget</title>
+</head>
+
+<body data-page-id="1919">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="button.htm">back</a>&#160;<a href="checkbutton.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter Canvas&nbsp;Widget</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>Canvas</b> widget provides structured graphics facilities
+                                    for Tkinter. This is a highly versatile widget which can be used to
+                                    draw graphs and plots, create graphics editors, and implement
+                                    various kinds of custom widgets.</p>
+                                <h2 id="when-to-use">When to use the Canvas Widget&#160;<a class="nav"
+                                        href="#when-to-use" title="bookmark!">#</a></h2>
+                                <p>The canvas is a general purpose widget, which is typically used
+                                    to display and edit graphs and other drawings.</p>
+                                <p>Another common use for this widget is to implement various kinds
+                                    of custom widgets. For example, you can use a canvas as a
+                                    completion bar, by drawing and updating a rectangle on the
+                                    canvas.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>To draw things in the canvas, use the <b>create</b> methods to add
+                                    new items.</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+master = Tk()
+
+w = Canvas(master, width=200, height=100)
+w.pack()
+
+w.create_line(0, 0, 200, 100)
+w.create_line(0, 100, 200, 0, fill=<span class="pystring">"red"</span>, dash=(4, 4))
+
+w.create_rectangle(50, 25, 150, 75, fill=<span class="pystring">"blue"</span>)
+
+mainloop()</pre>
+                                <p>Note that items added to the canvas are kept until you remove them.
+                                    If you want to change the drawing, you can either use methods like
+                                    <b>coords</b>, <b>itemconfig</b>, and <b>move</b> to modify the items,
+                                    or use <b>delete</b> to remove them.</p>
+                                <pre class="python">
+i = w.create_line(xy, fill=<span class="pystring">"red"</span>)
+
+w.coords(i, new_xy) <span class="pycomment"># change coordinates</span>
+w.itemconfig(i, fill=<span class="pystring">"blue"</span>) <span class="pycomment"># change color</span>
+
+w.delete(i) <span class="pycomment"># remove</span>
+
+w.delete(ALL) <span class="pycomment"># remove all items</span></pre>
+                                <h2 id="concepts">Concepts&#160;<a class="nav" href="#concepts" title="bookmark!">#</a>
+                                </h2>
+                                <p>To display things on the canvas, you create one or more
+                                    <i>canvas items</i>, which are placed in a stack. By default, new
+                                    items are drawn on top of items already on the canvas.</p>
+                                <p>Tkinter provides lots of methods allowing you to manipulate the
+                                    items in various ways. Among other things, you can attach
+                                    (<i>bind</i>) event callbacks to individual canvas items.</p>
+                                <h3 id="canvas-items">Canvas Items&#160;<a class="nav" href="#canvas-items"
+                                        title="bookmark!">#</a></h3>
+                                <p>The <b>Canvas</b> widget supports the following standard
+                                    items:</p>
+                                <ul>
+                                    <li><a href="#Tkinter.Canvas.create_arc-method"><b>arc</b></a> (arc, chord,
+                                        or pieslice)</li>
+                                    <li><a href="#Tkinter.Canvas.create_bitmap-method"><b>bitmap</b></a>
+                                        (built-in or read from XBM file)</li>
+                                    <li><a href="#Tkinter.Canvas.create_image-method"><b>image</b></a> (a
+                                        <a href="bitmapimage.htm">BitmapImage</a> or <a
+                                            href="photoimage.htm">PhotoImage</a> instance)</li>
+                                    <li><a href="#Tkinter.Canvas.create_line-method"><b>line</b></a></li>
+                                    <li><a href="#Tkinter.Canvas.create_oval-method"><b>oval</b></a> (a circle
+                                        or an ellipse)</li>
+                                    <li><a href="#Tkinter.Canvas.create_polygon-method"><b>polygon</b></a></li>
+                                    <li><a href="#Tkinter.Canvas.create_rectangle-method"><b>rectangle</b></a></li>
+                                    <li><a href="#Tkinter.Canvas.create_text-method"><b>text</b></a></li>
+                                    <li><a href="#Tkinter.Canvas.create_window-method"><b>window</b></a></li>
+                                </ul>
+                                <p>Chords, pieslices, ovals, polygons, and rectangles consist of
+                                    both an outline and an interior area, either of which can be made
+                                    transparent (and if you insist, you can make both transparent).</p>
+                                <p>Window items are used to place other Tkinter widgets on top of
+                                    the canvas; for these items, the Canvas widget simply acts like a
+                                    geometry manager.</p>
+                                <p>You can also write your own item types in C or C++ and plug them
+                                    into Tkinter via Python extension modules.</p>
+                                <h3 id="coordinate-systems">Coordinate Systems&#160;<a class="nav"
+                                        href="#coordinate-systems" title="bookmark!">#</a></h3>
+                                <p>The <b>Canvas</b> widget uses two coordinate systems; the window
+                                    coordinate system (with (0, 0) in the upper left corner), and a
+                                    canvas coordinate system which specify where the items are drawn.
+                                    By scrolling the canvas, you can specify which part of the canvas
+                                    coordinate system to show in the window.</p>
+                                <p>The <b>scrollregion</b> option is used to limit scrolling
+                                    operations for the canvas. To set this, you can usually use
+                                    something like:</p>
+                                <pre class="python">
+    canvas.config(scrollregion=canvas.bbox(ALL))</pre>
+                                <p>To convert from window coordinates to canvas coordinates, use
+                                    the <a href="#Tkinter.Canvas.canvasx-method"><b>canvasx</b></a> and
+                                    <a href="#Tkinter.Canvas.canvasy-method"><b>canvasy</b></a> methods:</p>
+                                <pre class="python">
+<span class="pykeyword">def</span> <span class="pyfunction">callback</span>(event):
+    canvas = event.widget
+    x = canvas.canvasx(event.x)
+    y = canvas.canvasy(event.y)
+    <span class="pykeyword">print</span> canvas.find_closest(x, y)</pre>
+                                <h3 id="item-specifiers">Item Specifiers: Handles and Tags&#160;<a class="nav"
+                                        href="#item-specifiers" title="bookmark!">#</a></h3>
+                                <p>The <b>Canvas</b> widget allows you to identify items in several
+                                    ways. Everywhere a method expects an item specifier, you can use
+                                    one of the following:</p>
+                                <ul>
+                                    <li>item handles (integers)</li>
+                                    <li>tags</li>
+                                    <li><b>ALL</b></li>
+                                    <li><b>CURRENT</b></li>
+                                </ul>
+                                <p><b>Item handles</b> are integer values used to identify a
+                                    specific item on the canvas. Tkinter automatically assigns a new
+                                    handle to each new item created on the canvas. Item handles can be
+                                    passed to the various canvas methods either as integers or as
+                                    strings.</p>
+                                <p><b>Tags</b> are symbolic names attached to items. Tags are
+                                    ordinary strings, and they can contain anything except whitespace
+                                    (as long as they don&#8217;t look like item handles).</p>
+                                <p>An item can have zero or more tags associated with it, and the
+                                    same tag can be used for more than one item. However, unlike the
+                                    <b>Text</b> widget, the <b>Canvas</b> widget doesn&#8217;t allow you to
+                                    create bindings or otherwise configure tags for which there are no
+                                    existing items. Tags are owned by the items, not the widget itself.
+                                    All such operations are ignored.</p>
+                                <p>You can either specify the tags via an option when you create
+                                    the item, set them via the
+                                    <a href="#Tkinter.Canvas.itemconfig-method"><b>itemconfig</b></a>
+                                    method, or add them using the
+                                    <a href="#Tkinter.Canvas.addtag_withtag"><b>addtag_withtag</b></a>
+                                    method. The <b>tags</b> option takes either a single tag string, or
+                                    a tuple of strings.</p>
+                                <pre class="python">
+item = canvas.create_line(0, 0, 100, 100, tags=<span class="pystring">"uno"</span>)
+canvas.itemconfig(item, tags=(<span class="pystring">"one"</span>, <span class="pystring">"two"</span>))
+canvas.addtag_withtag(<span class="pystring">"three"</span>, <span class="pystring">"one"</span>)</pre>
+                                <p>To get all tags associated with a specific item, use
+                                    <b>gettags</b>. To get the handles for all items having a given
+                                    tag, use <b>find_withtag</b>.</p>
+                                <pre class="python">
+&gt;&gt;&gt; <span class="pykeyword">print</span> canvas.gettags(item)
+(<span class="pystring">'one'</span>, <span class="pystring">'two'</span>, <span class="pystring">'three'</span>)
+&gt;&gt;&gt; <span class="pykeyword">print</span> canvas.find_withtag(<span class="pystring">"one"</span>)
+(1,)</pre>
+                                <p>The <b>Canvas</b> widget also provides two predefined tags:</p>
+                                <p><b>ALL</b> (or the string &#8220;all&#8221;) matches all items on the
+                                    canvas.</p>
+                                <p><b>CURRENT</b> (or &#8220;current&#8221;) matches the item under the mouse
+                                    pointer, if any. This can be used inside mouse event bindings to
+                                    refer to the item that triggered the callback.</p>
+                                <h3 id="printing">Printing&#160;<a class="nav" href="#printing" title="bookmark!">#</a>
+                                </h3>
+                                <p>The Tkinter widget supports printing to Postscript printers.</p>
+                                <h2 id="performance-issues">Performance Issues&#160;<a class="nav"
+                                        href="#performance-issues" title="bookmark!">#</a></h2>
+                                <p>The <b>Canvas</b> widget implements a straight-forward
+                                    damage/repair display model. Changes to the canvas, and external
+                                    events such as <b>Expose</b>, are all treated as &#8220;damage&#8221; to the
+                                    screen. The widget maintains a <b>dirty rectangle</b> to keep track
+                                    of the damaged area.</p>
+                                <p>When the first damage event arrives, the canvas registers an
+                                    idle task (using <b>after_idle</b>) which is used to &#8220;repair&#8221; the
+                                    canvas when the program gets back to the Tkinter main loop. You can
+                                    force updates by calling the <b>update_idletasks</b> method.</p>
+                                <p>When it&#8217;s time to redraw the canvas, the widget starts by
+                                    allocating a pixmap (on X windows, this is an image memory stored
+                                    on the display) with the same size as the dirty rectangle.</p>
+                                <p>It then loops over the canvas items, and redraws <i>all</i>
+                                    items for which the bounding box touch the dirty rectangle (this
+                                    means that diagonal lines may be redrawn also if they don&#8217;t
+                                    actually cover the rectangle, but this is usually no big deal).</p>
+                                <p>Finally, the widget copies the pixmap to the display, and
+                                    releases the pixmap. The copy operation is a very fast operation on
+                                    most modern hardware.</p>
+                                <p>Since the canvas uses a <i>single</i> dirty rectangle, you can
+                                    sometimes get better performance by forcing updates. For example,
+                                    if you&#8217;re changing things in different parts of the canvas without
+                                    returning to the main loop, adding explicit calls to
+                                    <b>update_idletasks()</b> allows the canvas to update a few small
+                                    rectangles, instead of a large one with many more objects.</p>
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Canvas(master=None, **options)</b> (class) [<a
+                                                href="#Tkinter.Canvas-class">#</a>]</dt>
+                                        <dd>
+                                            <p>A structured graphics canvas.</p>
+                                            <dl>
+                                                <dt><i>master</i></dt>
+                                                <dd>
+                                                    Parent widget.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options. See the description of
+                                                    the <a class="link"
+                                                        href="#canvas.Canvas.config-method"><b>config</b></a> method for
+                                                    a list of available
+                                                    options.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.addtag-method"
+                                                name="Tkinter.Canvas.addtag-method"><b>addtag(tag, method,
+                                                    *args)</b></a> [<a href="#Tkinter.Canvas.addtag-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a tag to a number of items. Application code should use
+                                                more specific methods wherever possible (that is, use
+                                                <a class="link"
+                                                    href="#canvas.Canvas.addtag_above-method"><b>addtag_above</b></a>
+                                                instead of <b>addtag(&#8220;above&#8221;)</b>,
+                                                and so on.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>tag</i></dt>
+                                                <dd>
+                                                    The tag to add.</dd>
+                                                <dt><i>method</i></dt>
+                                                <dd>
+                                                    How to add a new tag. This can be one of &#8220;above&#8221;,
+                                                    &#8220;all&#8221;, &#8220;below&#8221;, &#8220;closest&#8221;,
+                                                    &#8220;enclosed&#8221;, &#8220;overlapping&#8221; or
+                                                    &#8220;withtag&#8221;.</dd>
+                                                <dt><i>*args</i></dt>
+                                                <dd>
+                                                    Additional arguments. For details, see the description
+                                                    of the individual method.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.addtag_above-method"
+                                                name="Tkinter.Canvas.addtag_above-method"><b>addtag_above(tag,
+                                                    item)</b></a> [<a href="#Tkinter.Canvas.addtag_above-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Adds a tag to the item just above the given item.</p>
+                                            <dl>
+                                                <dt><i>tag</i></dt>
+                                                <dd>
+                                                    The tag to add.</dd>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    The tag or id of the reference item.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.addtag_all-method"
+                                                name="Tkinter.Canvas.addtag_all-method"><b>addtag_all(tag)</b></a> [<a
+                                                href="#Tkinter.Canvas.addtag_all-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a tag to all items on the canvas. This is a shortcut for
+                                                <b>addtag_withtag(newtag, ALL)</b>.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>tag</i></dt>
+                                                <dd>
+                                                    The tag to add.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.addtag_below-method"
+                                                name="Tkinter.Canvas.addtag_below-method"><b>addtag_below(tag,
+                                                    item)</b></a> [<a href="#Tkinter.Canvas.addtag_below-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Adds a tag to the item just below the given item.</p>
+                                            <dl>
+                                                <dt><i>tag</i></dt>
+                                                <dd>
+                                                    The tag to add.</dd>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    The tag or id of the reference item.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.addtag_closest-method"
+                                                name="Tkinter.Canvas.addtag_closest-method"><b>addtag_closest(tag, x, y,
+                                                    halo=None, start=None)</b></a> [<a
+                                                href="#Tkinter.Canvas.addtag_closest-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a tag to the item closest to the given coordinate. Note
+                                                that the position is given in canvas coordinates, and that
+                                                this method always succeeds if there&#8217;s at least one item in
+                                                the canvas. To add tags to items within a certain distance
+                                                from the position, use <a class="link"
+                                                        href="#Tkinter.Canvas.addtag_overlapped-method"><b>addtag_overlapped</b></a>
+                                                with a
+                                                small rectangle centered on the position.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>tag</i></dt>
+                                                <dd>
+                                                    The tag to add.</dd>
+                                                <dt><i>x</i></dt>
+                                                <dd>
+                                                    The horizontal coordinate.</dd>
+                                                <dt><i>y</i></dt>
+                                                <dd>
+                                                    The vertical coordinate.</dd>
+                                                <dt><i>halo</i></dt>
+                                                <dd>
+                                                    Optional halo distance.</dd>
+                                                <dt><i>start</i></dt>
+                                                <dd>
+                                                    Optional start item.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.addtag_enclosed-method"
+                                                name="Tkinter.Canvas.addtag_enclosed-method"><b>addtag_enclosed(tag, x1,
+                                                    y1, x2, y2)</b></a> [<a
+                                                href="#Tkinter.Canvas.addtag_enclosed-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a tag to all items enclosed by the given rectangle.</p>
+                                            <dl>
+                                                <dt><i>tag</i></dt>
+                                                <dd>
+                                                    The tag to add.</dd>
+                                                <dt><i>x1</i></dt>
+                                                <dd>
+                                                    Left coordinate.</dd>
+                                                <dt><i>y1</i></dt>
+                                                <dd>
+                                                    Top coordinate.</dd>
+                                                <dt><i>x2</i></dt>
+                                                <dd>
+                                                    Right coordinate.</dd>
+                                                <dt><i>y2</i></dt>
+                                                <dd>
+                                                    Bottom coordinate.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.addtag_overlapped-method"
+                                                name="Tkinter.Canvas.addtag_overlapped-method"><b>addtag_overlapped(tag,
+                                                    x1, y1, x2, y2)</b></a> [<a
+                                                href="#Tkinter.Canvas.addtag_overlapped-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a tag to all items overlapping the given rectangle. This
+                                                includes items that are completely enclosed by it.</p>
+                                            <dl>
+                                                <dt><i>tag</i></dt>
+                                                <dd>
+                                                    The tag to add.</dd>
+                                                <dt><i>x1</i></dt>
+                                                <dd>
+                                                    Left coordinate.</dd>
+                                                <dt><i>y1</i></dt>
+                                                <dd>
+                                                    Top coordinate.</dd>
+                                                <dt><i>x2</i></dt>
+                                                <dd>
+                                                    Right coordinate.</dd>
+                                                <dt><i>y2</i></dt>
+                                                <dd>
+                                                    Bottom coordinate.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.addtag_withtag-method"
+                                                name="Tkinter.Canvas.addtag_withtag-method"><b>addtag_withtag(tag,
+                                                    item)</b></a> [<a
+                                                href="#Tkinter.Canvas.addtag_withtag-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a tag to all items having the given tag.</p>
+                                            <dl>
+                                                <dt><i>tag</i></dt>
+                                                <dd>
+                                                    The tag to add.</dd>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    The reference item. If a tag is given, the new tag
+                                                    is added to all items that have this tag. You can also give
+                                                    an id, to add a tag to a single item.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.bbox-method"
+                                                name="Tkinter.Canvas.bbox-method"><b>bbox(item=None)</b></a> [<a
+                                                href="#Tkinter.Canvas.bbox-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the bounding box for all matching items. If the tag
+                                                is omitted, the bounding box for all items is returned. Note
+                                                that the bounding box is approximate and may differ a few
+                                                pixels from the real value.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier. If omitted, the bounding box
+                                                    for all elements on the canvas.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The bounding box, as a 4-tuple.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.canvasx-method"
+                                                name="Tkinter.Canvas.canvasx-method"><b>canvasx(x,
+                                                    gridspacing=None)</b></a> [<a
+                                                href="#Tkinter.Canvas.canvasx-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Converts a window coordinate to a canvas coordinate.</p>
+                                            <dl>
+                                                <dt><i>x</i></dt>
+                                                <dd>
+                                                    Screen coordinate.</dd>
+                                                <dt><i>gridspacing</i></dt>
+                                                <dd>
+                                                    Optional grid spacing. The coordinate
+                                                    is rounded to the nearest grid coordinate.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    Canvas coordinate.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.canvasy-method"
+                                                name="Tkinter.Canvas.canvasy-method"><b>canvasy(y,
+                                                    gridspacing=None)</b></a> [<a
+                                                href="#Tkinter.Canvas.canvasy-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Converts a window coordinate to a canvas coordinate.</p>
+                                            <dl>
+                                                <dt><i>y</i></dt>
+                                                <dd>
+                                                    Screen coordinate.</dd>
+                                                <dt><i>gridspacing</i></dt>
+                                                <dd>
+                                                    Optional grid spacing. The coordinate
+                                                    is rounded to the nearest grid coordinate.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    Canvas coordinate.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.config-method"
+                                                name="Tkinter.Canvas.config-method"><b>config(**options)</b></a> [<a
+                                                href="#Tkinter.Canvas.config-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies one or more widget options. If no options are given,
+                                                the method returns a dictionary containing all current option
+                                                values.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options.</dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                    Canvas background color. Defaults to the
+                                                    standard widget background color.
+                                                    (the database name is background, the class is Background)</dd>
+                                                <dt><i>bg=</i></dt>
+                                                <dd>
+                                                    Same as <b>background</b>.
+                                                </dd>
+                                                <dt><i>borderwidth=</i></dt>
+                                                <dd>
+                                                    Width of the canvas border. The default
+                                                    is 0 (no border).
+                                                    (borderWidth/BorderWidth)</dd>
+                                                <dt><i>bd=</i></dt>
+                                                <dd>
+                                                    Same as <b>borderwidth</b>.
+                                                </dd>
+                                                <dt><i>closeenough=</i></dt>
+                                                <dd>
+                                                    The default value is 1.
+                                                    (closeEnough/CloseEnough)</dd>
+                                                <dt><i>confine=</i></dt>
+                                                <dd>
+                                                    The default value is 1.
+                                                    (confine/Confine)</dd>
+                                                <dt><i>cursor=</i></dt>
+                                                <dd>
+                                                    The cursor to use when the mouse is moved
+                                                    over the canvas.
+                                                    (cursor/Cursor)</dd>
+                                                <dt><i>height=</i></dt>
+                                                <dd>
+                                                    Canvas width. Default value is &#8216;7c&#8217;.
+                                                    (height/Height)</dd>
+                                                <dt><i>highlightbackground=</i></dt>
+                                                <dd>
+                                                    The color to use for the highlight
+                                                    border when the canvas does not have focus. The default is
+                                                    system specific.
+                                                    (highlightBackground/HighlightBackground)</dd>
+                                                <dt><i>highlightcolor=</i></dt>
+                                                <dd>
+                                                    The color to use for the highlight border
+                                                    when the canvas has focus. The default is system speciific.
+                                                    (highlightColor/HighlightColor)</dd>
+                                                <dt><i>highlightthickness=</i></dt>
+                                                <dd>
+                                                    The width of the highlight border.
+                                                    The default is system specific (usually one or two pixels).
+                                                    (highlightThickness/HighlightThickness)</dd>
+                                                <dt><i>insertbackground=</i></dt>
+                                                <dd>
+                                                    The color to use for the text insertion
+                                                    cursor. The default is system specific.
+                                                    (insertBackground/Foreground)</dd>
+                                                <dt><i>insertborderwidth=</i></dt>
+                                                <dd>
+                                                    Width of the insertion cursor&#8217;s border.
+                                                    If this is set to a non-zero value, the cursor is drawn using
+                                                    the <b>RAISED</b> border style.
+                                                    (insertBorderWidth/BorderWidth)
+                                                </dd>
+                                                <dt><i>insertofftime=</i></dt>
+                                                <dd>
+                                                    Together with <b>insertontime</b>, this
+                                                    option controls cursor blinking. Both values are given in
+                                                    milliseconds.
+                                                    (insertOffTime/OffTime)
+                                                </dd>
+                                                <dt><i>insertontime=</i></dt>
+                                                <dd>
+                                                    See <b>insertofftime</b>.
+                                                    (insertOnTime/OnTime)
+                                                </dd>
+                                                <dt><i>insertwidth=</i></dt>
+                                                <dd>
+                                                    Width of the insertion cursor. Usually
+                                                    one or two pixels.
+                                                    (insertWidth/InsertWidth)</dd>
+                                                <dt><i>offset=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;0,0&#8217;.
+                                                    (offset/Offset)</dd>
+                                                <dt><i>relief=</i></dt>
+                                                <dd>
+                                                    Border style. The default is <b>FLAT</b>.
+                                                    Other possible values are <b>SUNKEN</b>, <b>RAISED</b>,
+                                                    <b>GROOVE</b>, and <b>RIDGE</b>.
+                                                    (relief/Relief)
+                                                </dd>
+                                                <dt><i>scrollregion=</i></dt>
+                                                <dd>
+                                                    Canvas scroll region. No default value.
+                                                    (scrollRegion/ScrollRegion)</dd>
+                                                <dt><i>selectbackground=</i></dt>
+                                                <dd>
+                                                    Selection background color. The default
+                                                    is system and display specific.
+                                                    (selectBackground/Foreground)</dd>
+                                                <dt><i>selectborderwidth=</i></dt>
+                                                <dd>
+                                                    Selection border width. The default is
+                                                    system specific.
+                                                    (selectBorderWidth/BorderWidth)</dd>
+                                                <dt><i>selectforeground=</i></dt>
+                                                <dd>
+                                                    Selection text color. The default is
+                                                    system specific.
+                                                    (selectForeground/Background)</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Canvas state. One of NORMAL, DISABLED, or HIDDEN.
+                                                    The default is NORMAL. Note that this is a global setting, but
+                                                    individual canvas items can use the item-level <b>state</b>
+                                                    option to override this setting.
+                                                    (state/State)
+                                                </dd>
+                                                <dt><i>takefocus=</i></dt>
+                                                <dd>
+                                                    Indicates that the user can use the <b>Tab</b>
+                                                    key to move to this widget. Default is an empty string, which
+                                                    means that the canvas widget accepts focus only if it has any
+                                                    keyboard bindings.
+                                                    (takeFocus/TakeFocus)
+                                                </dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Canvas width. Default value is &#8216;10c&#8217;.
+                                                    (width/Width)</dd>
+                                                <dt><i>xscrollcommand=</i></dt>
+                                                <dd>
+                                                    Used to connect a canvas to a
+                                                    horizontal scrollbar. This option should be set to the
+                                                    <b>set</b> method of the corresponding scrollbar.
+                                                    (xScrollCommand/ScrollCommand)
+                                                </dd>
+                                                <dt><i>xscrollincrement=</i></dt>
+                                                <dd>
+                                                    Default value is 0.
+                                                    (xScrollIncrement/ScrollIncrement)</dd>
+                                                <dt><i>yscrollcommand=</i></dt>
+                                                <dd>
+                                                    Used to connect a canvas to a
+                                                    vertical scrollbar. This option should be set to the
+                                                    <b>set</b> method of the corresponding scrollbar.
+                                                    (yScrollCommand/ScrollCommand)
+                                                </dd>
+                                                <dt><i>yscrollincrement=</i></dt>
+                                                <dd>
+                                                    Default value is 0.
+                                                    (yScrollIncrement/ScrollIncrement)</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.coords-method"
+                                                name="Tkinter.Canvas.coords-method"><b>coords(item, *coords)</b></a> [<a
+                                                href="#Tkinter.Canvas.coords-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the coordinates for an item.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier (tag or id).</dd>
+                                                <dt><i>*coords</i></dt>
+                                                <dd>
+                                                    Optional list of coordinate pairs. If given,
+                                                    the coordinates will replace the current coordinates for
+                                                    all matching items.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    If no coordinates are given, this method returns the
+                                                    coordinates for the matching item. If the item specifier
+                                                    matches more than one item, the coordinates for the first
+                                                    item found is returned.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.create_arc-method"
+                                                name="Tkinter.Canvas.create_arc-method"><b>create_arc(bbox,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.create_arc-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Draws an arc, pieslice, or chord on the canvas. The new item
+                                                is drawn on top of the existing items.</p>
+                                            <dl>
+                                                <dt><i>bbox</i></dt>
+                                                <dd>
+                                                    Bounding box for the full arc.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Arc options.</dd>
+                                                <dt><i>activedash=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activefill=</i></dt>
+                                                <dd>
+                                                    Fill color to use when the mouse pointer is
+                                                    moved over the item, if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>activeoutline=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activeoutlinestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activewidth=</i></dt>
+                                                <dd>
+                                                    Default is 0.0.</dd>
+                                                <dt><i>dash=</i></dt>
+                                                <dd>
+                                                    Outline dash pattern, given as a list of segment
+                                                    lengths. Only the odd segments are drawn.</dd>
+                                                <dt><i>dashoffset=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>disableddash=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledfill=</i></dt>
+                                                <dd>
+                                                    Fill color to use when the item is disabled,
+                                                    if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>disabledoutline=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledoutlinestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledstipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledwidth=</i></dt>
+                                                <dd>
+                                                    Default is 0.0.</dd>
+                                                <dt><i>extent=</i></dt>
+                                                <dd>
+                                                    The size, relative to the <b>start</b> angle.
+                                                    Default is 90.0.
+                                                </dd>
+                                                <dt><i>fill=</i></dt>
+                                                <dd>
+                                                    Fill color. An empty string means transparent.</dd>
+                                                <dt><i>offset=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;0,0&#8221;.</dd>
+                                                <dt><i>outline=</i></dt>
+                                                <dd>
+                                                    Outline color. Default is &#8220;black&#8221;.</dd>
+                                                <dt><i>outlineoffset=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;0,0&#8221;.</dd>
+                                                <dt><i>outlinestipple=</i></dt>
+                                                <dd>
+                                                    Outline stipple pattern.</dd>
+                                                <dt><i>start=</i></dt>
+                                                <dd>
+                                                    Start angle. Default is 0.0.</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Item state. One of NORMAL, DISABLED, or HIDDEN.</dd>
+                                                <dt><i>stipple=</i></dt>
+                                                <dd>
+                                                    Stipple pattern.</dd>
+                                                <dt><i>style=</i></dt>
+                                                <dd>
+                                                    One of PIESLICE, CHORD, or ARC. Default is
+                                                    PIESLICE.</dd>
+                                                <dt><i>tags=</i></dt>
+                                                <dd>
+                                                    A tag to attach to this item, or a tuple
+                                                    containing multiple tags.</dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Default is 1.0.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The item id.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.create_bitmap-method"
+                                                name="Tkinter.Canvas.create_bitmap-method"><b>create_bitmap(position,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.create_bitmap-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Draws a bitmap on the canvas.</p>
+                                            <dl>
+                                                <dt><i>position</i></dt>
+                                                <dd>
+                                                    Bitmap position, given as two coordinates.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Bitmap options.</dd>
+                                                <dt><i>activebackground=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activebitmap=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activeforeground=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>anchor=</i></dt>
+                                                <dd>
+                                                    Where to place the bitmap relative to the given
+                                                    position. Default is CENTER.</dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                    Background color, used for pixels that are
+                                                    &#8220;off&#8221;. Use an empty string to make the background
+                                                    transparent.
+                                                    Default is transparent.</dd>
+                                                <dt><i>bitmap=</i></dt>
+                                                <dd>
+                                                    The bitmap descriptor. See
+                                                    <a href="bitmapimage.htm"><b>BitmapImage</b></a> for more
+                                                    information. (To display a <b>BitmapImage</b> object, use
+                                                    the <a class="link"
+                                                        href="#canvas.Canvas.create_image-method"><b>create_image</b></a>
+                                                    function.)
+                                                </dd>
+                                                <dt><i>disabledbackground=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledbitmap=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledforeground=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>foreground=</i></dt>
+                                                <dd>
+                                                    Foreground colors, used for pixels that are
+                                                    &#8220;on&#8221;. Default is &#8220;black&#8221;.</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Item state. One of NORMAL, DISABLED, or HIDDEN.</dd>
+                                                <dt><i>tags=</i></dt>
+                                                <dd>
+                                                    A tag to attach to this item, or a tuple
+                                                    containing multiple tags.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The item id.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.create_image-method"
+                                                name="Tkinter.Canvas.create_image-method"><b>create_image(position,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.create_image-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Draws an image on the canvas.</p>
+                                            <dl>
+                                                <dt><i>position</i></dt>
+                                                <dd>
+                                                    Image position, given as two coordinates.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Image options.</dd>
+                                                <dt><i>activeimage=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>anchor=</i></dt>
+                                                <dd>
+                                                    Where to place the image relative to the given
+                                                    position. Default is CENTER.</dd>
+                                                <dt><i>disabledimage=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>image=</i></dt>
+                                                <dd>
+                                                    The image object. This should be a
+                                                    <a href="photoimage.htm"><b>PhotoImage</b></a> or
+                                                    <a href="bitmapimage.htm"><b>BitmapImage</b></a>,
+                                                    or a compatible object (such as the PIL PhotoImage).
+                                                    The application must keep a reference to the image
+                                                    object.
+                                                </dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Item state. One of NORMAL, DISABLED, or HIDDEN.</dd>
+                                                <dt><i>tags=</i></dt>
+                                                <dd>
+                                                    A tag to attach to this item, or a tuple
+                                                    containing multiple tags.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The item id.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.create_line-method"
+                                                name="Tkinter.Canvas.create_line-method"><b>create_line(coords,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.create_line-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Draws a line on the canvas.</p>
+                                            <dl>
+                                                <dt><i>coords</i></dt>
+                                                <dd>
+                                                    Image coordinates.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Line options.</dd>
+                                                <dt><i>activedash=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activefill=</i></dt>
+                                                <dd>
+                                                    Line color to use when the mouse pointer is
+                                                    moved over the item, if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>activestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activewidth=</i></dt>
+                                                <dd>
+                                                    Default is 0.0.</dd>
+                                                <dt><i>arrow=</i></dt>
+                                                <dd>
+                                                    Default is NONE.</dd>
+                                                <dt><i>arrowshape=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;8 10 3&#8221;.</dd>
+                                                <dt><i>capstyle=</i></dt>
+                                                <dd>
+                                                    Default is BUTT.</dd>
+                                                <dt><i>dash=</i></dt>
+                                                <dd>
+                                                    Dash pattern, given as a list of segment lengths.
+                                                    Only the odd segments are drawn.</dd>
+                                                <dt><i>dashoffset=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>disableddash=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledfill=</i></dt>
+                                                <dd>
+                                                    Line color to use when the item is disabled,
+                                                    if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>disabledstipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledwidth=</i></dt>
+                                                <dd>
+                                                    Default is 0.0.</dd>
+                                                <dt><i>fill=</i></dt>
+                                                <dd>
+                                                    Line color. Default is &#8220;black&#8221;.</dd>
+                                                <dt><i>joinstyle=</i></dt>
+                                                <dd>
+                                                    Default is ROUND.</dd>
+                                                <dt><i>offset=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;0,0&#8221;.</dd>
+                                                <dt><i>smooth=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>splinesteps=</i></dt>
+                                                <dd>
+                                                    Default is 12.</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Item state. One of NORMAL, DISABLED, or HIDDEN.</dd>
+                                                <dt><i>stipple=</i></dt>
+                                                <dd>
+                                                    Stipple pattern.</dd>
+                                                <dt><i>tags=</i></dt>
+                                                <dd>
+                                                    A tag to attach to this item, or a tuple
+                                                    containing multiple tags.</dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Default is 1.0.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The item id.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.create_oval-method"
+                                                name="Tkinter.Canvas.create_oval-method"><b>create_oval(bbox,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.create_oval-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Draws an ellipse on the canvas.</p>
+                                            <dl>
+                                                <dt><i>bbox</i></dt>
+                                                <dd>
+                                                    Ellipse coordinates.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Ellipse options.</dd>
+                                                <dt><i>activedash=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activefill=</i></dt>
+                                                <dd>
+                                                    Fill color to use when the mouse pointer is
+                                                    moved over the item, if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>activeoutline=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activeoutlinestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activewidth=</i></dt>
+                                                <dd>
+                                                    Default is 0.0.</dd>
+                                                <dt><i>dash=</i></dt>
+                                                <dd>
+                                                    Outline dash pattern, given as a list of segment
+                                                    lengths. Only the odd segments are drawn.</dd>
+                                                <dt><i>dashoffset=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>disableddash=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledfill=</i></dt>
+                                                <dd>
+                                                    Fill color to use when the item is disabled,
+                                                    if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>disabledoutline=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledoutlinestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledstipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledwidth=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>fill=</i></dt>
+                                                <dd>
+                                                    Fill color. An empty string means transparent.</dd>
+                                                <dt><i>offset=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;0,0&#8221;.</dd>
+                                                <dt><i>outline=</i></dt>
+                                                <dd>
+                                                    Outline color. Default is &#8220;black&#8221;.</dd>
+                                                <dt><i>outlineoffset=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;0,0&#8221;.</dd>
+                                                <dt><i>outlinestipple=</i></dt>
+                                                <dd>
+                                                    Outline stipple pattern.</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Item state. One of NORMAL, DISABLED, or HIDDEN.</dd>
+                                                <dt><i>stipple=</i></dt>
+                                                <dd>
+                                                    Stipple pattern.</dd>
+                                                <dt><i>tags=</i></dt>
+                                                <dd>
+                                                    A tag to attach to this item, or a tuple
+                                                    containing multiple tags.</dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Default is 1.0.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The item id.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.create_polygon-method"
+                                                name="Tkinter.Canvas.create_polygon-method"><b>create_polygon(coords,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.create_polygon-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Draws a polygon on the canvas.</p>
+                                            <dl>
+                                                <dt><i>coords</i></dt>
+                                                <dd>
+                                                    Polygon coordinates.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Polygon options.</dd>
+                                                <dt><i>activedash=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activefill=</i></dt>
+                                                <dd>
+                                                    Fill color to use when the mouse pointer is
+                                                    moved over the item, if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>activeoutline=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activeoutlinestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activewidth=</i></dt>
+                                                <dd>
+                                                    Default is 0.0.</dd>
+                                                <dt><i>dash=</i></dt>
+                                                <dd>
+                                                    Outline dash pattern, given as a list of segment
+                                                    lengths. Only the odd segments are drawn.</dd>
+                                                <dt><i>dashoffset=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>disableddash=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledfill=</i></dt>
+                                                <dd>
+                                                    Fill color to use when the item is disabled,
+                                                    if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>disabledoutline=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledoutlinestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledstipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledwidth=</i></dt>
+                                                <dd>
+                                                    Default is 0.0.</dd>
+                                                <dt><i>fill=</i></dt>
+                                                <dd>
+                                                    Fill color. Default is &#8220;black&#8221;.</dd>
+                                                <dt><i>joinstyle=</i></dt>
+                                                <dd>
+                                                    Default is ROUND.</dd>
+                                                <dt><i>offset=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;0,0&#8221;.</dd>
+                                                <dt><i>outline=</i></dt>
+                                                <dd>
+                                                    Outline color.</dd>
+                                                <dt><i>outlineoffset=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;0,0&#8221;.</dd>
+                                                <dt><i>outlinestipple=</i></dt>
+                                                <dd>
+                                                    Outline stipple pattern.</dd>
+                                                <dt><i>smooth=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>splinesteps=</i></dt>
+                                                <dd>
+                                                    Default is 12.</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Item state. One of NORMAL, DISABLED, or HIDDEN.</dd>
+                                                <dt><i>stipple=</i></dt>
+                                                <dd>
+                                                    Stipple pattern.</dd>
+                                                <dt><i>tags=</i></dt>
+                                                <dd>
+                                                    A tag to attach to this item, or a tuple
+                                                    containing multiple tags.</dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Default is 1.0.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The item id.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.create_rectangle-method"
+                                                name="Tkinter.Canvas.create_rectangle-method"><b>create_rectangle(bbox,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.create_rectangle-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Draws a rectangle on the canvas.</p>
+                                            <dl>
+                                                <dt><i>bbox</i></dt>
+                                                <dd>
+                                                    Rectangle bounding box.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Rectangle options.</dd>
+                                                <dt><i>activedash=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activefill=</i></dt>
+                                                <dd>
+                                                    Fill color to use when the mouse pointer is
+                                                    moved over the item, if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>activeoutline=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activeoutlinestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activewidth=</i></dt>
+                                                <dd>
+                                                    Default is 0.0.</dd>
+                                                <dt><i>dash=</i></dt>
+                                                <dd>
+                                                    Outline dash pattern, given as a list of segment
+                                                    lengths. Only the odd segments are drawn.</dd>
+                                                <dt><i>dashoffset=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>disableddash=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledfill=</i></dt>
+                                                <dd>
+                                                    Fill color to use when the item is disabled,
+                                                    if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>disabledoutline=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledoutlinestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledstipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>disabledwidth=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>fill=</i></dt>
+                                                <dd>
+                                                    Fill color. An empty string means transparent.</dd>
+                                                <dt><i>offset=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;0,0&#8221;.</dd>
+                                                <dt><i>outline=</i></dt>
+                                                <dd>
+                                                    Outline color. Default is &#8220;black&#8221;.</dd>
+                                                <dt><i>outlineoffset=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;0,0&#8221;.</dd>
+                                                <dt><i>outlinestipple=</i></dt>
+                                                <dd>
+                                                    Outline stipple pattern.</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Item state. One of NORMAL, DISABLED, or HIDDEN.</dd>
+                                                <dt><i>stipple=</i></dt>
+                                                <dd>
+                                                    Stipple pattern.</dd>
+                                                <dt><i>tags=</i></dt>
+                                                <dd>
+                                                    A tag to attach to this item, or a tuple
+                                                    containing multiple tags.</dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Default is 1.0.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The item id.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.create_text-method"
+                                                name="Tkinter.Canvas.create_text-method"><b>create_text(position,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.create_text-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Draws text on the canvas.</p>
+                                            <dl>
+                                                <dt><i>position</i></dt>
+                                                <dd>
+                                                    Text position, given as two coordinates. By
+                                                    default, the text is centered on this position. You can
+                                                    override this with the <b>anchor</b> option. For example, if
+                                                    the coordinate is the upper left corner, set the
+                                                    <b>anchor</b> to <b>NW</b>.
+                                                </dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Text options.</dd>
+                                                <dt><i>activefill=</i></dt>
+                                                <dd>
+                                                    Text color to use when the mouse pointer is
+                                                    moved over the item, if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>activestipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>anchor=</i></dt>
+                                                <dd>
+                                                    Where to place the text relative to the given
+                                                    position. Default is CENTER.</dd>
+                                                <dt><i>disabledfill=</i></dt>
+                                                <dd>
+                                                    Text color to use when the item is disabled,
+                                                    if different from <b>fill</b>.
+                                                </dd>
+                                                <dt><i>disabledstipple=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>fill=</i></dt>
+                                                <dd>
+                                                    Text color. Default is &#8220;black&#8221;.</dd>
+                                                <dt><i>font=</i></dt>
+                                                <dd>
+                                                    Font specifier. Default is system specific.</dd>
+                                                <dt><i>justify=</i></dt>
+                                                <dd>
+                                                    Default is LEFT.</dd>
+                                                <dt><i>offset=</i></dt>
+                                                <dd>
+                                                    Default is &#8220;0,0&#8221;.</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Item state. One of NORMAL, DISABLED, or HIDDEN.</dd>
+                                                <dt><i>stipple=</i></dt>
+                                                <dd>
+                                                    Stipple pattern.</dd>
+                                                <dt><i>tags=</i></dt>
+                                                <dd>
+                                                    A tag to attach to this item, or a tuple
+                                                    containing multiple tags.</dd>
+                                                <dt><i>text=</i></dt>
+                                                <dd>
+                                                    The text to display.</dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Maximum line length. Lines longer than this value
+                                                    are wrapped. Default is 0 (no wrapping).</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The item id.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.create_window-method"
+                                                name="Tkinter.Canvas.create_window-method"><b>create_window(position,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.create_window-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Places a Tkinter widget on the canvas. Note that widgets are
+                                                drawn on top of the canvas (that is, the canvas acts like a
+                                                geometry manager). You cannot draw other canvas items on top
+                                                of a widget.</p>
+                                            <dl>
+                                                <dt><i>position</i></dt>
+                                                <dd>
+                                                    Window position, given as two coordinates.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Window options.</dd>
+                                                <dt><i>anchor=</i></dt>
+                                                <dd>
+                                                    Where to place the widget relative to the given
+                                                    position. Default is CENTER.</dd>
+                                                <dt><i>height=</i></dt>
+                                                <dd>
+                                                    Window height. Default is to use the window&#8217;s
+                                                    requested height.</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Item state. One of NORMAL, DISABLED, or HIDDEN.</dd>
+                                                <dt><i>tags=</i></dt>
+                                                <dd>
+                                                    A tag to attach to this item, or a tuple
+                                                    containing multiple tags.</dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Window width. Default is to use the window&#8217;s
+                                                    requested width.</dd>
+                                                <dt><i>window=</i></dt>
+                                                <dd>
+                                                    Window object.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The item id.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.dchars-method"
+                                                name="Tkinter.Canvas.dchars-method"><b>dchars(item, from,
+                                                    to=None)</b></a> [<a href="#Tkinter.Canvas.dchars-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Deletes text from an editable item.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>from</i></dt>
+                                                <dd>
+                                                    Where to start deleting text.</dd>
+                                                <dt><i>to</i></dt>
+                                                <dd>
+                                                    Where to stop deleting text. If omitted, a single
+                                                    character is removed.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.delete-method"
+                                                name="Tkinter.Canvas.delete-method"><b>delete(item)</b></a> [<a
+                                                href="#Tkinter.Canvas.delete-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Deletes all matching items. It is not an error to give an
+                                                item specifier that doesn&#8217;t match any items.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier (tag or id).</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.dtag-method"
+                                                name="Tkinter.Canvas.dtag-method"><b>dtag(item, tag=None)</b></a> [<a
+                                                href="#Tkinter.Canvas.dtag-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Removes the given tag from all matching items. If the tag is
+                                                omitted, all tags are removed from the matching items. It is
+                                                not an error to give a specifier that doesn&#8217;t match any items.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    The item specifier (tag or id).</dd>
+                                                <dt><i>tag</i></dt>
+                                                <dd>
+                                                    The tag to remove from matching items. If omitted,
+                                                    all tags are removed.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.find_above-method"
+                                                name="Tkinter.Canvas.find_above-method"><b>find_above(item)</b></a> [<a
+                                                href="#Tkinter.Canvas.find_above-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the item just above the given item.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Reference item.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.find_all-method"
+                                                name="Tkinter.Canvas.find_all-method"><b>find_all()</b></a> [<a
+                                                href="#Tkinter.Canvas.find_all-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns all items on the canvas. This method returns a tuple
+                                                containing the identities of all items on the canvas, with the
+                                                topmost item last (that is, if you haven&#8217;t change the order
+                                                using <a class="link" href="#canvas.Canvas.lift-method"><b>lift</b></a>
+                                                or <a class="link" href="#canvas.Canvas.lower-method"><b>lower</b></a>,
+                                                the items are
+                                                returned in the order you created them). This is shortcut for
+                                                <b>find_withtag(ALL)</b>.
+
+                                            </p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A tuple containing all items on the canvas.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.find_below-method"
+                                                name="Tkinter.Canvas.find_below-method"><b>find_below(item)</b></a> [<a
+                                                href="#Tkinter.Canvas.find_below-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the item just below the given item.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Reference item.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.find_closest-method"
+                                                name="Tkinter.Canvas.find_closest-method"><b>find_closest(x, y,
+                                                    halo=None, start=None)</b></a> [<a
+                                                href="#Tkinter.Canvas.find_closest-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the item closest to the given position. Note that the
+                                                position is given in canvas coordinates, and that this method
+                                                always succeeds if there&#8217;s at least one item in the canvas. To
+                                                find items within a certain distance from a position, use
+                                                <a class="link"
+                                                    href="#canvas.Canvas.find_overlapping-method"><b>find_overlapping</b></a>
+                                                with a small rectangle centered
+                                                on the position.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>x</i></dt>
+                                                <dd>
+                                                    Horizontal screen coordinate.</dd>
+                                                <dt><i>y</i></dt>
+                                                <dd>
+                                                    Vertical screen coordinate.</dd>
+                                                <dt><i>halo</i></dt>
+                                                <dd>
+                                                    Optional halo distance.</dd>
+                                                <dt><i>start</i></dt>
+                                                <dd>
+                                                    Optional start item.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    An item specifier.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.find_enclosed-method"
+                                                name="Tkinter.Canvas.find_enclosed-method"><b>find_enclosed(x1, y1, x2,
+                                                    y2)</b></a> [<a href="#Tkinter.Canvas.find_enclosed-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Finds all items completely enclosed by the rectangle
+                                                (x1, y1, x2, y2).</p>
+                                            <dl>
+                                                <dt><i>x1</i></dt>
+                                                <dd>
+                                                    Left edge.</dd>
+                                                <dt><i>y1</i></dt>
+                                                <dd>
+                                                    Upper edge.</dd>
+                                                <dt><i>x2</i></dt>
+                                                <dd>
+                                                    Right edge.</dd>
+                                                <dt><i>y2</i></dt>
+                                                <dd>
+                                                    Lower edge.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A tuple containing all matching items.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.find_overlapping-method"
+                                                name="Tkinter.Canvas.find_overlapping-method"><b>find_overlapping(x1,
+                                                    y1, x2, y2)</b></a> [<a
+                                                href="#Tkinter.Canvas.find_overlapping-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Finds all items that overlap the given rectangle, or that are
+                                                completely enclosed by it.</p>
+                                            <dl>
+                                                <dt><i>x1</i></dt>
+                                                <dd>
+                                                    Left edge.</dd>
+                                                <dt><i>y1</i></dt>
+                                                <dd>
+                                                    Upper edge.</dd>
+                                                <dt><i>x2</i></dt>
+                                                <dd>
+                                                    Right edge.</dd>
+                                                <dt><i>y2</i></dt>
+                                                <dd>
+                                                    Lower edge.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A tuple containing all matching items.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.find_withtag-method"
+                                                name="Tkinter.Canvas.find_withtag-method"><b>find_withtag(item)</b></a>
+                                            [<a href="#Tkinter.Canvas.find_withtag-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Finds all items having the given specifier.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.focus-method"
+                                                name="Tkinter.Canvas.focus-method"><b>focus(item=None)</b></a> [<a
+                                                href="#Tkinter.Canvas.focus-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Moves focus to the given item. If the item has keyboard bindings,
+                                                it will receive all further keyboard events, given that the canvas
+                                                itself also has focus. It&#8217;s usually best to call focus_set on the
+                                                canvas whenever you set focus to a canvas item.
+                                            </p>
+                                            <p>
+                                                To remove focus from the item, call this method with an empty
+                                                string.
+                                            </p>
+                                            <p>
+                                                To find out what item that currently has focus, call this method
+                                                without any arguments.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier. To remove focus from any item,
+                                                    use an empty string.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    If the item specifier is omitted, this method returns
+                                                    the item that currently has focus, or None if no item has
+                                                    focus.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.gettags-method"
+                                                name="Tkinter.Canvas.gettags-method"><b>gettags(item)</b></a> [<a
+                                                href="#Tkinter.Canvas.gettags-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Gets tags associated with an item.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A tuple containing all tags associated with the item.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.icursor-method"
+                                                name="Tkinter.Canvas.icursor-method"><b>icursor(item, index)</b></a> [<a
+                                                href="#Tkinter.Canvas.icursor-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Moves the insertion cursor to the given position. This method
+                                                can only be used with editable items.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    Cursor index.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.index-method"
+                                                name="Tkinter.Canvas.index-method"><b>index(item, index)</b></a> [<a
+                                                href="#Tkinter.Canvas.index-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Gets the numerical cursor index corresponding to the given index.
+                                                Numerical indexes work like Python&#8217;s sequence indexes; 0 is just
+                                                to the left of the first character, and len(text) is just to the
+                                                right of the last character.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    An index. You can use a numerical index, or one of
+                                                    INSERT (the current insertion cursor), END (the length of the
+                                                    text), or SEL_FIRST and SEL_LAST (the selection start and end).
+                                                    You can also use the form &#8220;@x,y&#8221; where x and y are
+                                                    canvas
+                                                    coordinates, to get the index closest to the given coordinate.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A numerical index (an integer).</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.insert-method"
+                                                name="Tkinter.Canvas.insert-method"><b>insert(item, index, text)</b></a>
+                                            [<a href="#Tkinter.Canvas.insert-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Inserts text into an editable item.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    Where to insert the text. This can be either a
+                                                    numerical index or a symbolic constant. See the description
+                                                    of the <a class="link"
+                                                        href="#canvas.Canvas.index-method"><b>index</b></a> method for
+                                                    details. If you insert
+                                                    text at the INSERT index, the cursor is moved along with the
+                                                    text.
+                                                </dd>
+                                                <dt><i>text</i></dt>
+                                                <dd>
+                                                    The text to insert.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.itemcget-method"
+                                                name="Tkinter.Canvas.itemcget-method"><b>itemcget(item, option)</b></a>
+                                            [<a href="#Tkinter.Canvas.itemcget-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Gets the current value for an item option.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>option</i></dt>
+                                                <dd>
+                                                    Item option.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The option value. If the item specifier refers to more
+                                                    than one item, this method returns the option value for the
+                                                    first item found.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.itemconfig-method"
+                                                name="Tkinter.Canvas.itemconfig-method"><b>itemconfig(item,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.itemconfig-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Changes one or more options for all matching items.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Item options.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.itemconfigure-method"
+                                                name="Tkinter.Canvas.itemconfigure-method"><b>itemconfigure(item,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.itemconfigure-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#canvas.Canvas.itemconfig-method"><b>itemconfig</b></a>.
+
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.lift-method"
+                                                name="Tkinter.Canvas.lift-method"><b>lift(item, **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.lift-method">#</a>]</dt>
+                                        <dd>
+                                            <p>(Deprecated) Moves item to top of stack. Same as
+                                                <a class="link"
+                                                    href="#canvas.Canvas.tag_raise-method"><b>tag_raise</b></a>.
+
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.lower-method"
+                                                name="Tkinter.Canvas.lower-method"><b>lower(item, **options)</b></a> [<a
+                                                href="#Tkinter.Canvas.lower-method">#</a>]</dt>
+                                        <dd>
+                                            <p>(Deprecated) Moves item to bottom of stack. Same as
+                                                <a class="link"
+                                                    href="#canvas.Canvas.tag_lower-method"><b>tag_lower</b></a>.
+
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.move-method"
+                                                name="Tkinter.Canvas.move-method"><b>move(item, dx, dy)</b></a> [<a
+                                                href="#Tkinter.Canvas.move-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Moves matching items by an offset.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>dx</i></dt>
+                                                <dd>
+                                                    Horizontal offset.</dd>
+                                                <dt><i>dy</i></dt>
+                                                <dd>
+                                                    Vertical offset.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.postscript-method"
+                                                name="Tkinter.Canvas.postscript-method"><b>postscript(**options)</b></a>
+                                            [<a href="#Tkinter.Canvas.postscript-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Generates a Postscript rendering of the canvas contents.
+                                                Images and embedded widgets are not included.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Postscript options.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.scale-method"
+                                                name="Tkinter.Canvas.scale-method"><b>scale(self, xscale, yscale,
+                                                    xoffset, yoffset)</b></a> [<a
+                                                href="#Tkinter.Canvas.scale-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Resizes matching items by scale factor. The coordinates for
+                                                each item are recalculated as ((coord-offset)*scale+offset);
+                                                in other words, each item first moved by -offset, then multiplied
+                                                with the scale factor, and then moved back again. Note that this
+                                                method modifies the item coordinates; you may loose precision
+                                                if you use this method several times on the same items.</p>
+                                            <dl>
+                                                <dt><i>xscale</i></dt>
+                                                <dd>
+                                                    Horizontal scale.</dd>
+                                                <dt><i>yscale</i></dt>
+                                                <dd>
+                                                    Vertical scale.</dd>
+                                                <dt><i>xoffset</i></dt>
+                                                <dd>
+                                                    Horizontal offset, in canvas coordinates.</dd>
+                                                <dt><i>yoffset</i></dt>
+                                                <dd>
+                                                    Vertical scale, in canvas coordinates.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.scan_dragto-method"
+                                                name="Tkinter.Canvas.scan_dragto-method"><b>scan_dragto(x, y)</b></a>
+                                            [<a href="#Tkinter.Canvas.scan_dragto-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Scrolls the widget contents relative to the scanning anchor.
+                                                The contents are moved 10 times the distance between the anchor
+                                                and the given position. Use <a class="link"
+                                                    href="#canvas.Canvas.scan_mark-method"><b>scan_mark</b></a> to set
+                                                the anchor.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>x</i></dt>
+                                                <dd>
+                                                    The horizontal coordinate.</dd>
+                                                <dt><i>y</i></dt>
+                                                <dd>
+                                                    The vertical coordinate.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.scan_mark-method"
+                                                name="Tkinter.Canvas.scan_mark-method"><b>scan_mark(x, y)</b></a> [<a
+                                                href="#Tkinter.Canvas.scan_mark-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Sets the scanning anchor. This sets an anchor that can be used
+                                                for fast scrolling to the given mouse coordinate.</p>
+                                            <dl>
+                                                <dt><i>x</i></dt>
+                                                <dd>
+                                                    The horizontal coordinate.</dd>
+                                                <dt><i>y</i></dt>
+                                                <dd>
+                                                    The vertical coordinate.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.select_adjust-method"
+                                                name="Tkinter.Canvas.select_adjust-method"><b>select_adjust(item,
+                                                    index)</b></a> [<a
+                                                href="#Tkinter.Canvas.select_adjust-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adjusts the selection, so that it includes the given index. This
+                                                method also sets the selection anchor to this position. This is
+                                                typically used by mouse bindings.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    Selection index.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.select_clear-method"
+                                                name="Tkinter.Canvas.select_clear-method"><b>select_clear()</b></a> [<a
+                                                href="#Tkinter.Canvas.select_clear-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Removes the selection, if it is in this canvas widget.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.select_from-method"
+                                                name="Tkinter.Canvas.select_from-method"><b>select_from(item,
+                                                    index)</b></a> [<a href="#Tkinter.Canvas.select_from-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Sets the selection anchor point. Use <a class="link"
+                                                    href="#canvas.Canvas.select_adjust-method"><b>select_adjust</b></a>
+                                                or <a class="link"
+                                                    href="#canvas.Canvas.select_to-method"><b>select_to</b></a> to
+                                                extend the selection.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    Selection anchor.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.select_item-method"
+                                                name="Tkinter.Canvas.select_item-method"><b>select_item()</b></a> [<a
+                                                href="#Tkinter.Canvas.select_item-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the item that owns the text selection for this canvas
+                                                widget.
+                                            </p>
+                                            <p>
+                                                Note that this method always returns None in some older versions
+                                                of Tkinter. To work around this problem, replace the method call
+                                                with <b>canvas.tk.call(canvas._w, &#8220;select&#8221;,
+                                                    &#8220;item&#8221;)</b>.
+
+                                            </p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    Item specifier, or None if there&#8217;s no selection.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.select_to-method"
+                                                name="Tkinter.Canvas.select_to-method"><b>select_to(item, index)</b></a>
+                                            [<a href="#Tkinter.Canvas.select_to-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies the selection so it includes the region between the
+                                                current selection anchor and the given index. The anchor is
+                                                set by <a class="link"
+                                                    href="#canvas.Canvas.select_from-method"><b>select_from</b></a> or
+                                                <a class="link"
+                                                    href="#canvas.Canvas.select_adjust-method"><b>select_adjust</b></a>.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    Selection end point.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.tag_bind-method"
+                                                name="Tkinter.Canvas.tag_bind-method"><b>tag_bind(item, event=None,
+                                                    callback, add=None)</b></a> [<a
+                                                href="#Tkinter.Canvas.tag_bind-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds an event binding to all matching items.
+                                            </p>
+                                            <p>
+                                                Note that the new bindings are associated with the items, not
+                                                the tag. For example, if you attach bindings to all items having
+                                                the <b>movable</b> tag, they will only be attached to any
+                                                existing items with that tag. If you create new items tagged as
+                                                <b>movable</b>, they will not get those bindings.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    The item specifier (tag or id).</dd>
+                                                <dt><i>event</i></dt>
+                                                <dd>
+                                                    The event specifier.</dd>
+                                                <dt><i>callback</i></dt>
+                                                <dd>
+                                                    A callable object that takes one argument.
+                                                    This callback is called with an event descriptor, for
+                                                    events matching the given event specifier.</dd>
+                                                <dt><i>add</i></dt>
+                                                <dd>
+                                                    Usually, the new binding replaces any existing
+                                                    binding for the same event sequence. If this argument
+                                                    is present, and set to &#8220;+&#8221;, the new binding is added to
+                                                    to any existing binding.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.tag_lower-method"
+                                                name="Tkinter.Canvas.tag_lower-method"><b>tag_lower(item)</b></a> [<a
+                                                href="#Tkinter.Canvas.tag_lower-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Moves a canvas item to the bottom of the canvas stack. If
+                                                multiple items match, they are all moved, with their relative
+                                                order preserved.
+                                            </p>
+                                            <p>
+                                                This method doesn&#8217;t work with window items. To change their
+                                                order, use <b>lower</b> on the widget instance instead.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.tag_raise-method"
+                                                name="Tkinter.Canvas.tag_raise-method"><b>tag_raise(item)</b></a> [<a
+                                                href="#Tkinter.Canvas.tag_raise-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Moves the given item to the top of the canvas stack. If multiple
+                                                items match, they are all moved, with their relative order
+                                                preserved.
+                                            </p>
+                                            <p>
+                                                This method doesn&#8217;t work with window items. To change their
+                                                order, use <b>lift</b> on the widget instance instead.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.tag_unbind-method"
+                                                name="Tkinter.Canvas.tag_unbind-method"><b>tag_unbind(self, item,
+                                                    event)</b></a> [<a href="#Tkinter.Canvas.tag_unbind-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Removes the binding, if any, for the given event sequence.
+                                                This applies to all matching items.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt><i>sequence</i></dt>
+                                                <dd>
+                                                    Event specifier.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.tkraise-method"
+                                                name="Tkinter.Canvas.tkraise-method"><b>tkraise(item, **options)</b></a>
+                                            [<a href="#Tkinter.Canvas.tkraise-method">#</a>]</dt>
+                                        <dd>
+                                            <p>(Deprecated) Same as <a class="link"
+                                                    href="#canvas.Canvas.tag_raise-method"><b>tag_raise</b></a>.
+
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.type-method"
+                                                name="Tkinter.Canvas.type-method"><b>type(item)</b></a> [<a
+                                                href="#Tkinter.Canvas.type-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the type of the given item. If item refers to more
+                                                than one item, this method returns the type of the first item
+                                                found.</p>
+                                            <dl>
+                                                <dt><i>item</i></dt>
+                                                <dd>
+                                                    Item specifier.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A string, giving the item type. This can be one of
+                                                    <b>&#8220;arc&#8221;</b>, <b>&#8220;bitmap&#8221;</b>,
+                                                    <b>&#8220;image&#8221;</b>, <b>&#8220;line&#8221;</b>,
+                                                    <b>&#8220;oval&#8221;</b>, <b>&#8220;polygon&#8221;</b>,
+                                                    <b>&#8220;rectangle&#8221;</b>,
+                                                    <b>&#8220;text&#8221;</b>, or <b>&#8220;window&#8221;</b>.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.xview-method"
+                                                name="Tkinter.Canvas.xview-method"><b>xview(how, *args)</b></a> [<a
+                                                href="#Tkinter.Canvas.xview-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adjusts the canvas view horizontally.</p>
+                                            <dl>
+                                                <dt><i>how</i></dt>
+                                                <dd>
+                                                    How to adjust the canvas. This can be either
+                                                    &#8220;moveto&#8221; or &#8220;scroll&#8221;.</dd>
+                                                <dt><i>*args</i></dt>
+                                                <dd>
+                                                    Additional arguments. For the &#8220;moveto&#8221; method,
+                                                    this is a single fraction. For the &#8220;scroll&#8221; method, this
+                                                    is a unit and a count. For details, see the descriptions
+                                                    of the <a class="link"
+                                                        href="#canvas.Canvas.xview_moveto-method"><b>xview_moveto</b></a>
+                                                    and
+                                                    <a class="link"
+                                                        href="#canvas.Canvas.xview_scroll-method"><b>xview_scroll</b></a>
+                                                    methods.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.xview_moveto-method"
+                                                name="Tkinter.Canvas.xview_moveto-method"><b>xview_moveto(fraction)</b></a>
+                                            [<a href="#Tkinter.Canvas.xview_moveto-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adjusts the canvas so that the given offset is at the left
+                                                edge of the canvas.</p>
+                                            <dl>
+                                                <dt><i>fraction</i></dt>
+                                                <dd>
+                                                    Scroll offset. Offset 0.0 is the beginning of
+                                                    the <b>scrollregion</b>, 1.0 the end.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.xview_scroll-method"
+                                                name="Tkinter.Canvas.xview_scroll-method"><b>xview_scroll(number,
+                                                    what)</b></a> [<a href="#Tkinter.Canvas.xview_scroll-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Scrolls the canvas horizontally by the given amount.</p>
+                                            <dl>
+                                                <dt><i>number</i></dt>
+                                                <dd>
+                                                    Number of units.</dd>
+                                                <dt><i>what</i></dt>
+                                                <dd>
+                                                    What unit to use. This can be either <b>&#8220;units&#8221;</b>
+                                                    (small steps) or <b>&#8220;pages&#8221;</b>.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.yview-method"
+                                                name="Tkinter.Canvas.yview-method"><b>yview(how, *args)</b></a> [<a
+                                                href="#Tkinter.Canvas.yview-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adjusts the canvas view vertically.</p>
+                                            <dl>
+                                                <dt><i>how</i></dt>
+                                                <dd>
+                                                    How to adjust the canvas. This can be either
+                                                    &#8220;moveto&#8221; or &#8220;scroll&#8221;.</dd>
+                                                <dt><i>*args</i></dt>
+                                                <dd>
+                                                    Additional arguments. For the &#8220;moveto&#8221; method,
+                                                    this is a single fraction. For the &#8220;scroll&#8221; method, this
+                                                    is a unit and a count. For details, see the descriptions
+                                                    of the <a class="link"
+                                                        href="#canvas.Canvas.yview_moveto-method"><b>yview_moveto</b></a>
+                                                    and
+                                                    <a class="link"
+                                                        href="#canvas.Canvas.yview_scroll-method"><b>yview_scroll</b></a>
+                                                    methods.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.yview_moveto-method"
+                                                name="Tkinter.Canvas.yview_moveto-method"><b>yview_moveto(fraction)</b></a>
+                                            [<a href="#Tkinter.Canvas.yview_moveto-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adjusts the canvas so that the given offset is at the top
+                                                edge of the canvas.</p>
+                                            <dl>
+                                                <dt><i>fraction</i></dt>
+                                                <dd>
+                                                    Scroll offset. Offset 0.0 is the beginning of
+                                                    the <b>scrollregion</b>, 1.0 the end.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Canvas.yview_scroll-method"
+                                                name="Tkinter.Canvas.yview_scroll-method"><b>yview_scroll(number,
+                                                    what)</b></a> [<a href="#Tkinter.Canvas.yview_scroll-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Scrolls the canvas vertically by the given amount.</p>
+                                            <dl>
+                                                <dt><i>number</i></dt>
+                                                <dd>
+                                                    Number of units.</dd>
+                                                <dt><i>what</i></dt>
+                                                <dd>
+                                                    What unit to use. This can be either <b>&#8220;units&#8221;</b>
+                                                    (small steps) or <b>&#8220;pages&#8221;</b>.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="button.htm">back</a>&#160;<a href="checkbutton.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b></li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#when-to-use">When to use the Canvas Widget</a></li>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#concepts">Concepts</a></li>
+                                <li>
+                                    <ul>
+                                        <li><a href="#canvas-items">Canvas Items</a></li>
+                                        <li><a href="#coordinate-systems">Coordinate Systems</a></li>
+                                        <li><a href="#item-specifiers">Item Specifiers: Handles and Tags</a></li>
+                                        <li><a href="#printing">Printing</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#performance-issues">Performance Issues</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

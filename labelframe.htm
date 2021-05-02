@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter LabelFrame&nbsp;Widget</title>
+</head>
+
+<body data-page-id="1926">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="label.htm">back</a>&#160;<a href="listbox.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter LabelFrame&nbsp;Widget</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>(new in Tk 8.4) The <b>LabelFrame</b> widget is a variant of the
+                                    Tkinter Frame widget. By default, it draws a border around its
+                                    child widgets, and it can also display a title.</p>
+                                <h2>When to use the LabelFrame Widget</h2>
+                                <p>The <b>LabelFrame</b> can be used when you want to group a
+                                    number of related widgets, such as a number of radiobuttons.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>To display a group, create a LabelFrame, and add child widgets
+                                    to the frame as usual. The widget draws a border around the
+                                    children, and a text label above them.</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+master = Tk()
+
+group = LabelFrame(master, text=<span class="pystring">"Group"</span>, padx=5, pady=5)
+group.pack(padx=10, pady=10)
+
+w = Entry(group)
+w.pack()
+
+mainloop()</pre>
+                                <p>You can use options to control where and how to draw the label,
+                                    and how to draw the border. See below for details.</p>
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>LabelFrame(master=None, **options)</b> (class) [<a
+                                                href="#Tkinter.LabelFrame-class">#</a>]</dt>
+                                        <dd>
+                                            <p>A frame widget with an internal group border and an opertional
+                                                label.</p>
+                                            <dl>
+                                                <dt><i>master</i></dt>
+                                                <dd>
+                                                    Parent widget.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options. See the description of
+                                                    the config method for a list of available options.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.LabelFrame.config-method"
+                                                name="Tkinter.LabelFrame.config-method"><b>config(**options)</b></a> [<a
+                                                href="#Tkinter.LabelFrame.config-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies one or more widget options. If no options are given,
+                                                the method returns a dictionary containing all current option
+                                                values.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options.</dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                    The background color to use in this frame.
+                                                    This defaults to the application background color. To prevent
+                                                    updates, set the color to an empty string.
+                                                    (the option database name is background, the class is Background)
+                                                </dd>
+                                                <dt><i>bd=</i></dt>
+                                                <dd>
+                                                    Same as <b>borderwidth</b>.
+                                                </dd>
+                                                <dt><i>bg=</i></dt>
+                                                <dd>
+                                                    Same as <b>background</b>.
+                                                </dd>
+                                                <dt><i>borderwidth=</i></dt>
+                                                <dd>
+                                                    Border width. Defaults to 2 pixels.
+                                                    (borderWidth/BorderWidth)</dd>
+                                                <dt><i>class=</i></dt>
+                                                <dd>
+                                                    Default is Labelframe.
+                                                    (class/Class)</dd>
+                                                <dt><i>colormap=</i></dt>
+                                                <dd>
+                                                    Some displays support only 256 colors
+                                                    (some use even less). Such displays usually provide a
+                                                    color map to specify which 256 colors to use. This
+                                                    option allows you to specify which color map to use
+                                                    for this frame, and its child widgets.
+                                                    <br />
+                                                    By default, a new frame uses the same color map as its parent.
+                                                    Using this option, you can reuse the color map of another
+                                                    window instead (this window must be on the same screen and
+                                                    have the same visual characteristics). You can also use the
+                                                    value &#8220;new&#8221; to allocate a new color map for this frame.
+                                                    <br />
+                                                    You cannot change this option once you&#8217;ve created the frame.
+                                                    (colormap/Colormap)
+                                                </dd>
+                                                <dt><i>container=</i></dt>
+                                                <dd>
+                                                    If true, this frame is a container widget.
+                                                    Defaults to false.
+                                                    <br />
+                                                    You cannot change this option once you&#8217;ve created the frame.
+                                                    (container/Container)
+                                                </dd>
+                                                <dt><i>cursor=</i></dt>
+                                                <dd>
+                                                    The cursor to show when the mouse pointer is
+                                                    placed over this widget. Default is a system specific arrow
+                                                    cursor.
+                                                    (cursor/Cursor)</dd>
+                                                <dt><i>fg=</i></dt>
+                                                <dd>
+                                                    Same as <b>foreground</b>.
+                                                </dd>
+                                                <dt><i>font=</i></dt>
+                                                <dd>
+                                                    Font to use for the label text. The default
+                                                    is system specific.
+                                                    (font/Font)</dd>
+                                                <dt><i>foreground=</i></dt>
+                                                <dd>
+                                                    Color to use for the label text. The default
+                                                    is system specific.
+                                                    (foreground/Foreground)</dd>
+                                                <dt><i>height=</i></dt>
+                                                <dd>
+                                                    Frame height, in pixels. No default value.
+                                                    (height/Height)</dd>
+                                                <dt><i>highlightbackground=</i></dt>
+                                                <dd>
+                                                    Together with <b>highlightcolor</b>,
+                                                    this option controls how to draw the focus highlight border.
+                                                    This option is used when the widget doesn&#8217;t have focus. The
+                                                    default is system specific.
+                                                    (highlightBackground/HighlightBackground)
+                                                </dd>
+                                                <dt><i>highlightcolor=</i></dt>
+                                                <dd>
+                                                    Same as <b>highlightbackground</b>, but
+                                                    is used when the widget has focus.
+                                                    (highlightColor/HighlightColor)
+                                                </dd>
+                                                <dt><i>highlightthickness=</i></dt>
+                                                <dd>
+                                                    The width of the focus highlight
+                                                    border. The default is typically a few pixels.
+                                                    (highlightThickness/HighlightThickness)</dd>
+                                                <dt><i>labelanchor=</i></dt>
+                                                <dd>
+                                                    Where to draw the label text. Default
+                                                    is NW (upper left corner).
+                                                    (labelAnchor/LabelAnchor)</dd>
+                                                <dt><i>labelwidget=</i></dt>
+                                                <dd>
+                                                    Widget to use for the label. If omitted,
+                                                    the frame uses the <b>text</b> option. No default value.
+                                                    (labelWidget/LabelWidget)
+                                                </dd>
+                                                <dt><i>padx=</i></dt>
+                                                <dd>
+                                                    Horizontal internal padding. Default is 0.
+                                                    (padX/Pad)</dd>
+                                                <dt><i>pady=</i></dt>
+                                                <dd>
+                                                    Vertical internal padding. Default is 0.
+                                                    (padY/Pad)</dd>
+                                                <dt><i>relief=</i></dt>
+                                                <dd>
+                                                    Border style. The default is <b>GROOVE</b>.
+                                                    Other possible values are <b>FLAT</b>, <b>RAISED</b>,
+                                                    <b>SUNKEN</b>, and <b>RIDGE</b>.
+                                                    (relief/Relief)
+                                                </dd>
+                                                <dt><i>takefocus=</i></dt>
+                                                <dd>
+                                                    If true, indicates that the user can use
+                                                    the <b>Tab</b> key to move to this widget. Default is 0
+                                                    (false).
+                                                    (takeFocus/TakeFocus)
+                                                </dd>
+                                                <dt><i>text=</i></dt>
+                                                <dd>
+                                                    The label text.
+                                                    (text/Text)</dd>
+                                                <dt><i>visual=</i></dt>
+                                                <dd>
+                                                    Screen visual. No default value.
+                                                    (visual/Visual)</dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Frame width. No default value.
+                                                    (width/Width)</dd>
+                                            </dl><br />
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="label.htm">back</a>&#160;<a href="listbox.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

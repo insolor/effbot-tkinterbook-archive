@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>Hello,&nbsp;Tkinter</title>
+</head>
+
+<body data-page-id="1969">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="tkinter-whats-tkinter.htm">back</a>&#160;<a
+                                    href="tkinter-hello-again.htm">next</a></p>
+                            <h1 class="maintitle">Hello,&nbsp;Tkinter</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>But enough talk. Time to look at some code instead.</p>
+                                <p>As you know, every serious tutorial should start with a <span>
+                                        &#8220;hello world&#8221;</span>-type example. In this overview, we&#8217;ll
+                                    show you
+                                    not only one such example, but two.</p>
+                                <p>First, let&#8217;s look at a pretty minimal version:</p>
+                                <div class="example">
+                                    <b>Our First Tkinter Program (File: hello1.py)</b>
+                                    <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+w = Label(root, text=<span class="pystring">"Hello, world!"</span>)
+w.pack()
+
+root.mainloop()</pre>
+                                </div>
+                                <h2>Running the Example</h2>
+                                <p>To run the program, run the script as usual:</p>
+                                <pre>
+$ python hello1.py
+</pre>
+                                <p>The following window appears.</p>
+                                <div class="figure">
+                                    <b>Running the program</b>
+                                    <p>
+                                        <img alt="" height="49"
+                                            src="data:image/gif;base64, R0lGODdhhAAxAIcAAAAAAIAAAACAAICAAAAAgIAAgACAgICAgMDAwP8AAAD/AP//AAAA//8A/wD/ /////xAQEBERERISEhMTExQUFBUVFRYWFhcXFxgYGBkZGRoaGhsbGxwcHB0dHR4eHh8fHyAgICEh ISIiIiMjIyQkJCUlJSYmJicnJygoKCkpKSoqKisrKywsLC0tLS4uLi8vLzAwMDExMTIyMjMzMzQ0 NDU1NTY2Njc3Nzg4ODk5OTo6Ojs7Ozw8PD09PT4+Pj8/P0BAQEFBQUJCQkNDQ0REREVFRUZGRkdH R0hISElJSUpKSktLS0xMTE1NTU5OTk9PT1BQUFFRUVJSUlNTU1RUVFVVVVZWVldXV1hYWFlZWVpa WltbW1xcXF1dXV5eXl9fX2BgYGFhYWJiYmNjY2RkZGVlZWZmZmdnZ2hoaGlpaWpqamtra2xsbG1t bW5ubm9vb3BwcHFxcXJycnNzc3R0dHV1dXZ2dnd3d3h4eHl5eXp6ent7e3x8fH19fX5+fn9/f4CA gIGBgYKCgoODg4SEhIWFhYaGhoeHh4iIiImJiYqKiouLi4yMjI2NjY6Ojo+Pj5CQkJGRkZKSkpOT k5SUlJWVlZaWlpeXl5iYmJmZmZqampubm5ycnJ2dnZ6enp+fn6CgoKGhoaKioqOjo6SkpKWlpaam pqenp6ioqKmpqaqqqqurq6ysrK2tra6urq+vr7CwsLGxsbKysrOzs7S0tLW1tba2tre3t7i4uLm5 ubq6uru7u7y8vL29vb6+vr+/v8DAwMHBwcLCwsPDw8TExMXFxcbGxsfHx8jIyMnJycrKysvLy8zM zM3Nzc7Ozs/Pz9DQ0NHR0dLS0tPT09TU1NXV1dbW1tfX19jY2NnZ2dra2tvb29zc3N3d3d7e3t/f 3+Dg4OHh4eLi4uPj4+Tk5OXl5ebm5ufn5+jo6Onp6erq6uvr6+zs7O3t7e7u7u/v7/Dw8PHx8fLy 8vPz8/T09PX19fb29vf39/j4+Pn5+fr6+vv7+/z8/P39/f7+/v///ywAAAAAhAAxAEAI/wARCBxI sKDBgwgTKlzIsKHDhwsBIHiAAAGBiwQCaNyokYDHjwEIiBxJsqTJkyhRPkDAsqXLlwgOAHiAoKbN mzgRHABAgMADBECDCh2K4AAAAgQQIDgAAMEDBAgISJ1KoECCBAQIBEjANUCBAATChn3wgIBZAg8e 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 AAgOKF7MuLHjx5AjS55MubLly5IBBAQAOw== "
+                                            width="132" />
+                                    </p>
+                                </div>
+                                <p>To stop the program, just close the window.</p>
+                                <h2>Details</h2>
+                                <p>We start by importing the <tt>Tkinter</tt> module. It contains
+                                    all classes, functions and other things needed to work with the Tk
+                                    toolkit. In most cases, you can simply import everything from <b>
+                                        Tkinter</b> into your module&#8217;s namespace:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *</pre>
+                                <p>To initialize Tkinter, we have to create a Tk <b>root</b>
+                                    widget. This is an ordinary window, with a title bar and other
+                                    decoration provided by your window manager. You should only create
+                                    one root widget for each program, and it must be created before any
+                                    other widgets.</p>
+                                <pre class="python">
+root = Tk()</pre>
+                                <p>Next, we create a <b>Label</b> widget as a child to the root
+                                    window:</p>
+                                <pre class="python">
+w = Label(root, text=<span class="pystring">"Hello, world!"</span>)
+w.pack()</pre>
+                                <p>A <b>Label</b> widget can display either text or an icon or
+                                    other image. In this case, we use the <b>text</b> option to
+                                    specify which text to display.</p>
+                                <p>Next, we call the <b>pack</b> method on this widget. This
+                                    tells it to size itself to fit the given text, and make itself
+                                    visible. However, the window won&#8217;t appear until we&#8217;ve entered
+                                    the Tkinter event loop:</p>
+                                <pre class="python">
+root.mainloop()</pre>
+                                <p>The program will stay in the event loop until we close the
+                                    window. The event loop doesn&#8217;t only handle events from the user
+                                    (such as mouse clicks and key presses) or the windowing system
+                                    (such as redraw events and window configuration messages), it also
+                                    handle operations queued by Tkinter itself. Among these operations
+                                    are geometry management (queued by the <b>pack</b> method) and
+                                    display updates. This also means that the application window will
+                                    not appear before you enter the main loop.</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="tkinter-whats-tkinter.htm">back</a>&#160;<a
+                                    href="tkinter-hello-again.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

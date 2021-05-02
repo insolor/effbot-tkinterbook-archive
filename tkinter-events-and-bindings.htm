@@ -1,0 +1,449 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>Events and&nbsp;Bindings</title>
+</head>
+
+<body data-page-id="1967">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="tkinter-widget-styling.htm">back</a>&#160;<a
+                                    href="tkinter-application-windows.htm">next</a></p>
+                            <h1 class="maintitle">Events and&nbsp;Bindings</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>As was mentioned earlier, a Tkinter application spends most of
+                                    its time inside an event loop (entered via the <b>mainloop</b>
+                                    method). Events can come from various sources, including key
+                                    presses and mouse operations by the user, and redraw events from
+                                    the window manager (indirectly caused by the user, in many
+                                    cases).</p>
+                                <p>Tkinter provides a powerful mechanism to let you deal with
+                                    events yourself. For each widget, you can <b>bind</b> Python
+                                    functions and methods to events.</p>
+                                <pre class="python">
+widget.bind(event, handler)</pre>
+                                <p>If an event matching the <i>event</i> description occurs in the
+                                    widget, the given <i>handler</i> is called with an object
+                                    describing the event.</p>
+                                <p>Here&#8217;s a simple example:</p>
+                                <div class="example">
+                                    <b>Capturing clicks in a window</b>
+                                    <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+<span class="pykeyword">def</span> <span class="pyfunction">callback</span>(event):
+    <span class="pykeyword">print</span> <span class="pystring">"clicked at"</span>, event.x, event.y
+
+frame = Frame(root, width=100, height=100)
+frame.bind(<span class="pystring">"&lt;Button-1&gt;"</span>, callback)
+frame.pack()
+
+root.mainloop()</pre>
+                                </div>
+                                <p>In this example, we use the <b>bind</b> method of the frame widget
+                                    to bind a callback function to an event called
+                                    <b>&lt;Button-1&gt;</b>. Run this program and click in the window that
+                                    appears. Each time you click, a message like <span> &#8220;<b>clicked at 44
+                                            63</b>&#8221;</span> is printed to the console window.</p>
+                                <p>Keyboard events are sent to the widget that currently owns the
+                                    keyboard focus. You can use the <b>focus_set</b> method to move
+                                    focus to a widget:</p>
+                                <div class="example">
+                                    <b>Capturing keyboard events</b>
+                                    <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+<span class="pykeyword">def</span> <span class="pyfunction">key</span>(event):
+    <span class="pykeyword">print</span> <span class="pystring">"pressed"</span>, repr(event.char)
+
+<span class="pykeyword">def</span> <span class="pyfunction">callback</span>(event):
+    frame.focus_set()
+    <span class="pykeyword">print</span> <span class="pystring">"clicked at"</span>, event.x, event.y
+
+frame = Frame(root, width=100, height=100)
+frame.bind(<span class="pystring">"&lt;Key&gt;"</span>, key)
+frame.bind(<span class="pystring">"&lt;Button-1&gt;"</span>, callback)
+frame.pack()
+
+root.mainloop()</pre>
+                                </div>
+                                <p>If you run this script, you&#8217;ll find that you have to click in the
+                                    frame before it starts receiving any keyboard events.</p>
+                                <h2 id="events">Events&#160;<a class="nav" href="#events" title="bookmark!">#</a></h2>
+                                <p>Events are given as strings, using a special event syntax:</p>
+                                <pre class="python">
+&lt;modifier-type-detail&gt;</pre>
+                                <p>The <i>type</i> field is the most important part of an event
+                                    specifier. It specifies the kind of event that we wish to bind, and
+                                    can be user actions like <b>Button</b>, and <b>Key</b>, or
+                                    window manager events like <b>Enter</b>, <b>Configure</b>, and
+                                    others. The modifier and detail fields are used to give additional
+                                    information, and can in many cases be left out. There are also
+                                    various ways to simplify the event string; for example, to match a
+                                    keyboard key, you can leave out the angle brackets and just use the
+                                    key as is. Unless it is a space or an angle bracket, of course.</p>
+                                <p>Instead of spending a few pages on discussing all the syntactic
+                                    shortcuts, let&#8217;s take a look on the most common event formats:</p>
+                                <h3>Event Formats</h3>
+                                <dl>
+                                    <dt><b>&lt;Button-1&gt;</b></dt>
+                                    <dd>
+                                        <p>A mouse button is pressed over the widget. Button 1 is the
+                                            leftmost button, button 2 is the middle button (where available),
+                                            and button 3 the rightmost button. When you press down a mouse
+                                            button over a widget, Tkinter will automatically &#8220;grab&#8221; the
+                                            mouse
+                                            pointer, and subsequent mouse events (e.g. Motion and Release events)
+                                            will then be sent to the current widget as long as the mouse button
+                                            is held down, even if the mouse is moved outside the current widget.
+                                            The current position of the mouse pointer (relative to the widget)
+                                            is provided in the <b>x</b> and <b>y</b> members of the event object
+                                            passed to the callback.</p>
+                                        <p>You can use <b>ButtonPress</b> instead of <b>Button</b>, or even
+                                            leave it out completely: <b>&lt;Button-1&gt;</b>,
+                                            <b>&lt;ButtonPress-1&gt;</b>, and <b>&lt;1&gt;</b> are all
+                                            synonyms. For clarity, I prefer the <b>&lt;Button-1&gt;</b>
+                                            syntax.</p>
+                                    </dd>
+                                    <dt><b>&lt;B1-Motion&gt;</b></dt>
+                                    <dd>
+                                        <p>The mouse is moved, with mouse button 1 being held down (use B2
+                                            for the middle button, B3 for the right button). The current
+                                            position of the mouse pointer is provided in the <b>x</b> and
+                                            <b>y</b> members of the event object passed to the callback.</p>
+                                    </dd>
+                                    <dt><b>&lt;ButtonRelease-1&gt;</b></dt>
+                                    <dd>
+                                        <p>Button 1 was released. The current position of the mouse
+                                            pointer is provided in the <b>x</b> and <b>y</b> members of the
+                                            event object passed to the callback.</p>
+                                    </dd>
+                                    <dt><b>&lt;Double-Button-1&gt;</b></dt>
+                                    <dd>
+                                        <p>Button 1 was double clicked. You can use <b>Double</b> or
+                                            <b>Triple</b> as prefixes. Note that if you bind to both a single
+                                            click (&lt;<b>Button-1&gt;</b>) and a double click, both bindings
+                                            will be called.</p>
+                                    </dd>
+                                    <dt><b>&lt;Enter&gt;</b></dt>
+                                    <dd>
+                                        <p>The mouse pointer entered the widget (this event doesn&#8217;t mean
+                                            that the user pressed the <b>Enter</b> key!).</p>
+                                    </dd>
+                                    <dt><b>&lt;Leave&gt;</b></dt>
+                                    <dd>
+                                        <p>The mouse pointer left the widget.</p>
+                                    </dd>
+                                    <dt><b>&lt;FocusIn&gt;</b></dt>
+                                    <dd>
+                                        <p>Keyboard focus was moved to this widget, or to a child of this
+                                            widget.</p>
+                                    </dd>
+                                    <dt><b>&lt;FocusOut&gt;</b></dt>
+                                    <dd>
+                                        <p>Keyboard focus was moved from this widget to another widget.</p>
+                                    </dd>
+                                    <dt><b>&lt;Return&gt;</b></dt>
+                                    <dd>
+                                        <p>The user pressed the Enter key. You can bind to virtually all
+                                            keys on the keyboard. For an ordinary 102-key PC-style keyboard, the
+                                            special keys are <b>Cancel</b> (the Break key), <b>BackSpace</b>,
+                                            <b>Tab</b>, <b>Return</b>(the Enter key), <b>Shift_L</b> (any Shift
+                                            key), <b>Control_L</b> (any Control key), <b>Alt_L</b> (any Alt key),
+                                            <b>Pause</b>, <b>Caps_Lock</b>, <b>Escape</b>, <b>Prior</b> (Page Up),
+                                            <b>Next</b> (Page Down), <b>End</b>, <b>Home</b>, <b>Left</b>,
+                                            <b>Up</b>, <b>Right</b>, <b>Down</b>, <b>Print</b>, <b>Insert</b>,
+                                            <b>Delete</b>, <b>F1</b>, <b>F2</b>, <b>F3</b>, <b>F4</b>, <b>F5</b>,
+                                            <b>F6</b>, <b>F7</b>, <b>F8</b>, <b>F9</b>, <b>F10</b>, <b>F11</b>,
+                                            <b>F12</b>, <b>Num_Lock</b>, and <b>Scroll_Lock</b>.</p>
+                                    </dd>
+                                    <dt><b>&lt;Key&gt;</b></dt>
+                                    <dd>
+                                        <p>The user pressed any key. The key is provided in the <b>char</b>
+                                            member of the event object passed to the callback (this is an empty
+                                            string for special keys).</p>
+                                    </dd>
+                                    <dt><b>a</b></dt>
+                                    <dd>
+                                        <p>The user typed an <span>&#8220;a&#8221;</span>. Most printable characters
+                                            can be used as is. The exceptions are space (<b>&lt;space&gt;</b>) and
+                                            less than (<b>&lt;less&gt;</b>). Note that <b>1</b> is a keyboard
+                                            binding, while <b>&lt;1&gt;</b> is a button binding.</p>
+                                    </dd>
+                                    <dt><b>&lt;Shift-Up&gt;</b></dt>
+                                    <dd>
+                                        <p>The user pressed the Up arrow, while holding the Shift key
+                                            pressed. You can use prefixes like <b>Alt</b>, <b>Shift</b>, and
+                                            <b>Control</b>.</p>
+                                    </dd>
+                                    <dt><b>&lt;Configure&gt;</b></dt>
+                                    <dd>
+                                        <p>The widget changed size (or location, on some platforms). The
+                                            new size is provided in the <b>width</b> and <b>height</b>
+                                            attributes of the event object passed to the callback.</p>
+                                    </dd>
+                                </dl>
+                                <h3>The Event Object</h3>
+                                <p>The event object is a standard Python object instance, with a
+                                    number of attributes describing the event.</p>
+                                <h3>Event Attributes</h3>
+                                <dl>
+                                    <dt><b>widget</b></dt>
+                                    <dd>
+                                        <p>The widget which generated this event. This is a valid
+                                            Tkinter widget instance, not a name. This attribute is set for
+                                            all events.</p>
+                                    </dd>
+                                    <dt><b>x, y</b></dt>
+                                    <dd>
+                                        <p>The current mouse position, in pixels.</p>
+                                    </dd>
+                                    <dt><b>x_root, y_root</b></dt>
+                                    <dd>
+                                        <p>The current mouse position relative to the upper left corner of
+                                            the screen, in pixels.</p>
+                                    </dd>
+                                    <dt><b>char</b></dt>
+                                    <dd>
+                                        <p>The character code (keyboard events only), as a string.</p>
+                                    </dd>
+                                    <dt><b>keysym</b></dt>
+                                    <dd>
+                                        <p>The key symbol (keyboard events only).</p>
+                                    </dd>
+                                    <dt><b>keycode</b></dt>
+                                    <dd>
+                                        <p>The key code (keyboard events only).</p>
+                                    </dd>
+                                    <dt><b>num</b></dt>
+                                    <dd>
+                                        <p>The button number (mouse button events only).</p>
+                                    </dd>
+                                    <dt><b>width, height</b></dt>
+                                    <dd>
+                                        <p>The new size of the widget, in pixels (Configure events
+                                            only).</p>
+                                    </dd>
+                                    <dt><b>type</b></dt>
+                                    <dd>
+                                        <p>The event type.</p>
+                                    </dd>
+                                </dl>
+                                <p>For portability reasons, you should stick to <b>char</b>,
+                                    <b>height</b>, <b>width</b>, <b>x</b>, <b>y</b>, <b>x_root</b>,
+                                    <b>y_root</b>, and <b>widget</b>. Unless you know exactly what you&#8217;re
+                                    doing, of course&#8230;</p>
+                                <h3>Instance and Class Bindings</h3>
+                                <p>The <b>bind</b> method we used in the above example creates an
+                                    instance binding. This means that the binding applies to a single
+                                    widget only; if you create new frames, they will not inherit the
+                                    bindings.</p>
+                                <p>But Tkinter also allows you to create bindings on the class and
+                                    application level; in fact, you can create bindings on four
+                                    different levels:</p>
+                                <ul>
+                                    <li>
+                                        <p>the widget instance, using <b>bind</b>.</p>
+                                    </li>
+                                    <li>
+                                        <p>the widget&#8217;s toplevel window (Toplevel or <b>root</b>), also
+                                            using <b>bind</b>.</p>
+                                    </li>
+                                    <li>
+                                        <p>the widget class, using <b>bind_class</b> (this is used by
+                                            Tkinter to provide standard bindings).</p>
+                                    </li>
+                                    <li>
+                                        <p>the whole application, using <b>bind_all</b>.</p>
+                                    </li>
+                                </ul>
+                                <p>For example, you can use <b>bind_all</b> to create a binding
+                                    for the F1 key, so you can provide help everywhere in the
+                                    application. But what happens if you create multiple bindings for
+                                    the same key, or provide overlapping bindings?</p>
+                                <p>First, on each of these four levels, Tkinter chooses the <span>
+                                        &#8220;closest match&#8221;</span> of the available bindings. For example, if
+                                    you
+                                    create instance bindings for the <b>&lt;Key&gt;</b> and
+                                    <b>&lt;Return&gt;</b> events, only the second binding will be called
+                                    if you press the <b>Enter</b> key.</p>
+                                <p>However, if you add a <b>&lt;Return&gt;</b> binding to the
+                                    toplevel widget, <i>both</i> bindings will be called. Tkinter first
+                                    calls the best binding on the instance level, then the best binding
+                                    on the toplevel window level, then the best binding on the class
+                                    level (which is often a standard binding), and finally the best
+                                    available binding on the application level. So in an extreme case,
+                                    a single event may call four event handlers.</p>
+                                <p>A common cause of confusion is when you try to use bindings to
+                                    override the default behavior of a standard widget. For example,
+                                    assume you wish to disable the Enter key in the text widget, so
+                                    that the users cannot insert newlines into the text. Maybe the
+                                    following will do the trick?</p>
+                                <pre class="python">
+<span class="pykeyword">def</span> <span class="pyfunction">ignore</span>(event):
+    <span class="pykeyword">pass</span>
+text.bind(<span class="pystring">"&lt;Return&gt;"</span>, ignore)</pre>
+                                <p>or, if you prefer one-liners:</p>
+                                <pre class="python">
+text.bind(<span class="pystring">"&lt;Return&gt;"</span>, <span class="pykeyword">lambda</span> e: None)</pre>
+                                <p>(the <b>lambda</b> function used here takes one argument, and
+                                    returns <b>None</b>)</p>
+                                <p>Unfortunately, the newline is still inserted, since the above
+                                    binding applies to the instance level only, and the standard
+                                    behavior is provided by a class level bindings.</p>
+                                <p>You could use the <b>bind_class</b> method to modify the
+                                    bindings on the class level, but that would change the behavior of
+                                    <i>all</i> text widgets in the application. An easier solution is
+                                    to prevent Tkinter from propagating the event to other handlers;
+                                    just return the string <span>&#8220;<b>break</b>&#8221;</span> from your
+                                    event handler:</p>
+                                <pre class="python">
+<span class="pykeyword">def</span> <span class="pyfunction">ignore</span>(event):
+    <span class="pykeyword">return</span> <span class="pystring">"break"</span>
+text.bind(<span class="pystring">"&lt;Return&gt;"</span>, ignore)</pre>
+                                <p>or</p>
+                                <pre class="python">
+text.bind(<span class="pystring">"&lt;Return&gt;"</span>, <span class="pykeyword">lambda</span> e: <span class="pystring">"break"</span>)</pre>
+                                <p>By the way, if you really want to change the behavior of all text
+                                    widgets in your application, here&#8217;s how to use the <b>bind_class</b>
+                                    method:</p>
+                                <pre class="python">
+top.bind_class(<span class="pystring">"Text"</span>, <span class="pystring">"&lt;Return&gt;"</span>, <span class="pykeyword">lambda</span> e: None)</pre>
+                                <p>But there are a lot of reasons why you shouldn&#8217;t do this. For
+                                    example, it messes things up completely the day you wish to extend
+                                    your application with some cool little UI component you downloaded
+                                    from the net. Better use your own <b>Text</b> widget
+                                    specialization, and keep Tkinter&#8217;s default bindings intact:</p>
+                                <pre class="python">
+<span class="pykeyword">class</span> <span class="pyclass">MyText</span>(Text):
+    <span class="pykeyword">def</span> <span class="pyfunction">__init__</span>(self, master, **kw):
+        apply(Text.__init__, (self, master), kw)
+        self.bind(<span class="pystring">"&lt;Return&gt;"</span>, <span class="pykeyword">lambda</span> e: <span class="pystring">"break"</span>)</pre>
+                                <h3 id="protocols">Protocols&#160;<a class="nav" href="#protocols"
+                                        title="bookmark!">#</a></h3>
+                                <p>In addition to event bindings, Tkinter also supports a mechanism
+                                    called <i>protocol handlers.</i> Here, the term protocol refers to
+                                    the interaction between the application and the window manager. The
+                                    most commonly used protocol is called <b>WM_DELETE_WINDOW</b>,
+                                    and is used to define what happens when the user explicitly closes
+                                    a window using the window manager.</p>
+                                <p>You can use the <b>protocol</b> method to install a handler
+                                    for this protocol (the widget must be a root or <b>Toplevel</b>
+                                    widget):</p>
+                                <pre class="python">
+widget.protocol(<span class="pystring">"WM_DELETE_WINDOW"</span>, handler)</pre>
+                                <p>Once you have installed your own handler, Tkinter will no longer
+                                    automatically close the window. Instead, you could for example
+                                    display a message box asking the user if the current data should be
+                                    saved, or in some cases, simply ignore the request. To close the
+                                    window from this handler, simply call the <b>destroy</b> method
+                                    of the window:</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <div class="example wide">
+                                <b>Capturing destroy events</b>
+                                <pre class="python wide">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+<span class="pykeyword">import</span> tkMessageBox
+
+<span class="pykeyword">def</span> <span class="pyfunction">callback</span>():
+    <span class="pykeyword">if</span> tkMessageBox.askokcancel(<span class="pystring">"Quit"</span>, <span class="pystring">"Do you really wish to quit?"</span>):
+        root.destroy()
+
+root = Tk()
+root.protocol(<span class="pystring">"WM_DELETE_WINDOW"</span>, callback)
+
+root.mainloop()</pre>
+                            </div>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>Note that even you don&#8217;t register an handler for
+                                    <b>WM_DELETE_WINDOW</b> on a toplevel window, the window itself will
+                                    be destroyed as usual (in a controlled fashion, unlike X). However, as
+                                    of Python 1.5.2, Tkinter will not destroy the corresponding widget
+                                    instance hierarchy, so it is a good idea to always register a handler
+                                    yourself:</p>
+                                <pre class="python">
+top = Toplevel(...)
+
+<span class="pycomment"># make sure widget instances are deleted</span>
+top.protocol(<span class="pystring">"WM_DELETE_WINDOW"</span>, top.destroy)</pre>
+                                <p>Future versions of Tkinter will most likely do this by
+                                    default.</p>
+                                <h3>Other Protocols</h3>
+                                <p>Window manager protocols were originally part of the X window
+                                    system (they are defined in a document titled <i>Inter-Client
+                                        Communication Conventions Manual</i>, or ICCCM). On that platform, you
+                                    can install handlers for other protocols as well, like
+                                    <b>WM_TAKE_FOCUS</b> and <b>WM_SAVE_YOURSELF</b>. See the ICCCM
+                                    documentation for details.</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="tkinter-widget-styling.htm">back</a>&#160;<a
+                                    href="tkinter-application-windows.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#events">Events</a></li>
+                                <li>
+                                    <ul>
+                                        <li><a href="#protocols">Protocols</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

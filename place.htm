@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter Place Geometry&nbsp;Manager</title>
+</head>
+
+<body data-page-id="1935">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="pack.htm">back</a>&#160;<a href="bitmapimage.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter Place Geometry&nbsp;Manager</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>Place</b> geometry manager is the simplest of the three
+                                    general geometry managers provided in Tkinter. It allows you
+                                    explicitly set the position and size of a window, either in
+                                    absolute terms, or relative to another window.</p>
+                                <p>You can access the place manager through the <b>place</b> method
+                                    which is available for all standard widgets.</p>
+                                <h2>When to use the Place Manager</h2>
+                                <p>It is usually not a good idea to use <b>place</b> for ordinary
+                                    window and dialog layouts; its simply to much work to get things
+                                    working as they should. Use the <b>pack</b> or <b>grid</b> managers
+                                    for such purposes.</p>
+                                <p>However, <b>place</b> has its uses in more specialized cases.
+                                    Most importantly, it can be used by compound widget containers to
+                                    implement various custom geometry managers. Another use is to
+                                    position control buttons in dialogs.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>Let&#8217;s look at some usage patterns. The following command centers
+                                    a widget in its parent:</p>
+                                <pre class="python">
+    w.place(relx=0.5, rely=0.5, anchor=CENTER)</pre>
+                                <p>Here&#8217;s another variant. It packs a <b>Label</b> widget in a
+                                    frame widget, and then places a <b>Button</b> in the upper right
+                                    corner of the frame. The button will overlap the label.</p>
+                                <pre class="python">
+    pane = Frame(master)
+    Label(pane, text=<span class="pystring">"Pane Title"</span>).pack()
+    b = Button(pane, width=12, height=12,
+               image=launch_icon, command=self.launch)
+    b.place(relx=1, x=-2, y=2, anchor=NE)</pre>
+                                <p>The following excerpt from a <b>Notepad</b> widget
+                                    implementation displays a notepad page (implemented as a
+                                    <b>Frame</b>) in the notepad body frame. It first loops over the
+                                    available pages, calling <b>place_forget</b> for each one of them.
+                                    Note that it&#8217;s not an error to <span>&#8220;unplace&#8221;</span> a widget
+                                    that
+                                    it&#8217;s not placed in the first case:</p>
+                                <pre class="python">
+    <span class="pykeyword">for</span> w <span class="pykeyword">in</span> self.__pages:
+        w.place_forget()
+    self.__pages[index].place(in_=self.__body, x=bd, y=bd)</pre>
+                                <p>You can combine the absolute and relative options. In such
+                                    cases, the relative option is applied first, and the absolute value
+                                    is then added to that position. In the following example, the
+                                    widget <i>w</i> is almost completely covers its parent, except for
+                                    a 5 pixel border around the widget.</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+    w.place(x=5, y=5, relwidth=1, relheight=1, width=-10, height=-10)</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>You can also place a widget outside another widget. For example,
+                                    why not place two widgets on top of each other:</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+    w2.place(in_=w1, relx=0.5, y=-2, anchor=S, bordermode=<span class="pystring">"outside"</span>)</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>Note the use of <b>relx</b> and <b>anchor</b> options to center
+                                    the widgets vertically. You could also use (relx=0, anchor=SW) to
+                                    get left alignment, or (relx=1, anchor=SE) to get right
+                                    alignment.</p>
+                                <p>By the way, why not combine this way to use the packer with the
+                                    launch button example shown earlier. The following example places
+                                    two buttons in the upper right corner of the <i>pane</i>:</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+    b1 = DrawnButton(pane, (12, 12), launch_icon, command=self.launch)
+    b1.place(relx=1, x=-2, y=2, anchor=NE)
+    b2 = DrawnButton(pane, (12, 12), info_icon, command=self.info)
+    b2.place(in_=b1, x=-2, anchor=NE, bordermode=<span class="pystring">"outside"</span>)</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>Finally, let&#8217;s look at a piece of code from an imaginary
+                                    <b>SplitWindow</b> container widget. The following piece of code
+                                    splits <i>frame</i> into two subframes called <i>f1</i> and
+                                    <i>f2</i>.</p>
+                                <pre class="python">
+    f1 = Frame(frame, bd=1, relief=SUNKEN)
+    f2 = Frame(frame, bd=1, relief=SUNKEN)
+    split = 0.5
+    f1.place(rely=0, relheight=split, relwidth=1)
+    f2.place(rely=split, relheight=1.0-split, relwidth=1)</pre>
+                                <p>To change the split point, set <i>split</i> to something
+                                    suitable, and call the <b>place</b> method again. If you haven&#8217;t
+                                    changed an option, you don&#8217;t have to specify it again.</p>
+                                <pre class="python">
+    f1.place(relheight=split)
+    f2.place(rely=split, relheight=1.0-split)</pre>
+                                <p>You could add a small frame to use as a dragging handle, and add
+                                    suitable bindings to it, e.g:</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+    f3 = Frame(frame, bd=2, relief=RAISED, width=8, height=8)
+    f3.place(relx=0.9, rely=split, anchor=E)
+    f3.bind(<span class="pystring">"B1-Motion&gt;"</span>, self.adjust)</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Place</b> (class) [<a href="#Tkinter.Place-class">#</a>]</dt>
+                                        <dd>
+                                            <p>Place geometry manager. This is an implementation class; all the
+                                                methods described below are available on all widget classes.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Place.place-method"
+                                                name="Tkinter.Place.place-method"><b>place(**options)</b></a> [<a
+                                                href="#Tkinter.Place.place-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Place this widget relative to its parent.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Geometry options.</dd>
+                                                <dt><i>anchor=</i></dt>
+                                                <dd>
+                                                    Default is NW.</dd>
+                                                <dt><i>bordermode=</i></dt>
+                                                <dd>
+                                                    Default is INSIDE.</dd>
+                                                <dt><i>height=</i></dt>
+                                                <dd>
+                                                    No default value.</dd>
+                                                <dt><i>in=</i></dt>
+                                                <dd>
+                                                    Default is ..</dd>
+                                                <dt><i>relheight=</i></dt>
+                                                <dd>
+                                                    No default value.</dd>
+                                                <dt><i>relwidth=</i></dt>
+                                                <dd>
+                                                    No default value.</dd>
+                                                <dt><i>relx=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>rely=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    No default value.</dd>
+                                                <dt><i>x=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                                <dt><i>y=</i></dt>
+                                                <dd>
+                                                    Default is 0.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Place.place_configure-method"
+                                                name="Tkinter.Place.place_configure-method"><b>place_configure(**options)</b></a>
+                                            [<a href="#Tkinter.Place.place_configure-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#place.Place.place-method"><b>place</b></a>.
+
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Place.place_forget-method"
+                                                name="Tkinter.Place.place_forget-method"><b>place_forget()</b></a> [<a
+                                                href="#Tkinter.Place.place_forget-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The place_forget method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Place.place_info-method"
+                                                name="Tkinter.Place.place_info-method"><b>place_info()</b></a> [<a
+                                                href="#Tkinter.Place.place_info-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The place_info method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Place.place_slaves-method"
+                                                name="Tkinter.Place.place_slaves-method"><b>place_slaves()</b></a> [<a
+                                                href="#Tkinter.Place.place_slaves-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The place_slaves method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Place.slaves-method"
+                                                name="Tkinter.Place.slaves-method"><b>slaves()</b></a> [<a
+                                                href="#Tkinter.Place.slaves-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#place.Place.place_slaves-method"><b>place_slaves</b></a>.
+                                            </p>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="pack.htm">back</a>&#160;<a href="bitmapimage.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

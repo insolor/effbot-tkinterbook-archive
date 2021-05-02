@@ -1,0 +1,498 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>Dialog&nbsp;Windows</title>
+</head>
+
+<body data-page-id="1966">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="tkinter-standard-dialogs.htm">back</a>&#160;<a href="tkinter-index.htm">next</a>
+                            </p>
+                            <h1 class="maintitle">Dialog&nbsp;Windows</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>While the standard dialogs described in the previous section may be
+                                    sufficient for many simpler applications, most larger applications
+                                    require more complicated dialogs. For example, to set configuration
+                                    parameters for an application, you will probably want to let the user
+                                    enter more than one value or string in each dialog.</p>
+                                <p>Basically, creating a dialog window is no different from creating
+                                    an application window. Just use the <b>Toplevel</b> widget, stuff
+                                    the necessary entry fields, buttons, and other widgets into it, and
+                                    let the user take care of the rest. (By the way, don&#8217;t use the
+                                    <b>ApplicationWindow</b> class for this purpose; it will only
+                                    confuse your users).</p>
+                                <p>But if you implement dialogs in this way, you may end up getting
+                                    both your users and yourself into trouble. The standard dialogs all
+                                    returned only when the user had finished her task and closed the
+                                    dialog; but if you just display another toplevel window, everything
+                                    will run in parallel. If you&#8217;re not careful, the user may be able to
+                                    display several copies of the same dialog, and both she and your
+                                    application will be hopelessly confused.</p>
+                                <p>In many situations, it is more practical to handle dialogs in a
+                                    synchronous fashion; create the dialog, display it, wait for the user
+                                    to close the dialog, and then resume execution of your
+                                    application. The <b>wait_window</b> method is exactly what we need; it
+                                    enters a local event loop, and doesn&#8217;t return until the given window
+                                    is destroyed (either via the <b>destroy</b> method, or explicitly via
+                                    the window manager):</p>
+                                <pre class="python">
+widget.wait_window(window)</pre>
+                                <p>(Note that the method waits until the window given as an
+                                    argument is destroyed; the only reason this is a method is to avoid
+                                    namespace pollution).</p>
+                                <p>In the following example, the <b>MyDialog</b> class creates a
+                                    <b>Toplevel</b> widget, and adds some widgets to it. The caller
+                                    then uses <b>wait_window</b> to wait until the dialog is closed.
+                                    If the user clicks OK, the entry field&#8217;s value is printed, and the
+                                    dialog is then explicitly destroyed.</p>
+                                <div class="example">
+                                    <b>Creating a simple dialog</b>
+                                    <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+<span class="pykeyword">class</span> <span class="pyclass">MyDialog</span>:
+
+    <span class="pykeyword">def</span> <span class="pyfunction">__init__</span>(self, parent):
+
+        top = self.top = Toplevel(parent)
+
+        Label(top, text=<span class="pystring">"Value"</span>).pack()
+
+        self.e = Entry(top)
+        self.e.pack(padx=5)
+
+        b = Button(top, text=<span class="pystring">"OK"</span>, command=self.ok)
+        b.pack(pady=5)
+
+    <span class="pykeyword">def</span> <span class="pyfunction">ok</span>(self):
+
+        <span class="pykeyword">print</span> <span class="pystring">"value is"</span>, self.e.get()
+
+        self.top.destroy()
+
+
+root = Tk()
+Button(root, text=<span class="pystring">"Hello!"</span>).pack()
+root.update()
+
+d = MyDialog(root)
+
+root.wait_window(d.top)</pre>
+                                </div>
+                                <p>If you run this program, you can type something into the entry
+                                    field, and then click <b>OK</b>, after which the program
+                                    terminates (note that we didn&#8217;t call the <b>mainloop</b> method
+                                    here; the local event loop handled by <b>wait_window</b> was
+                                    sufficient). But there are a few problems with this example:</p>
+                                <ul>
+                                    <li>
+                                        <p>The root window is still active. You can click on the button in
+                                            the root window also when the dialog is displayed. If the dialog
+                                            depends on the current application state, letting the users mess
+                                            around with the application itself may be disastrous. And just
+                                            being able to display multiple dialogs (or even multiple copies of
+                                            one dialog) is a sure way to confuse your users.</p>
+                                    </li>
+                                    <li>
+                                        <p>You have to explicitly click in the entry field to move the
+                                            cursor into it, and also click on the OK button. Pressning <b>
+                                                Enter</b> in the entry field is not sufficient.</p>
+                                    </li>
+                                    <li>
+                                        <p>There should be some controlled way to cancel the dialog (and as
+                                            we learned earlier, we really should handle the <b>
+                                                WM_DELETE_WINDOW</b> protocol too).</p>
+                                    </li>
+                                </ul>
+                                <p>To address the first problem, Tkinter provides a method called
+                                    <b>grab_set</b>, which makes sure that no mouse or keyboard
+                                    events are sent to the wrong window.</p>
+                                <p>The second problem consists of several parts; first, we need to
+                                    explicitly move the keyboard focus to the dialog. This can be done
+                                    with the <b>focus_set</b> method. Second, we need to bind the
+                                    <b>Enter</b> key so it calls the <b>ok</b> method. This is
+                                    easy, just use the <b>bind</b> method on the <b>Toplevel</b>
+                                    widget (and make sure to modify the <b>ok</b> method to take an
+                                    optional argument so it doesn&#8217;t choke on the event object).</p>
+                                <p>The third problem, finally, can be handled by adding an
+                                    additional <b>Cancel</b> button which calls the <b>destroy</b>
+                                    method, and also use <b>bind</b> and <b>protocol</b> to do the
+                                    same when the user presses <b>Escape</b> or explicitly closes the
+                                    window.</p>
+                                <p>The following <b>Dialog</b> class provides all this, and a few
+                                    additional tricks. To implement your own dialogs, simply inherit
+                                    from this class and override the <b>body</b> and <b>apply</b>
+                                    methods. The former should create the dialog body, the latter is
+                                    called when the user clicks OK.</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <div class="example wide">
+                                <b>A dialog support class (File: tkSimpleDialog.py)</b>
+                                <pre class="python wide">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+<span class="pykeyword">import</span> os
+
+<span class="pykeyword">class</span> <span class="pyclass">Dialog</span>(Toplevel):
+
+    <span class="pykeyword">def</span> <span class="pyfunction">__init__</span>(self, parent, title = None):
+
+        Toplevel.__init__(self, parent)
+        self.transient(parent)
+
+        <span class="pykeyword">if</span> title:
+            self.title(title)
+
+        self.parent = parent
+
+        self.result = None
+
+        body = Frame(self)
+        self.initial_focus = self.body(body)
+        body.pack(padx=5, pady=5)
+
+        self.buttonbox()
+
+        self.grab_set()
+
+        <span class="pykeyword">if</span> <span class="pykeyword">not</span> self.initial_focus:
+            self.initial_focus = self
+
+        self.protocol(<span class="pystring">"WM_DELETE_WINDOW"</span>, self.cancel)
+
+        self.geometry(<span class="pystring">"+%d+%d"</span> % (parent.winfo_rootx()+50,
+                                  parent.winfo_rooty()+50))
+
+        self.initial_focus.focus_set()
+
+        self.wait_window(self)
+
+    <span class="pycomment">#</span>
+    <span class="pycomment"># construction hooks</span>
+
+    <span class="pykeyword">def</span> <span class="pyfunction">body</span>(self, master):
+        <span class="pycomment"># create dialog body.  return widget that should have</span>
+        <span class="pycomment"># initial focus.  this method should be overridden</span>
+
+        <span class="pykeyword">pass</span>
+
+    <span class="pykeyword">def</span> <span class="pyfunction">buttonbox</span>(self):
+        <span class="pycomment"># add standard button box. override if you don't want the</span>
+        <span class="pycomment"># standard buttons</span>
+
+        box = Frame(self)
+
+        w = Button(box, text=<span class="pystring">"OK"</span>, width=10, command=self.ok, default=ACTIVE)
+        w.pack(side=LEFT, padx=5, pady=5)
+        w = Button(box, text=<span class="pystring">"Cancel"</span>, width=10, command=self.cancel)
+        w.pack(side=LEFT, padx=5, pady=5)
+
+        self.bind(<span class="pystring">"&lt;Return&gt;"</span>, self.ok)
+        self.bind(<span class="pystring">"&lt;Escape&gt;"</span>, self.cancel)
+
+        box.pack()
+
+    <span class="pycomment">#</span>
+    <span class="pycomment"># standard button semantics</span>
+
+    <span class="pykeyword">def</span> <span class="pyfunction">ok</span>(self, event=None):
+
+        <span class="pykeyword">if</span> <span class="pykeyword">not</span> self.validate():
+            self.initial_focus.focus_set() <span class="pycomment"># put focus back</span>
+            <span class="pykeyword">return</span>
+
+        self.withdraw()
+        self.update_idletasks()
+
+        self.apply()
+
+        self.cancel()
+
+    <span class="pykeyword">def</span> <span class="pyfunction">cancel</span>(self, event=None):
+
+        <span class="pycomment"># put focus back to the parent window</span>
+        self.parent.focus_set()
+        self.destroy()
+
+    <span class="pycomment">#</span>
+    <span class="pycomment"># command hooks</span>
+
+    <span class="pykeyword">def</span> <span class="pyfunction">validate</span>(self):
+
+        <span class="pykeyword">return</span> 1 <span class="pycomment"># override</span>
+
+    <span class="pykeyword">def</span> <span class="pyfunction">apply</span>(self):
+
+        <span class="pykeyword">pass</span> <span class="pycomment"># override</span></pre>
+                            </div>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The main trickery is done in the constructor; first, <b>
+                                        transient</b> is used to associate this window with a parent
+                                    window (usually the application window from which the dialog was
+                                    launched). The dialog won&#8217;t show up as an icon in the window
+                                    manager (it won&#8217;t appear in the task bar under Windows, for
+                                    example), and if you iconify the parent window, the dialog will be
+                                    hidden as well. Next, the constructor creates the dialog body, and
+                                    then calls <b>grab_set</b> to make the dialog modal, <b>
+                                        geometry</b> to position the dialog relative to the parent window,
+                                    <b>focus_set</b> to move the keyboard focus to the appropriate
+                                    widget (usually the widget returned by the <b>body</b> method),
+                                    and finally <b>wait_window</b>.</p>
+                                <p>Note that we use the <b>protocol</b> method to make sure an
+                                    explicit close is treated as a cancel, and in the <b>
+                                        buttonbox</b> method, we bind the <b>Enter</b> key to OK, and
+                                    <b>Escape</b> to Cancel. The <b>default=ACTIVE</b> call marks
+                                    the OK button as a default button in a platform specific way.</p>
+                                <p>Using this class is much easier than figuring out how it&#8217;s
+                                    implemented; just create the necessary widgets in the <b>body</b>
+                                    method, and extract the result and carry out whatever you wish to
+                                    do in the <b>apply</b> method. Here&#8217;s a simple example (we&#8217;ll
+                                    take a closer look at the <b>grid</b> method in a moment).</p>
+                                <div class="example">
+                                    <b>Creating a simple dialog, revisited</b>
+                                    <pre class="python">
+<span class="pykeyword">import</span> tkSimpleDialog
+
+<span class="pykeyword">class</span> <span class="pyclass">MyDialog</span>(tkSimpleDialog.Dialog):
+
+    <span class="pykeyword">def</span> <span class="pyfunction">body</span>(self, master):
+
+        Label(master, text=<span class="pystring">"First:"</span>).grid(row=0)
+        Label(master, text=<span class="pystring">"Second:"</span>).grid(row=1)
+
+        self.e1 = Entry(master)
+        self.e2 = Entry(master)
+
+        self.e1.grid(row=0, column=1)
+        self.e2.grid(row=1, column=1)
+        <span class="pykeyword">return</span> self.e1 <span class="pycomment"># initial focus</span>
+
+    <span class="pykeyword">def</span> <span class="pyfunction">apply</span>(self):
+        first = int(self.e1.get())
+        second = int(self.e2.get())
+        <span class="pykeyword">print</span> first, second <span class="pycomment"># or something</span></pre>
+                                </div>
+                                <p>And here&#8217;s the resulting dialog:</p>
+                                <div class="figure">
+                                    <b>Running the dialog2.py script</b>
+                                    <p>
+                                        <img alt="media/cache/6676ce34eb83273a29e00447163b8818.gif" width="190" />
+                                    </p>
+                                </div>
+                                <p>Note that the <b>body</b> method may optionally return a
+                                    widget that should receive focus when the dialog is displayed. If
+                                    this is not relevant for your dialog, simply return <b>None</b>
+                                    (or omit the return statement).</p>
+                                <p>The above example did the actual processing in the <b>
+                                        apply</b> method (okay, a more realistic example should probably
+                                    to something with the result, rather than just printing it). But
+                                    instead of doing the processing in the <b>apply</b> method, you
+                                    can store the entered data in an instance attribute:</p>
+                                <pre class="python">
+    ...
+
+    <span class="pykeyword">def</span> <span class="pyfunction">apply</span>(self):
+        first = int(self.e1.get())
+        second = int(self.e2.get())
+        self.result = first, second
+
+d = MyDialog(root)
+<span class="pykeyword">print</span> d.result</pre>
+                                <p>Note that if the dialog is cancelled, the <b>apply</b> method
+                                    is never called, and the <b>result</b> attribute is never set.
+                                    The <b>Dialog</b> constructor sets this attribute to <b>
+                                        None</b>, so you can simply test the result before doing any
+                                    processing of it. If you wish to return data in other attributes,
+                                    make sure to initialize them in the <b>body</b> method (or simply
+                                    set <b>result</b> to 1 in the apply method, and test it before
+                                    accessing the other attributes).</p>
+                                <h2 style="sect1">Grid Layouts</h2>
+                                <p>While the <b>pack</b> manager was convenient to use when we
+                                    designed application windows, it may not be that easy to use for
+                                    dialogs. A typical dialog may include a number of entry fields and
+                                    check boxes, with corresponding labels that should be properly
+                                    aligned. Consider the following simple example:</p>
+                                <div class="figure">
+                                    <b>Simple Dialog Layout</b>
+                                    <p>
+                                        <img alt="media/cache/8d6be299bb44b167f1e62531f57a773f.gif" width="140" />
+                                    </p>
+                                </div>
+                                <p>To implement this using the <b>pack</b> manager, we could
+                                    create a frame to hold the label <span>&#8220;first:&#8221;</span>, and the
+                                    corresponding entry field, and use <b>side=LEFT</b> when packing
+                                    them. Add a corresponding frame for the next line, and pack the
+                                    frames and the checkbutton into an outer frame using <b>
+                                        side=TOP</b>. Unfortunately, packing the labels in this fashion
+                                    makes it impossible to get the entry fields lined up, and if we use
+                                    <b>side=RIGHT</b> to pack the entry field instead, things break
+                                    down if the entry fields have different width. By carefully using
+                                    <b>width</b> options, padding, <b>side</b> and <b>anchor</b>
+                                    packer options, etc., we can get reasonable results with some
+                                    effort. But there&#8217;s a much easier way: use the <b>grid</b>
+                                    manager instead.</p>
+                                <p>This manager splits the master widget (typically a frame) into a
+                                    2-dimensional grid, or table. For each widget, you only have to
+                                    specify where in this grid it should appear, and the grid managers
+                                    takes care of the rest. The following <b>body</b> method shows
+                                    how to get the above layout:</p>
+                                <div class="example">
+                                    <b>Using the grid geometry maanager</b>
+                                    <pre class="python">
+<span class="pykeyword">def</span> <span class="pyfunction">body</span>(self, master):
+
+    Label(master, text=<span class="pystring">"First:"</span>).grid(row=0, sticky=W)
+    Label(master, text=<span class="pystring">"Second:"</span>).grid(row=1, sticky=W)
+
+    self.e1 = Entry(master)
+    self.e2 = Entry(master)
+
+    self.e1.grid(row=0, column=1)
+    self.e2.grid(row=1, column=1)
+
+    self.cb = Checkbutton(master, text=<span class="pystring">"Hardcopy"</span>)
+    self.cb.grid(row=2, columnspan=2, sticky=W)</pre>
+                                </div>
+                                <p>For each widget that should be handled by the grid manager, you
+                                    call the <b>grid</b> method with the <b>row</b> and <b>
+                                        column</b> options, telling the manager where to put the widget.
+                                    The topmost row, and the leftmost column, is numbered 0 (this is
+                                    also the default). Here, the checkbutton is placed beneath the
+                                    label and entry widgets, and the <b>columnspan</b> option is used
+                                    to make it occupy more than one cell. Here&#8217;s the result:</p>
+                                <div class="figure">
+                                    <b>Using the grid manager</b>
+                                    <p>
+                                        <img alt="media/cache/90bfacf1133c21ead67c52325c75ed3f.gif" width="190" />
+                                    </p>
+                                </div>
+                                <p>If you look carefully, you&#8217;ll notice a small difference between
+                                    this dialog, and the dialog shown by the <b>dialog2.py</b>
+                                    script. Here, the labels are aligned to the left margin. If you
+                                    compare the code, you&#8217;ll find that the only difference is an option
+                                    called <b>sticky</b>.</p>
+                                <p>When its time to display the frame widget, the grid geometry
+                                    manager loops over all widgets, calculating a suitable width for
+                                    each row, and a suitable height for each column. For any widget
+                                    where the resulting cell turns out to be larger than the widget,
+                                    the widget is centered by default. The <b>sticky</b> option is
+                                    used to modify this behavior. By setting it to one of <b>E</b>,
+                                    <b>W</b>, <b>S</b>, <b>N</b>, <b>NW</b>, <b>NE</b>, <b>
+                                        SE</b>, or <b>SW</b>, you can align the widget to any side or
+                                    corner of the cell. But you can also use this option to stretch the
+                                    widget if necessary; if you set the option to <b>E+W</b>, the
+                                    widget will be stretched to occupy the full width of the cell. And
+                                    if you set it to <b>E+W+N+S</b> (or <b>NW+SE</b>, etc), the
+                                    widget will be stretched in both directions. In practice, the <b>
+                                        sticky</b> option replaces the <b>fill</b>, <b>expand</b>, and
+                                    <b>anchor</b> options used by the pack manager.</p>
+                                <p>The grid manager provides many other options allowing you to tune
+                                    the look and behavior of the resulting layout. These include
+                                    <b>padx</b> and <b>pady</b> which are used to add extra padding to
+                                    widget cells, and many others. See the <i><a href="grid.htm">Grid Geometry
+                                            Manager</a></i> chapter for details.</p>
+                                <h2 style="sect1">Validating Data</h2>
+                                <p>What if the user types bogus data into the dialog? In our
+                                    current example, the <b>apply</b> method will raise an exception
+                                    if the contents of an entry field is not an integer. We could of
+                                    course handle this with a <b>try/except</b> and a standard
+                                    message box:</p>
+                                <pre class="python">
+    ...
+
+    <span class="pykeyword">def</span> <span class="pyfunction">apply</span>(self):
+        <span class="pykeyword">try</span>:
+            first = int(self.e1.get())
+            second = int(self.e2.get())
+            dosomething((first, second))
+        <span class="pykeyword">except</span> ValueError:
+            tkMessageBox.showwarning(
+                <span class="pystring">"Bad input"</span>,
+                <span class="pystring">"Illegal values, please try again"</span>
+            )</pre>
+                                <p>There&#8217;s a problem with this solution: the <b>ok</b> method has
+                                    already removed the dialog from the screen when the <b>apply</b>
+                                    method is called, and it will destroy it as soon as we return. This
+                                    design is intentional; if we carry out some potentially lengthy
+                                    processing in the <b>apply</b> method, it would be very confusing if
+                                    the dialog wasn&#8217;t removed before we finished. The <b>Dialog</b>
+                                    class already contain hooks for another solution: a separate
+                                    <b>validate</b> method which is called before the dialog is
+                                    removed.</p>
+                                <p>In the following example, we simply moved the code from <b>
+                                        apply</b> to <b>validate</b>, and changed it to store the result
+                                    in an instance attribute. This is then used in the <b>apply</b>
+                                    method to carry out the work.</p>
+                                <pre class="python">
+    ...
+
+    <span class="pykeyword">def</span> <span class="pyfunction">validate</span>(self):
+        <span class="pykeyword">try</span>:
+            first= int(self.e1.get())
+            second = int(self.e2.get())
+            self.result = first, second
+            <span class="pykeyword">return</span> 1
+        <span class="pykeyword">except</span> ValueError:
+            tkMessageBox.showwarning(
+                <span class="pystring">"Bad input"</span>,
+                <span class="pystring">"Illegal values, please try again"</span>
+            )
+            <span class="pykeyword">return</span> 0
+
+    <span class="pykeyword">def</span> <span class="pyfunction">apply</span>(self):
+        dosomething(self.result)</pre>
+                                <p>Note that if we left the processing to the calling program (as
+                                    shown above), we don&#8217;t even have to implement the <b>apply</b>
+                                    method.</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="tkinter-standard-dialogs.htm">back</a>&#160;<a href="tkinter-index.htm">next</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

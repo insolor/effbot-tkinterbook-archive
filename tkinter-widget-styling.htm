@@ -1,0 +1,453 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>Widget&nbsp;Styling</title>
+</head>
+
+<body data-page-id="1974">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="tkinter-widget-configuration.htm">back</a>&#160;<a
+                                    href="tkinter-events-and-bindings.htm">next</a></p>
+                            <h1 class="maintitle">Widget&nbsp;Styling</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>All Tkinter standard widgets provide a basic set of <span>
+                                        &#8220;styling&#8221;</span> options, which allow you to modify things like
+                                    colors, fonts, and other visual aspects of each widget.</p>
+                                <h2 id="colors">Colors&#160;<a class="nav" href="#colors" title="bookmark!">#</a></h2>
+                                <p>Most widgets allow you to specify the widget and text colors,
+                                    using the <b>background</b> and <b>foreground</b> options. To
+                                    specify a color, you can either use a color name, or explicitly
+                                    specify the red, green, and blue (RGB) color components.</p>
+                                <h3 id="color-names">Color Names&#160;<a class="nav" href="#color-names"
+                                        title="bookmark!">#</a></h3>
+                                <p>Tkinter includes a color database which maps color names to the
+                                    corresponding RGB values. This database includes common names like
+                                    <b>Red, Green, Blue, Yellow</b>, and <b>LightBlue,</b> but also
+                                    more exotic things like <b>Moccasin, PeachPuff</b>, etc.</p>
+                                <p>On an X window system, the color names are defined by the X
+                                    server. You might be able to locate a file named <b>xrgb.txt</b>
+                                    which contains a list of color names and the corresponding RGB
+                                    values. On Windows and Macintosh systems, the color name table is
+                                    built into Tk.</p>
+                                <p>Under Windows, you can also use the Windows system colors (these
+                                    can be changed by the user via the control panel):</p>
+                                <blockquote class="blockquote">
+                                    <p><b>SystemActiveBorder, SystemActiveCaption, SystemAppWorkspace,
+                                            SystemBackground, SystemButtonFace, SystemButtonHighlight,
+                                            SystemButtonShadow, SystemButtonText, SystemCaptionText,
+                                            SystemDisabledText, SystemHighlight, SystemHighlightText,
+                                            SystemInactiveBorder, SystemInactiveCaption,
+                                            SystemInactiveCaptionText, SystemMenu, SystemMenuText,
+                                            SystemScrollbar, SystemWindow, SystemWindowFrame,
+                                            SystemWindowText.</b></p>
+                                </blockquote>
+                                <p>On the Macintosh, the following system colors are available:</p>
+                                <blockquote class="blockquote">
+                                    <p><b>SystemButtonFace, SystemButtonFrame, SystemButtonText,
+                                            SystemHighlight, SystemHighlightText, SystemMenu, SystemMenuActive,
+                                            SystemMenuActiveText, SystemMenuDisabled, SystemMenuText,
+                                            SystemWindowBody.</b></p>
+                                </blockquote>
+                                <p>Color names are case insensitive. Many (but not all) color names
+                                    are also available with or without spaces between the words. For
+                                    example, <span>&#8220;lightblue&#8221;</span>, <span>&#8220;light
+                                        blue&#8221;</span>, and
+                                    <span>&#8220;Light Blue&#8221;</span> all specify the same color.</p>
+                                <h3 id="rgb-syntax">RGB Specifications&#160;<a class="nav" href="#rgb-syntax"
+                                        title="bookmark!">#</a>
+                                </h3>
+                                <p>If you need to explicitly specify a color, you can use a string
+                                    with the following format:</p>
+                                <pre class="python">
+<span class="pycomment">#RRGGBB</span></pre>
+                                <p>RR, GG, BB are hexadecimal representations of the red, green and
+                                    blue values, respectively. The following sample shows how you can
+                                    convert a color 3-tuple to a Tk color specification:</p>
+                                <pre class="python">
+tk_rgb = <span class="pystring">"#%02x%02x%02x"</span> % (128, 192, 200)</pre>
+                                <p>Tk also supports the forms <span>&#8220;<b>#RGB</b>&#8221;</span> and
+                                    <span>&#8220;<b>#RRRRGGGGBBBB</b>&#8221;</span> to specify each value with 16
+                                    and 65536 levels, respectively.</p>
+                                <p>You can use the <b>winfo_rgb</b> widget method to translate a
+                                    color string (either a name or an RGB specification) to a
+                                    3-tuple:</p>
+                                <pre class="python">
+rgb = widget.winfo_rgb(<span class="pystring">"red"</span>)
+red, green, blue = rgb[0]/256, rgb[1]/256, rgb[2]/256</pre>
+                                <p>Note that <b>winfo_rgb</b> returns 16-bit RGB values, ranging
+                                    from 0 to 65535. To map them into the more common 0-255 range, you
+                                    must divide each value by 256 (or shift them 8 bits to the
+                                    right).</p>
+                                <h2 id="fonts">Fonts&#160;<a class="nav" href="#fonts" title="bookmark!">#</a></h2>
+                                <p>Widgets that allow you to display text in one way or another
+                                    also allows you to specify which font to use. All widgets provide
+                                    reasonable default values, and you seldom have to specify the font
+                                    for simpler elements like labels and buttons.</p>
+                                <p>Fonts are usually specifed using the <b>font</b> widget
+                                    option. Tkinter supports a number of different font descriptor
+                                    types:</p>
+                                <ul>
+                                    <li>
+                                        <p>Font descriptors</p>
+                                    </li>
+                                    <li>
+                                        <p>User-defined font names</p>
+                                    </li>
+                                    <li>
+                                        <p>System fonts</p>
+                                    </li>
+                                    <li>
+                                        <p>X font descriptors</p>
+                                    </li>
+                                </ul>
+                                <p>With Tk versions before 8.0, only <i>X font descriptors</i> are
+                                    supported (see below).</p>
+                                <h3 id="font-descriptors">Font descriptors&#160;<a class="nav" href="#font-descriptors"
+                                        title="bookmark!">#</a></h3>
+                                <p>Starting with Tk 8.0, Tkinter supports platform independent font
+                                    descriptors. You can specify a font as tuple containing a family
+                                    name, a height in points, and optionally a string with one or more
+                                    styles. Examples:</p>
+                                <pre class="python">
+(<span class="pystring">"Times"</span>, 10, <span class="pystring">"bold"</span>)
+(<span class="pystring">"Helvetica"</span>, 10, <span class="pystring">"bold italic"</span>)
+(<span class="pystring">"Symbol"</span>, 8)</pre>
+                                <p>To get the default size and style, you can give the font name as
+                                    a single string. If the family name doesn&#8217;t include spaces, you can
+                                    also add size and styles to the string itself:</p>
+                                <pre class="python">
+<span class="pystring">"Times 10 bold"</span>
+<span class="pystring">"Helvetica 10 bold italic"</span>
+<span class="pystring">"Symbol 8"</span></pre>
+                                <p>Here are some families available on most Windows platforms:</p>
+                                <p><b>Arial</b> (corresponds to Helvetica), <b>Courier New</b>
+                                    (Courier), <b>Comic Sans MS</b>, <b>Fixedsys</b>, <b>MS Sans
+                                        Serif</b>, <b>MS Serif</b>, <b>Symbol</b>, <b>System</b>,
+                                    <b>Times New Roman</b> (Times), and <b>Verdana</b>:</p>
+                                <p>
+                                    <img alt="media/cache/b3644e69d451cc48a402eb8856bc7f6d.gif" width="320" />
+                                </p>
+                                <p>Note that if the family name contains spaces, you must use the
+                                    tuple syntax described above.</p>
+                                <p>The available styles are <b>normal</b>, <b>bold</b>, <b>
+                                        roman</b>, <b>italic</b>, <b>underline</b>, and <b>
+                                        overstrike</b>.</p>
+                                <p>Tk 8.0 automatically maps <b>Courier</b>, <b>Helvetica</b>,
+                                    and <b>Times</b> to their corresponding native family names on
+                                    all platforms. In addition, a font specification can never fail
+                                    under Tk 8.0; if Tk cannot come up with an exact match, it tries to
+                                    find a similar font. If that fails, Tk falls back to a
+                                    platform-specific default font. Tk&#8217;s idea of what is <span>&#8220;similar
+                                        enough&#8221;</span> probably doesn&#8217;t correspond to your own view, so you
+                                    shouldn&#8217;t rely too much on this feature.</p>
+                                <p>Tk 4.2 under Windows supports this kind of font descriptors as
+                                    well. There are several restrictions, including that the family
+                                    name must exist on the platform, and not all the above style names
+                                    exist (or rather, some of them have different names).</p>
+                                <h3 id="font-names">Font names&#160;<a class="nav" href="#font-names"
+                                        title="bookmark!">#</a></h3>
+                                <p>In addition, Tk 8.0 allows you to create named fonts and use
+                                    their names when specifying fonts to the widgets.</p>
+                                <p>The <b>tkFont</b> module provides a <a href="font"><b>Font</b></a> class which allows
+                                    you to create
+                                    font
+                                    instances. You can use such an instance everywhere Tkinter accepts a
+                                    font specifier. You can also use a font instance to get font metrics,
+                                    including the size occupied by a given string written in that
+                                    font.</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+tkFont.Font(family=<span class="pystring">"Times"</span>, size=10, weight=tkFont.BOLD)
+tkFont.Font(family=<span class="pystring">"Helvetica"</span>, size=10, weight=tkFont.BOLD,
+            slant=tkFont.ITALIC)
+tkFont.Font(family=<span class="pystring">"Symbol"</span>, size=8)</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>If you modify a named font (using the <b>config</b> method),
+                                    the changes are automatically propagated to all widgets using the
+                                    font.</p>
+                                <p>The <b>Font</b> constructor supports the following style
+                                    options (note that the constants are defined in the <b>tkFont</b>
+                                    module):</p>
+                                <dl class="options">
+                                    <dt>
+                                        <b>family</b>
+                                    </dt>
+                                    <dd>
+                                        <p>Font family.</p>
+                                    </dd>
+                                    <dt>
+                                        <b>size</b>
+                                    </dt>
+                                    <dd>
+                                        <p>Font size in points. To give the size in pixels, use a negative
+                                            value.</p>
+                                    </dd>
+                                    <dt>
+                                        <b>weight</b>
+                                    </dt>
+                                    <dd>
+                                        <p>Font thickness. Use one of <b>NORMAL</b> or <b>BOLD</b>.
+                                            Default is <b>NORMAL</b>.</p>
+                                    </dd>
+                                    <dt>
+                                        <b>slant</b>
+                                    </dt>
+                                    <dd>
+                                        <p>Font slant. Use one of <b>NORMAL</b> or <b>ITALIC</b>.
+                                            Default is <b>NORMAL</b>.</p>
+                                    </dd>
+                                    <dt>
+                                        <b>underline</b>
+                                    </dt>
+                                    <dd>
+                                        <p>Font underlining. If 1 (true), the font is underlined. Default
+                                            is 0 (false).</p>
+                                    </dd>
+                                    <dt>
+                                        <b>overstrike</b>
+                                    </dt>
+                                    <dd>
+                                        <p>Font strikeout. If 1 (true), a line is drawn over text written
+                                            with this font. Default is 0 (false).</p>
+                                    </dd>
+                                </dl>
+                                <h3 id="system-fonts">System fonts&#160;<a class="nav" href="#system-fonts"
+                                        title="bookmark!">#</a></h3>
+                                <p>Tk also supports system specific font names. Under X, these are
+                                    usually font aliases like <b>fixed</b>, <b>6x10</b>, etc.</p>
+                                <p>Under Windows, these include <b>ansi</b>, <b>ansifixed</b>,
+                                    <b>device</b>, <b>oemfixed</b>, <b>system</b>, and <b>
+                                        systemfixed</b>:</p>
+                                <p>
+                                    <img alt="media/cache/6f3283f6bf322c795c98d7233a423923.gif" width="284" />
+                                </p>
+                                <p>On the Macintosh, the system font names are <b>application</b>
+                                    and <b>system</b>.</p>
+                                <p>Note that the system fonts are full font names, not family
+                                    names, and they cannot be combined with size or style attributes.
+                                    For portability reasons, avoid using these names wherever
+                                    possible.</p>
+                                <h3 id="x-font-descriptors">X Font Descriptors&#160;<a class="nav"
+                                        href="#x-font-descriptors" title="bookmark!">#</a></h3>
+                                <p><i>X Font Descriptors</i> are strings having the following
+                                    format (the asterisks represent fields that are usually not
+                                    relevant. For details, see the Tk documentation, or an X
+                                    manual):</p>
+                                <pre>
+-*-family-weight-slant-*--*-size-*-*-*-*-charset
+</pre>
+                                <p>The font <i>family</i> is typically something like <b>
+                                        Times</b>, <b>Helvetica</b>, <b>Courier</b> or <b>
+                                        Symbol</b>.</p>
+                                <p>The <i>weight</i> is either <b>Bold</b> or <b>Normal</b>.
+                                    Slant is either <b>R</b> for <span>&#8220;roman&#8221;</span> (normal), <b>
+                                        I</b> for italic, or <b>O</b> for oblique (in practice, this is
+                                    just another word for italic).</p>
+                                <p><i>Size</i> is the height of the font in decipoints (that is,
+                                    points multiplied by 10). There are usually 72 points per inch, but
+                                    some low-resolution displays may use larger <span>&#8220;logical&#8221;</span>
+                                    points to make sure that small fonts are still legible. The <i>
+                                        character set</i>, finally, is usually <b>ISO8859-1</b> (ISO
+                                    Latin 1), but may have other values for some fonts.</p>
+                                <p>The following descriptor requests a 12-point boldface Times
+                                    font, using the ISO Latin 1 character set:</p>
+                                <pre>
+-*-Times-Bold-R-*--*-120-*-*-*-*-ISO8859-1
+</pre>
+                                <p>If you don&#8217;t care about the character set, or use a font like
+                                    <b>Symbol</b> which has a special character set, you can use a
+                                    single asterisk as the last component:</p>
+                                <pre>
+-*-Symbol-*-*-*--*-80-*
+</pre>
+                                <p>A typical X server supports at least <b>Times</b>, <b>
+                                        Helvetica</b>, <b>Courier</b>, and a few more fonts, in sizes
+                                    like 8, 10, 12, 14, 18, and 24 points, and in normal, bold, and
+                                    italic (<b>Times</b>) or oblique (<b>Helvetica</b>, <b>
+                                        Courier</b>) variants. Most servers also support freely scaleable
+                                    fonts. You can use programs like <b>xlsfonts</b> and <b>
+                                        xfontsel</b> to check which fonts you have access to on a given
+                                    server.</p>
+                                <p>This kind of font descriptors can also be used on Windows and
+                                    Macintosh. Note that if you use Tk 4.2, you should keep in mind
+                                    that the font family must be one supported by Windows (see
+                                    above).</p>
+                                <h2 id="text-formatting">Text Formatting&#160;<a class="nav" href="#text-formatting"
+                                        title="bookmark!">#</a></h2>
+                                <p>While text labels and buttons usually contain a single line of
+                                    text, Tkinter also supports multiple lines. To split the text
+                                    across lines, simply insert newline characters (<b>\n</b>) where
+                                    necessary.</p>
+                                <p>By default, the lines are centered. You can change this by
+                                    setting the <b>justify</b> option to <b>LEFT</b> or <b>
+                                        RIGHT</b>. The default value is <b>CENTER</b>.</p>
+                                <p>You can also use the <b>wraplength</b> option to set a maximum
+                                    width, and let the widget wrap the text over multiple lines all by
+                                    itself. Tkinter attempts to wrap on whitespace, but if the widget
+                                    is too narrow, it may break individual words across lines.</p>
+                                <h2 id="borders">Borders&#160;<a class="nav" href="#borders" title="bookmark!">#</a>
+                                </h2>
+                                <p>All Tkinter widgets have a border (though it&#8217;s not visible by
+                                    default for some widgets). The border consists of an optional 3D
+                                    relief, and a focus highlight region.</p>
+                                <h3 id="relief">Relief&#160;<a class="nav" href="#relief" title="bookmark!">#</a></h3>
+                                <p>The relief settings control how to draw the widget border:</p>
+                                <dl class="options">
+                                    <dt>
+                                        <b>borderwidth</b> (or <b>bd</b>)
+                                    </dt>
+                                    <dd>
+                                        <p>This is the width of the border, in pixels. Most widgets have a
+                                            default borderwidth of one or two pixels. There&#8217;s hardly any reason
+                                            to make the border wider than that.</p>
+                                    </dd>
+                                    <dt>
+                                        <b>relief</b>
+                                    </dt>
+                                    <dd>
+                                        <p>This option controls how to draw the 3D border. It can be set to
+                                            one of <b>SUNKEN</b>, <b>RAISED</b>, <b>GROOVE</b>,
+                                            <b>RIDGE</b>, and <b>FLAT</b>.</p>
+                                    </dd>
+                                </dl>
+                                <h3 id="focus-highlights">Focus Highlights&#160;<a class="nav" href="#focus-highlights"
+                                        title="bookmark!">#</a></h3>
+                                <p>The highlight settings control how to indicate that the widget
+                                    (or one of its children) has keyboard focus. In most cases, the
+                                    highlight region is a border outside the relief. The following
+                                    options control how this extra border is drawn:</p>
+                                <dl class="options">
+                                    <dt>
+                                        <b>highlightcolor</b>
+                                    </dt>
+                                    <dd>
+                                        <p>This option is used to draw the highlight region when the widget
+                                            has keyboard focus. It&#8217;s usually black, or some other distinct
+                                            contrast color.</p>
+                                    </dd>
+                                    <dt>
+                                        <b>highlightbackground</b>
+                                    </dt>
+                                    <dd>
+                                        <p>This option is used to draw the highlight region when the widget
+                                            doesn&#8217;t have focus. It&#8217;s usually same as the widget background.
+                                        </p>
+                                    </dd>
+                                    <dt>
+                                        <b>highlightthickness</b>
+                                    </dt>
+                                    <dd>
+                                        <p>This option is the width of the highlight region, in pixels. It is
+                                            usually one or two pixels for widgets that can take keyboard
+                                            focus.</p>
+                                    </dd>
+                                </dl>
+                                <h2 id="cursors">Cursors&#160;<a class="nav" href="#cursors" title="bookmark!">#</a>
+                                </h2>
+                                <dl class="options">
+                                    <dt>
+                                        <b>cursor</b>
+                                    </dt>
+                                    <dd>
+                                        <p>This option controls which mouse cursor to use when the mouse is
+                                            moved over the widget.</p>
+                                        <p>If this option isn&#8217;t set, the widget uses the same mouse pointer as
+                                            its parent.</p>
+                                        <p>Note that some widgets, including the <a href="text">
+                                                <b>Text</b></a> and <a href="entry"><b>Entry</b></a>
+                                            widgets, set this option by default.</p>
+                                    </dd>
+                                </dl>
+                                <blockquote>
+                                    <p>
+                                        <img alt="media/cache/b151db152b02cbed2efbfa925b75b0a8.gif" width="384" />
+                                    </p>
+                                </blockquote>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="tkinter-widget-configuration.htm">back</a>&#160;<a
+                                    href="tkinter-events-and-bindings.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#colors">Colors</a></li>
+                                <li>
+                                    <ul>
+                                        <li><a href="#color-names">Color Names</a></li>
+                                        <li><a href="#rgb-syntax">RGB Specifications</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#fonts">Fonts</a></li>
+                                <li>
+                                    <ul>
+                                        <li><a href="#font-descriptors">Font descriptors</a></li>
+                                        <li><a href="#font-names">Font names</a></li>
+                                        <li><a href="#system-fonts">System fonts</a></li>
+                                        <li><a href="#x-font-descriptors">X Font Descriptors</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#text-formatting">Text Formatting</a></li>
+                                <li><a href="#borders">Borders</a></li>
+                                <li>
+                                    <ul>
+                                        <li><a href="#relief">Relief</a></li>
+                                        <li><a href="#focus-highlights">Focus Highlights</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#cursors">Cursors</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

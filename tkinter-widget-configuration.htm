@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>Widget&nbsp;Configuration</title>
+</head>
+
+<body data-page-id="1973">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="tkinter-classes.htm">back</a>&#160;<a href="tkinter-widget-styling.htm">next</a>
+                            </p>
+                            <h1 class="maintitle">Widget&nbsp;Configuration</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>To control the appearance of a widget, you usually use <i>
+                                        options</i> rather than method calls. Typical options include text
+                                    and color, size, command callbacks, etc. To deal with options, all
+                                    core widgets implement the same configuration interface:</p>
+                                <h2>Configuration Interface</h2>
+                                <div class="method">
+                                    <p class="def"><b>widgetclass(master, option=value, &#8230;)</b>
+                                        <span>=&gt; widget</span></p>
+                                    <p>(where <i>widgetclass</i> is one of the widget classes mentioned
+                                        earlier)</p>
+                                    <p>Create an instance of this widget class, as a child to the given
+                                        master, and using the given options. All options have default values,
+                                        so in the simplest case, you only have to specify the master. You can
+                                        even leave that out if you really want; Tkinter then uses the most
+                                        recently created root window as master. Note that the <b>name</b>
+                                        option can only be set when the widget is created.</p>
+                                </div>
+                                <div class="method">
+                                    <p class="def"><b>cget(&#8220;option&#8221;)</b> <span>=&gt; string</span></p>
+                                    <p>Return the current value of an option. Both the option name, and
+                                        the returned value, are strings. To get the <b>name</b> option, use
+                                        <b>str(widget)</b> instead.</p>
+                                </div>
+                                <div class="method">
+                                    <p class="def"><b>config(option=value, &#8230;)</b></p>
+                                    <p class="def"><b>configure(option=value, &#8230;)</b></p>
+                                    <p>Set one or more options (given as keyword arguments).</p>
+                                </div>
+                                <p>Note that some options have names that are reserved words in Python
+                                    (<b>class</b>, <b>from</b>, &#8230;). To use these as keyword
+                                    arguments, simply append an underscore to the option name
+                                    (<b>class_</b>, <b>from_</b>, &#8230;). Note that you cannot set the
+                                    <b>name</b> option using this method; it can only be set when the
+                                    widget is created.</p>
+                                <p>For convenience, the widgets also implement a partial dictionary
+                                    interface. The <b>__setitem__</b> method maps to <b>
+                                        configure</b>, while <b>__getitem__</b> maps to <b>cget</b>. As
+                                    a result, you can use the following syntax to set and query
+                                    options:</p>
+                                <pre class="python">
+value = widget[<span class="pystring">"option"</span>]
+widget[<span class="pystring">"option"</span>] = value</pre>
+                                <p>Note that each assignment results in one call to Tk. If you wish
+                                    to change multiple options, it is usually a better idea to change
+                                    them with a single call to <b>config</b> or <b>configure</b>
+                                    (personally, I prefer to always change options in that
+                                    fashion).</p>
+                                <p>The following dictionary method also works for widgets:</p>
+                                <div class="method">
+                                    <p class="def"><b>keys()</b> <span>=&gt; list</span></p>
+                                    <p>Return a list of all options that can be set for this widget. The
+                                        <b>name</b> option is not included in this list (it cannot be
+                                        queried or modified through the dictionary interface anyway, so this
+                                        doesn&#8217;t really matter).</p>
+                                </div>
+                                <h2>Backwards Compatibility</h2>
+                                <p>Keyword arguments were introduced in Python 1.3. Before that,
+                                    options were passed to the widget constructors and <b>
+                                        configure</b> methods using ordinary Python dictionaries. The
+                                    source code could then look something like this:</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+self.button = Button(frame, {<span class="pystring">"text"</span>: <span class="pystring">"QUIT"</span>, <span class="pystring">"fg"</span>: <span class="pystring">"red"</span>, <span class="pystring">"command"</span>: frame.quit})
+self.button.pack({<span class="pystring">"side"</span>: LEFT})</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The keyword argument syntax is of course much more elegant, and
+                                    less error prone. However, for compatibility with existing code,
+                                    Tkinter still supports the older syntax. You shouldn&#8217;t use this
+                                    syntax in new programs, even if it might be tempting in some cases.
+                                    For example, if you create a custom widget which needs to pass
+                                    configuration options along to its parent class, you may come up
+                                    with something like:</p>
+                                <pre class="python">
+<span class="pykeyword">def</span> <span class="pyfunction">__init__</span>(self, master, **kw):
+    Canvas.__init__(self, master, kw) <span class="pycomment"># kw is a dictionary</span></pre>
+                                <p>This works just fine with the current version of Tkinter, but it
+                                    may not work with future versions. A more general approach is to
+                                    use the <b>apply</b> function:</p>
+                                <pre class="python">
+<span class="pykeyword">def</span> <span class="pyfunction">__init__</span>(self, master, **kw):
+    apply(Canvas.__init__, (self, master), kw)</pre>
+                                <p>The <b>apply</b> function takes a function (an unbound method,
+                                    in this case), a tuple with arguments (which must include <b>
+                                        self</b> since we&#8217;re calling an unbound method), and optionally, a
+                                    dictionary which provides the keyword arguments.</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="tkinter-classes.htm">back</a>&#160;<a href="tkinter-widget-styling.htm">next</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

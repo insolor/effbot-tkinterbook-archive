@@ -1,0 +1,449 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter Button&nbsp;Widget</title>
+</head>
+
+<body data-page-id="1918">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="tkinter-index.htm">back</a>&#160;<a href="canvas.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter Button&nbsp;Widget</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>Button</b> widget is a standard Tkinter widget used to
+                                    implement various kinds of buttons. Buttons can contain text or
+                                    images, and you can associate a Python function or method with each
+                                    button. When the button is pressed, Tkinter automatically calls
+                                    that function or method.</p>
+                                <p>The button can only display text in a single font, but the text
+                                    may span more than one line. In addition, one of the characters can
+                                    be underlined, for example to mark a keyboard shortcut. By default,
+                                    the <b>Tab</b> key can be used to move to a button widget.</p>
+                                <h2 id="when-to-use">When to use the Button Widget&#160;<a class="nav"
+                                        href="#when-to-use" title="bookmark!">#</a></h2>
+                                <p>Simply put, button widgets are used to let the user say &#8220;do this
+                                    now!,&#8221; where <i>this</i> is either given by the text on the button,
+                                    or implied by the icon displayed in the button. Buttons are
+                                    typically used in toolbars, in application windows, and to accept
+                                    or dismiss data entered into a dialog box.</p>
+                                <p>For buttons suitable for data entry, see the <a
+                                        href="checkbutton.htm"><b>Checkbutton</b></a> and <a
+                                        href="radiobutton.htm"><b>Radiobutton</b></a> widgets.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>Plain buttons are pretty straightforward to use. All you have to
+                                    do is to specify the button contents (text, bitmap, or image) and
+                                    what function or method to call when the button is pressed:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+master = Tk()
+
+<span class="pykeyword">def</span> <span class="pyfunction">callback</span>():
+    <span class="pykeyword">print</span> <span class="pystring">"click!"</span>
+
+b = Button(master, text=<span class="pystring">"OK"</span>, command=callback)
+b.pack()
+
+mainloop()</pre>
+                                <p>A button without a callback is pretty useless; it simply doesn&#8217;t
+                                    do anything when you press the button. You might wish to use such
+                                    buttons anyway when developing an application. In that case, it is
+                                    probably a good idea to disable the button to avoid confusing your
+                                    beta testers:</p>
+                                <pre class="python">
+b = Button(master, text=<span class="pystring">"Help"</span>, state=DISABLED)</pre>
+                                <p>If you don&#8217;t specify a size, the button is made just large
+                                    enough to hold its contents. You can use the <b>padx</b> and
+                                    <b>pady</b> option to add some extra space between the contents and
+                                    the button border.</p>
+                                <p>You can also use the <b>height</b> and <b>width</b> options to
+                                    explicitly set the size. If you display text in the button, these
+                                    options define the size of the button in text units. If you display
+                                    bitmaps or images instead, they define the size in pixels (or other
+                                    screen units). You can specify the size in pixels even for
+                                    text buttons, but that requires some magic. Here&#8217;s one way to do it
+                                    (there are others):</p>
+                                <pre class="python">
+f = Frame(master, height=32, width=32)
+f.pack_propagate(0) <span class="pycomment"># don't shrink</span>
+f.pack()
+
+b = Button(f, text=<span class="pystring">"Sure!"</span>)
+b.pack(fill=BOTH, expand=1)</pre>
+                                <p>Buttons can display multiple lines of text (but only in one
+                                    font). You can use newlines, or use the <b>wraplength</b> option to
+                                    make the button wrap text by itself. When wrapping text, use the
+                                    <b>anchor</b>, <b>justify</b>, and possibly <b>padx</b> options to
+                                    make things look exactly as you wish. An example:</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+b = Button(master, text=longtext, anchor=W, justify=LEFT, padx=2)</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>To make an ordinary button look like it&#8217;s held down, for example
+                                    if you wish to implement a toolbox of some kind, you can simply
+                                    change the relief from RAISED to SUNKEN:</p>
+                                <pre class="python">
+b.config(relief=SUNKEN)</pre>
+                                <p>You might wish to change the background as well. Note that a
+                                    possibly better solution is to use a <b>Checkbutton</b> or
+                                    <b>Radiobutton</b> with the <b>indicatoron</b> option set to
+                                    false:</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+b = Checkbutton(master, image=bold, variable=var, indicatoron=0)</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>In earlier versions of Tkinter, the <b>image</b> option
+                                    overrides the <b>text</b> option. If you specify both, only the
+                                    image is displayed. In later versions, you can use the
+                                    <b>compound</b> option to change this behavior. To display text on
+                                    top of an image, set <b>compound</b> to <b>CENTER</b>:</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+b = Button(master, text=<span class="pystring">"Click me"</span>, image=pattern, compound=CENTER)</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>To display an icon along with the text, set the option to one of
+                                    <b>LEFT</b>, <b>RIGHT</b>, <b>TOP</b>, or <b>BOTTOM</b>:</p>
+                                <pre class="python">
+<span class="pycomment"># put the icon to the left of the text label</span>
+b = Button(compound=LEFT, image=icon, text=<span class="pystring">"Action"</span>)
+
+<span class="pycomment"># put the icon on top of the text</span>
+b = Button(compound=TOP, image=icon, text=<span class="pystring">"Quit"</span>)</pre>
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Button(master=None, **options)</b> (class) [<a
+                                                href="#Tkinter.Button-class">#</a>]</dt>
+                                        <dd>
+                                            <p>A command button.</p>
+                                            <dl>
+                                                <dt><i>master</i></dt>
+                                                <dd>
+                                                    Parent widget.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options. See the description of
+                                                    the <a class="link"
+                                                        href="#button.Button.config-method"><b>config</b></a> method for
+                                                    a list of available
+                                                    options.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Button.config-method"
+                                                name="Tkinter.Button.config-method"><b>config(**options)</b></a> [<a
+                                                href="#Tkinter.Button.config-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies one or more widget options. If no options are given,
+                                                the method returns a dictionary containing all current option
+                                                values.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options.</dd>
+                                                <dt><i>activebackground=</i></dt>
+                                                <dd>
+                                                    What background color to use when
+                                                    the button is active. The default is system specific.
+                                                    (the option database name is activeBackground, the class
+                                                    is Foreground)</dd>
+                                                <dt><i>activeforeground=</i></dt>
+                                                <dd>
+                                                    What foreground color to use when
+                                                    the button is active. The default is system specific.
+                                                    (activeForeground/Background)</dd>
+                                                <dt><i>anchor=</i></dt>
+                                                <dd>
+                                                    Controls where in the button the text (or
+                                                    image) should be located. Use one of <b>N</b>, <b>NE</b>,
+                                                    <b>E</b>, <b>SE</b>, <b>S</b>, <b>SW</b>, <b>W</b>,
+                                                    <b>NW</b>, or <b> CENTER</b>. Default is <b>CENTER</b>.
+                                                    (anchor/Anchor)
+                                                </dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                    The background color. The default is
+                                                    system specific.
+                                                    (background/Background)</dd>
+                                                <dt><i>bg=</i></dt>
+                                                <dd>
+                                                    Same as <b>background</b>.
+                                                </dd>
+                                                <dt><i>bitmap=</i></dt>
+                                                <dd>
+                                                    The bitmap to display in the widget. If the
+                                                    <b>image</b> option is given, this option is ignored.
+                                                    (bitmap/Bitmap)
+                                                </dd>
+                                                <dt><i>borderwidth=</i></dt>
+                                                <dd>
+                                                    The width of the button border. The default
+                                                    is platform specific, but is usually 1 or 2 pixels.
+                                                    (borderWidth/BorderWidth)</dd>
+                                                <dt><i>bd=</i></dt>
+                                                <dd>
+                                                    Same as <b>borderwidth</b>.
+                                                </dd>
+                                                <dt><i>command=</i></dt>
+                                                <dd>
+                                                    A function or method that is called when the
+                                                    button is pressed. The callback can be a function, bound
+                                                    method, or any other callable Python object. If this option
+                                                    is not used, nothing will happen when the user presses
+                                                    the button.
+                                                    (command/Command)</dd>
+                                                <dt><i>compound=</i></dt>
+                                                <dd>
+                                                    Controls how to combine text and image in the
+                                                    button. By default, if an image or bitmap is given, it is drawn
+                                                    instead of the text. If this option is set to <b>CENTER</b>,
+                                                    the text is drawn on top of the image. If this option is set
+                                                    to one of <b>BOTTOM</b>, <b>LEFT</b>, <b>RIGHT</b>, or <b>TOP</b>,
+                                                    the image is drawn besides the text (use <b>BOTTOM</b> to draw
+                                                    the image under the text, etc.). Default is <b>NONE</b>.
+                                                    (compound/Compound)
+                                                </dd>
+                                                <dt><i>cursor=</i></dt>
+                                                <dd>
+                                                    The cursor to show when the mouse is moved
+                                                    over the button.
+                                                    (cursor/Cursor)</dd>
+                                                <dt><i>default=</i></dt>
+                                                <dd>
+                                                    If set, the button is a default button.
+                                                    Tkinter will indicate this by drawing a platform specific
+                                                    indicator (usually an extra border). The default is
+                                                    <b>DISABLED</b> (no default behavior).
+                                                    (default/Default)
+                                                </dd>
+                                                <dt><i>disabledforeground=</i></dt>
+                                                <dd>
+                                                    The color to use when the button
+                                                    is disabled. The background is shown in the <b>background</b>
+                                                    color. The default is system specific.
+                                                    (disabledForeground/DisabledForeground)
+                                                </dd>
+                                                <dt><i>font=</i></dt>
+                                                <dd>
+                                                    The font to use in the button. The button can
+                                                    only contain text in a single font. The default is system
+                                                    specific.
+                                                    (font/Font)</dd>
+                                                <dt><i>foreground=</i></dt>
+                                                <dd>
+                                                    The color to use for text and bitmap
+                                                    content. The default is system specific.
+                                                    (foreground/Foreground)</dd>
+                                                <dt><i>fg=</i></dt>
+                                                <dd>
+                                                    Same as <b>foreground</b>.
+                                                </dd>
+                                                <dt><i>height=</i></dt>
+                                                <dd>
+                                                    The height of the button. If the button displays
+                                                    text, the size is given in text units. If the button displays
+                                                    an image, the size is given in pixels (or screen units). If
+                                                    the size is omitted, it is calculated based on the button
+                                                    contents.
+                                                    (height/Height)</dd>
+                                                <dt><i>highlightbackground=</i></dt>
+                                                <dd>
+                                                    The color to use for the highlight
+                                                    border when the button does not have focus. The default is
+                                                    system specific.
+                                                    (highlightBackground/HighlightBackground)</dd>
+                                                <dt><i>highlightcolor=</i></dt>
+                                                <dd>
+                                                    The color to use for the highlight border
+                                                    when the button has focus. The default is system speciific.
+                                                    (highlightColor/HighlightColor)</dd>
+                                                <dt><i>highlightthickness=</i></dt>
+                                                <dd>
+                                                    The width of the highlight border.
+                                                    The default is system specific (usually one or two pixels).
+                                                    (highlightThickness/HighlightThickness)</dd>
+                                                <dt><i>image=</i></dt>
+                                                <dd>
+                                                    The image to display in the widget. If specified,
+                                                    this takes precedence over the <b>text</b> and <b>bitmap</b>
+                                                    options.
+                                                    (image/Image)
+                                                </dd>
+                                                <dt><i>justify=</i></dt>
+                                                <dd>
+                                                    Defines how to align multiple lines of text.
+                                                    Use <b>LEFT</b>, <b>RIGHT</b>, or <b>CENTER</b>. Default is
+                                                    CENTER.
+                                                    (justify/Justify)
+                                                </dd>
+                                                <dt><i>overrelief=</i></dt>
+                                                <dd>
+                                                    Alternative relief to use when the mouse is
+                                                    moved over the widget. If empty, always use the <b>relief</b>
+                                                    value. (overRelief/OverRelief)
+                                                </dd>
+                                                <dt><i>padx=</i></dt>
+                                                <dd>
+                                                    Extra horizontal padding between the text or
+                                                    image and the border.
+                                                    (padX/Pad)</dd>
+                                                <dt><i>pady=</i></dt>
+                                                <dd>
+                                                    Extra vertical padding between the text or image
+                                                    and the border.
+                                                    (padY/Pad)</dd>
+                                                <dt><i>relief=</i></dt>
+                                                <dd>
+                                                    Border decoration. Usually, the button is
+                                                    <b>SUNKEN</b> when pressed, and <b>RAISED</b> otherwise.
+                                                    Other possible values are <b>GROOVE</b>, <b>RIDGE</b>,
+                                                    and <b>FLAT</b>. Default is RAISED.
+                                                    (relief/Relief)
+                                                </dd>
+                                                <dt><i>repeatdelay=</i></dt>
+                                                <dd>
+                                                    (repeatDelay/RepeatDelay)</dd>
+                                                <dt><i>repeatinterval=</i></dt>
+                                                <dd>
+                                                    (repeatInterval/RepeatInterval)</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    The button state: <b>NORMAL</b>, <b>ACTIVE</b>
+                                                    or <b>DISABLED</b>. Default is <b>NORMAL</b>.
+                                                    (state/State)
+                                                </dd>
+                                                <dt><i>takefocus=</i></dt>
+                                                <dd>
+                                                    Indicates that the user can use the <b>Tab</b>
+                                                    key to move to this button. Default is an empty string,
+                                                    which means that the button accepts focus only if it has
+                                                    any keyboard bindings (default is on, in other words).
+                                                    (takeFocus/TakeFocus)
+                                                </dd>
+                                                <dt><i>text=</i></dt>
+                                                <dd>
+                                                    The text to display in the button. The text
+                                                    can contain newlines. If the <b>bitmap</b> or <b>image</b>
+                                                    options are used, this option is ignored (unless the
+                                                    <b>compound</b> option is used).
+                                                    (text/Text)
+                                                </dd>
+                                                <dt><i>textvariable=</i></dt>
+                                                <dd>
+                                                    Associates a Tkinter variable (usually
+                                                    a <b>StringVar</b>) to the button. If the variable is changed,
+                                                    the button text is updated.
+                                                    (textVariable/Variable)
+                                                </dd>
+                                                <dt><i>underline=</i></dt>
+                                                <dd>
+                                                    Which character to underline, in a text label.
+                                                    Default is -1, which means that no character is underlined.
+                                                    (underline/Underline)</dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    The width of the button. If the button displays
+                                                    text, the size is given in text units. If the button displays
+                                                    an image, the size is given in pixels (or screen units). If
+                                                    the size is omitted, or zero, it is calculated based on the
+                                                    button contents.
+                                                    (width/Width)</dd>
+                                                <dt><i>wraplength=</i></dt>
+                                                <dd>
+                                                    Determines when a button&#8217;s text should be
+                                                    wrapped into multiple lines. This is given in screen units.
+                                                    Default is 0 (no wrapping).
+                                                    (wrapLength/WrapLength)</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Button.flash-method"
+                                                name="Tkinter.Button.flash-method"><b>flash()</b></a> [<a
+                                                href="#Tkinter.Button.flash-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Flash the button. This method redraws the button several times,
+                                                alternating between active and normal appearance.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Button.invoke-method"
+                                                name="Tkinter.Button.invoke-method"><b>invoke()</b></a> [<a
+                                                href="#Tkinter.Button.invoke-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Call the command associated with the button.</p>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="tkinter-index.htm">back</a>&#160;<a href="canvas.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#when-to-use">When to use the Button Widget</a></li>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

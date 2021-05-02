@@ -1,0 +1,687 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter Menu&nbsp;Widget</title>
+</head>
+
+<body data-page-id="1928">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="listbox.htm">back</a>&#160;<a href="menubutton.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter Menu&nbsp;Widget</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>Menu</b> widget is used to implement toplevel, pulldown,
+                                    and popup menus.</p>
+                                <h2>When to use the Menu Widget</h2>
+                                <p>This widget is used to display all kinds of menus used by an
+                                    application. Since this widget uses native code where possible, you
+                                    shouldn&#8217;t try to fake menus using buttons and other Tkinter
+                                    widgets.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>Toplevel menus are displayed just under the title bar of the
+                                    root or any other toplevel windows (or on Macintosh, along the
+                                    upper edge of the screen). To create a toplevel menu, create a new
+                                    Menu instance, and use <b>add</b> methods to add commands and other
+                                    menu entries to it.</p>
+                                <pre class="python">
+root = Tk()
+
+<span class="pykeyword">def</span> <span class="pyfunction">hello</span>():
+    <span class="pykeyword">print</span> <span class="pystring">"hello!"</span>
+
+<span class="pycomment"># create a toplevel menu</span>
+menubar = Menu(root)
+menubar.add_command(label=<span class="pystring">"Hello!"</span>, command=hello)
+menubar.add_command(label=<span class="pystring">"Quit!"</span>, command=root.quit)
+
+<span class="pycomment"># display the menu</span>
+root.config(menu=menubar)</pre>
+                                <p>Pulldown menus (and other submenus) are created in a similar
+                                    fashion. The main difference is that they are attached to a parent
+                                    menu (using <b>add_cascade)</b>, instead of a toplevel window.</p>
+                                <pre class="python">
+root = Tk()
+
+<span class="pykeyword">def</span> <span class="pyfunction">hello</span>():
+    <span class="pykeyword">print</span> <span class="pystring">"hello!"</span>
+
+menubar = Menu(root)
+
+<span class="pycomment"># create a pulldown menu, and add it to the menu bar</span>
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label=<span class="pystring">"Open"</span>, command=hello)
+filemenu.add_command(label=<span class="pystring">"Save"</span>, command=hello)
+filemenu.add_separator()
+filemenu.add_command(label=<span class="pystring">"Exit"</span>, command=root.quit)
+menubar.add_cascade(label=<span class="pystring">"File"</span>, menu=filemenu)
+
+<span class="pycomment"># create more pulldown menus</span>
+editmenu = Menu(menubar, tearoff=0)
+editmenu.add_command(label=<span class="pystring">"Cut"</span>, command=hello)
+editmenu.add_command(label=<span class="pystring">"Copy"</span>, command=hello)
+editmenu.add_command(label=<span class="pystring">"Paste"</span>, command=hello)
+menubar.add_cascade(label=<span class="pystring">"Edit"</span>, menu=editmenu)
+
+helpmenu = Menu(menubar, tearoff=0)
+helpmenu.add_command(label=<span class="pystring">"About"</span>, command=hello)
+menubar.add_cascade(label=<span class="pystring">"Help"</span>, menu=helpmenu)
+
+<span class="pycomment"># display the menu</span>
+root.config(menu=menubar)</pre>
+                                <p>Finally, a popup menu is created in the same way, but is
+                                    explicitly displayed, using the <b>post</b> method:</p>
+                                <pre class="python">
+root = Tk()
+
+<span class="pykeyword">def</span> <span class="pyfunction">hello</span>():
+    <span class="pykeyword">print</span> <span class="pystring">"hello!"</span>
+
+<span class="pycomment"># create a popup menu</span>
+menu = Menu(root, tearoff=0)
+menu.add_command(label=<span class="pystring">"Undo"</span>, command=hello)
+menu.add_command(label=<span class="pystring">"Redo"</span>, command=hello)
+
+<span class="pycomment"># create a canvas</span>
+frame = Frame(root, width=512, height=512)
+frame.pack()
+
+<span class="pykeyword">def</span> <span class="pyfunction">popup</span>(event):
+    menu.post(event.x_root, event.y_root)
+
+<span class="pycomment"># attach popup to canvas</span>
+frame.bind(<span class="pystring">"&lt;Button-3&gt;"</span>, popup)</pre>
+                                <p>You can use the <b>postcommand</b> callback to update (or even
+                                    create) the menu every time it is displayed.</p>
+                                <pre class="python">
+counter = 0
+
+<span class="pykeyword">def</span> <span class="pyfunction">update</span>():
+    <span class="pykeyword">global</span> counter
+    counter = counter + 1
+    menu.entryconfig(0, label=str(counter))
+
+root = Tk()
+
+menubar = Menu(root)
+
+menu = Menu(menubar, tearoff=0, postcommand=update)
+menu.add_command(label=str(counter))
+menu.add_command(label=<span class="pystring">"Exit"</span>, command=root.quit)
+
+menubar.add_cascade(label=<span class="pystring">"Test"</span>, menu=menu)
+
+root.config(menu=menubar)</pre>
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Menu(master=None, **options)</b> (class) [<a
+                                                href="#Tkinter.Menu-class">#</a>]</dt>
+                                        <dd>
+                                            <p>A menu pane.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.__init__-method"
+                                                name="Tkinter.Menu.__init__-method"><b>__init__(master=None,
+                                                    **options)</b></a> [<a href="#Tkinter.Menu.__init__-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Creates a menu widget.</p>
+                                            <dl>
+                                                <dt><i>master</i></dt>
+                                                <dd>
+                                                    Parent widget.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options. See the description of
+                                                    the config method for a list of available options.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.activate-method"
+                                                name="Tkinter.Menu.activate-method"><b>activate(index)</b></a> [<a
+                                                href="#Tkinter.Menu.activate-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The activate method.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.add-method" name="Tkinter.Menu.add-method"><b>add(type,
+                                                    **options)</b></a> [<a href="#Tkinter.Menu.add-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Add (append) an entry of the given type to the menu.</p>
+                                            <dl>
+                                                <dt><i>type</i></dt>
+                                                <dd>
+                                                    What kind of entry to add. Can be one of
+                                                    <b>&#8220;command&#8221;</b>, <b>&#8220;cascade&#8221;</b>
+                                                    (submenu),
+                                                    <b>&#8220;checkbutton&#8221;</b>, <b>&#8220;radiobutton&#8221;</b>,
+                                                    or <b>&#8220;separator&#8221;</b>.
+                                                </dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Menu options.</dd>
+                                                <dt><i>activebackground=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>activeforeground=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>accelerator=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>bitmap=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>columnbreak=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>command=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>font=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>foreground=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>hidemargin=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>image=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>indicatoron=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>label=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>menu=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>offvalue=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>onvalue=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>selectcolor=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>selectimage=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>underline=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>value=</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>variable=</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.add_cascade-method"
+                                                name="Tkinter.Menu.add_cascade-method"><b>add_cascade(**options)</b></a>
+                                            [<a href="#Tkinter.Menu.add_cascade-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a submenu. See <a class="link"
+                                                    href="#menu.Menu.add-method"><b>add</b></a> for a list of options.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.add_checkbutton-method"
+                                                name="Tkinter.Menu.add_checkbutton-method"><b>add_checkbutton(**options)</b></a>
+                                            [<a href="#Tkinter.Menu.add_checkbutton-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a checkbutton. See <a class="link"
+                                                    href="#menu.Menu.add-method"><b>add</b></a> for a list of options.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.add_command-method"
+                                                name="Tkinter.Menu.add_command-method"><b>add_command(**options)</b></a>
+                                            [<a href="#Tkinter.Menu.add_command-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a command. See <a class="link"
+                                                    href="#menu.Menu.add-method"><b>add</b></a> for a list of options.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.add_radiobutton-method"
+                                                name="Tkinter.Menu.add_radiobutton-method"><b>add_radiobutton(**options)</b></a>
+                                            [<a href="#Tkinter.Menu.add_radiobutton-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a radiobutton. See <a class="link"
+                                                    href="#menu.Menu.add-method"><b>add</b></a> for a list of options.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.add_separator-method"
+                                                name="Tkinter.Menu.add_separator-method"><b>add_separator(**options)</b></a>
+                                            [<a href="#Tkinter.Menu.add_separator-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds a separator. See <a class="link"
+                                                    href="#menu.Menu.add-method"><b>add</b></a> for a list of options.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.config-method"
+                                                name="Tkinter.Menu.config-method"><b>config(**options)</b></a> [<a
+                                                href="#Tkinter.Menu.config-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies one or more widget options. If no options are given,
+                                                the method returns a dictionary containing all current option
+                                                values.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options.</dd>
+                                                <dt><i>activebackground=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;SystemHighlight&#8217;.
+                                                    (the database name is activeBackground, the class is Foreground)
+                                                </dd>
+                                                <dt><i>activeborderwidth=</i></dt>
+                                                <dd>
+                                                    Default value is 0.
+                                                    (activeBorderWidth/BorderWidth)</dd>
+                                                <dt><i>activeforeground=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;SystemHighlightText&#8217;.
+                                                    (activeForeground/Background)</dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;SystemMenu&#8217;.
+                                                    (background/Background)</dd>
+                                                <dt><i>bg=</i></dt>
+                                                <dd>
+                                                    Same as background.</dd>
+                                                <dt><i>borderwidth=</i></dt>
+                                                <dd>
+                                                    Default value is 0.
+                                                    (borderWidth/BorderWidth)</dd>
+                                                <dt><i>bd=</i></dt>
+                                                <dd>
+                                                    Same as borderwidth.</dd>
+                                                <dt><i>cursor=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;arrow&#8217;.
+                                                    (cursor/Cursor)</dd>
+                                                <dt><i>disabledforeground=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;SystemDisabledText&#8217;.
+                                                    (disabledForeground/DisabledForeground)</dd>
+                                                <dt><i>font=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;MS Sans Serif 8&#8217;.
+                                                    (font/Font)</dd>
+                                                <dt><i>foreground=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;SystemMenuText&#8217;.
+                                                    (foreground/Foreground)</dd>
+                                                <dt><i>fg=</i></dt>
+                                                <dd>
+                                                    Same as foreground.</dd>
+                                                <dt><i>postcommand=</i></dt>
+                                                <dd>
+                                                    No default value.
+                                                    (postCommand/Command)</dd>
+                                                <dt><i>relief=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;flat&#8217;.
+                                                    (relief/Relief)</dd>
+                                                <dt><i>selectcolor=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;SystemMenuText&#8217;.
+                                                    (selectColor/Background)</dd>
+                                                <dt><i>takefocus=</i></dt>
+                                                <dd>
+                                                    Default value is 0.
+                                                    (takeFocus/TakeFocus)</dd>
+                                                <dt><i>tearoff=</i></dt>
+                                                <dd>
+                                                    Default value is 1.
+                                                    (tearOff/TearOff)</dd>
+                                                <dt><i>tearoffcommand=</i></dt>
+                                                <dd>
+                                                    No default value.
+                                                    (tearOffCommand/TearOffCommand)</dd>
+                                                <dt><i>title=</i></dt>
+                                                <dd>
+                                                    No default value.
+                                                    (title/Title)</dd>
+                                                <dt><i>type=</i></dt>
+                                                <dd>
+                                                    Default value is &#8216;normal&#8217;.
+                                                    (type/Type)</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.delete-method"
+                                                name="Tkinter.Menu.delete-method"><b>delete(index1, index2=None)</b></a>
+                                            [<a href="#Tkinter.Menu.delete-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Deletes one or more menu entries.</p>
+                                            <dl>
+                                                <dt><i>index1</i></dt>
+                                                <dd>
+                                                    The first entry to delete.</dd>
+                                                <dt><i>index2</i></dt>
+                                                <dd>
+                                                    The last entry to delete. If omitted, only one
+                                                    entry is deleted.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.entrycget-method"
+                                                name="Tkinter.Menu.entrycget-method"><b>entrycget(index, option)</b></a>
+                                            [<a href="#Tkinter.Menu.entrycget-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The entrycget method.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>option</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.entryconfig-method"
+                                                name="Tkinter.Menu.entryconfig-method"><b>entryconfig(index,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Menu.entryconfig-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Reconfigures the given menu entry. Only the given options are
+                                                changed; the rest are left as is. See <a class="link"
+                                                    href="#menu.Menu.add-method"><b>add</b></a> for a
+                                                list of available options.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.entryconfigure-method"
+                                                name="Tkinter.Menu.entryconfigure-method"><b>entryconfigure(index,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Menu.entryconfigure-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#Tkinter.Menu.entryconfig-method"><b>entryconfig</b></a>.
+
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.index-method"
+                                                name="Tkinter.Menu.index-method"><b>index(index)</b></a> [<a
+                                                href="#Tkinter.Menu.index-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Converts an index (of any kind) to an integer index.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    An integer index.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.insert-method"
+                                                name="Tkinter.Menu.insert-method"><b>insert(index, itemType,
+                                                    **options)</b></a> [<a href="#Tkinter.Menu.insert-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Inserts an entry of the given type in the menu. This is similar
+                                                to <a class="link" href="#menu.Menu.add-method"><b>add</b></a>, but
+                                                inserts an entry
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>itemType</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.insert_cascade-method"
+                                                name="Tkinter.Menu.insert_cascade-method"><b>insert_cascade(index,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Menu.insert_cascade-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Inserts a submenu.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.insert_checkbutton-method"
+                                                name="Tkinter.Menu.insert_checkbutton-method"><b>insert_checkbutton(index,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Menu.insert_checkbutton-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Inserts a checkbutton.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.insert_command-method"
+                                                name="Tkinter.Menu.insert_command-method"><b>insert_command(index,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Menu.insert_command-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Inserts a command.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.insert_radiobutton-method"
+                                                name="Tkinter.Menu.insert_radiobutton-method"><b>insert_radiobutton(index,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Menu.insert_radiobutton-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Inserts a radiobutton.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.insert_separator-method"
+                                                name="Tkinter.Menu.insert_separator-method"><b>insert_separator(index,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Menu.insert_separator-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Inserts a separator.
+
+                                                def insert_separator(index, **options)</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.invoke-method"
+                                                name="Tkinter.Menu.invoke-method"><b>invoke(index)</b></a> [<a
+                                                href="#Tkinter.Menu.invoke-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The invoke method.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.post-method" name="Tkinter.Menu.post-method"><b>post(x,
+                                                    y)</b></a> [<a href="#Tkinter.Menu.post-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Displays the menu at the given position. The position should
+                                                be given in pixels, relative to the root window.</p>
+                                            <dl>
+                                                <dt><i>x</i></dt>
+                                                <dd>
+                                                    Menu position.</dd>
+                                                <dt><i>y</i></dt>
+                                                <dd>
+                                                    Menu position.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.type-method"
+                                                name="Tkinter.Menu.type-method"><b>type(index)</b></a> [<a
+                                                href="#Tkinter.Menu.type-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Gets the type of the given menu entry.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    Index specifier.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    Item type.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.unpost-method"
+                                                name="Tkinter.Menu.unpost-method"><b>unpost()</b></a> [<a
+                                                href="#Tkinter.Menu.unpost-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Removes a posted menu.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Menu.yposition-method"
+                                                name="Tkinter.Menu.yposition-method"><b>yposition(index)</b></a> [<a
+                                                href="#Tkinter.Menu.yposition-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the vertical offset for the given entry. This can be
+                                                used to position a popup menu so that a given entry is under
+                                                the mouse when the menu appears.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                    Index specifier.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The vertical offset, in screen coordinates.</dd>
+                                            </dl><br />
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="listbox.htm">back</a>&#160;<a href="menubutton.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img src="media/img/djangosite80x15.gif" border="0"
+                        alt="A Django site." title="A Django site." style="vertical-align: bottom;" width="80"
+                        height="15"></a>
+                rendered by a <a href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

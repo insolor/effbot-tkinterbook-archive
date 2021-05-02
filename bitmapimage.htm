@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="shortcut icon" href="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css"
+        media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css"
+        media="print">
+    <title>The Tkinter BitmapImage&nbsp;Class</title>
+</head>
+
+<body data-page-id="1917">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="place.htm">back</a>&#160;<a href="photoimage.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter BitmapImage&nbsp;Class</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>BitmapImage</b> class provides a simple image class, for
+                                    monochrome (two-color) images.</p>
+                                <h2>When to use the BitmapImage Class</h2>
+                                <p>This class can be used to display bitmap images in labels, buttons,
+                                    canvases, and text widgets.</p>
+                                <p>The bitmap loader reads X11 bitmap files. To use other formats,
+                                    use the <a href="photoimage.htm"><b>PhotoImage</b></a> class.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>An X11 bitmap image consists of a C fragment that defines a width,
+                                    a height, and a data array containing the bitmap. To embed a bitmap
+                                    in a Python program, you can put it inside a triple-quoted string:</p>
+                                <pre class="python">
+BITMAP = <span class="pystring">"""</span>
+#define im_width 32
+#define im_height 32
+static char im_bits[] = {
+0xaf,0x6d,0xeb,0xd6,0x55,0xdb,0xb6,0x2f,
+0xaf,0xaa,0x6a,0x6d,0x55,0x7b,0xd7,0x1b,
+0xad,0xd6,0xb5,0xae,0xad,0x55,0x6f,0x05,
+0xad,0xba,0xab,0xd6,0xaa,0xd5,0x5f,0x93,
+0xad,0x76,0x7d,0x67,0x5a,0xd5,0xd7,0xa3,
+0xad,0xbd,0xfe,0xea,0x5a,0xab,0x69,0xb3,
+0xad,0x55,0xde,0xd8,0x2e,0x2b,0xb5,0x6a,
+0x69,0x4b,0x3f,0xb4,0x9e,0x92,0xb5,0xed,
+0xd5,0xca,0x9c,0xb4,0x5a,0xa1,0x2a,0x6d,
+0xad,0x6c,0x5f,0xda,0x2c,0x91,0xbb,0xf6,
+0xad,0xaa,0x96,0xaa,0x5a,0xca,0x9d,0xfe,
+0x2c,0xa5,0x2a,0xd3,0x9a,0x8a,0x4f,0xfd,
+0x2c,0x25,0x4a,0x6b,0x4d,0x45,0x9f,0xba,
+0x1a,0xaa,0x7a,0xb5,0xaa,0x44,0x6b,0x5b,
+0x1a,0x55,0xfd,0x5e,0x4e,0xa2,0x6b,0x59,
+0x9a,0xa4,0xde,0x4a,0x4a,0xd2,0xf5,0xaa
+};
+"""</pre>
+                                <p>To create X11 bitmaps, you can use the X11 <b>bitmap</b> editor
+                                    provided with most Unix systems, or draw your image in some other
+                                    drawing program and convert it to a bitmap using e.g.
+                                    <a href="zone/pil-index.htm">the Python
+                                        Imaging Library.</a></p>
+                                <p>The BitmapImage class can read X11 bitmaps from strings or text
+                                    files:</p>
+                                <pre class="python">
+bitmap = BitmapImage(data=BITMAP)
+
+bitmap = BitmapImage(file=<span class="pystring">"bitmap.xbm"</span>)</pre>
+                                <p>By default, foreground (non-zero) pixels in the bitmap are drawn in
+                                    black, and background (zero) pixels are made transparent. You can use
+                                    the <b>foreground</b> and <b>background</b> options to override this
+                                    behaviour:</p>
+                                <pre class="python">
+bitmap = BitmapImage(
+    data=BITMAP,
+    foreground=<span class="pystring">"white"</span>, background=<span class="pystring">"black"</span>
+    )</pre>
+                                <p>You can draw two-colour transparent bitmaps by associating a mask
+                                    image to the bitmap. The mask must be an X11 bitmap of the same size
+                                    as the main bitmap. Background (zero) pixels in the mask are always
+                                    made transparent, independent of the foreground and background colour
+                                    settings:</p>
+                                <pre class="python">
+bitmap = BitmapImage(
+    data=BITMAP,
+    foreground=<span class="pystring">"black"</span>, background=<span class="pystring">"yellow"</span>,
+    maskdata=MASK_BITMAP
+    )</pre>
+                                <p>You can use a BitmapImage instance everywhere Tkinter accepts an
+                                    image object. An example:</p>
+                                <pre class="python">
+label = Label(image=bitmap)
+label.pack()</pre>
+                                <div class="note">
+                                    <p><b>Note:</b> When a BitmapImage object is garbage-collected by
+                                        Python (e.g. when you return from a function which stored a bitmap in
+                                        a local variable), the bitmap is cleared even if it&#8217;s displayed by a
+                                        Tkinter widget.</p>
+                                    <p>To avoid this, the program must keep an extra reference to the
+                                        bitmap object. One way to do this is to assign the bitmap to a widget
+                                        attribute, like this:</p>
+                                    <pre class="python">
+label = Label(image=bitmap)
+label.image = bitmap <span class="pycomment"># keep a reference!</span>
+label.pack()</pre>
+                                </div>
+                                <p>You can change the bitmap options after you&#8217;ve created the object.
+                                    To modify an option, use the <b>config</b> method, or the [] operator.
+                                    To get the current value of an option, use the [] operator. The
+                                    <b>cget</b> method cannot be used for bitmap objects.</p>
+                                <pre class="python">
+bitmap.config(foreground=<span class="pystring">"blue"</span>)
+bitmap[<span class="pystring">"foreground"</span>] = <span class="pystring">"red"</span>
+<span class="pykeyword">print</span> bitmap[<span class="pystring">"foreground"</span>]</pre>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="place.htm">back</a>&#160;<a href="photoimage.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org/" title="Go to effbot.org.">:::
+                                    effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b></li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0"
+                        alt="A Django site." title="A Django site." style="vertical-align: bottom;" width="80"
+                        height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

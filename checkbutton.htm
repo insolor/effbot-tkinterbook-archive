@@ -1,0 +1,436 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter Checkbutton&nbsp;Widget</title>
+</head>
+
+<body data-page-id="1920">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="canvas.htm">back</a>&#160;<a href="entry.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter Checkbutton&nbsp;Widget</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>Checkbutton</b> widget is a standard Tkinter widgets used
+                                    to implement on-off selections. Checkbuttons can contain text or
+                                    images, and you can associate a Python function or method with each
+                                    button. When the button is pressed, Tkinter calls that function or
+                                    method.</p>
+                                <p>The button can only display text in a single font, but the text
+                                    may span more than one line. In addition, one of the characters can
+                                    be underlined, for example to mark a keyboard shortcut. By default,
+                                    the <b>Tab</b> key can be used to move to a button widget.</p>
+                                <p>Each Checkbutton widget should be associated with a
+                                    variable.</p>
+                                <h2>When to use the Checkbutton Widget</h2>
+                                <p>The checkbutton widget is used to choose between two distinct values
+                                    (usually switching something on or off). Groups of checkbuttons can
+                                    be used to implement &#8220;many-of-many&#8221; selections.</p>
+                                <p>To handle &#8220;one-of-many&#8221; choices, use <a
+                                        href="radiobutton.htm"><b>Radiobutton</b></a> and <a
+                                        href="listbox.htm"><b>Listbox</b></a> widgets.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>(Also see the <a href="button.htm#patterns"><b>Button</b></a> patterns).</p>
+                                <p>To use a <b>Checkbutton</b>, you must create a Tkinter variable.
+                                    To inspect the button state, query the variable.</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+master = Tk()
+
+var = IntVar()
+
+c = Checkbutton(master, text=<span class="pystring">"Expand"</span>, variable=var)
+c.pack()
+
+mainloop()</pre>
+                                <p>By default, the variable is set to 1 if the button is selected,
+                                    and 0 otherwise. You can change these values using the
+                                    <b>onvalue</b> and <b>offvalue</b> options. The variable doesn&#8217;t
+                                    have to be an integer variable:</p>
+                                <pre class="python">
+    var = StringVar()
+    c = Checkbutton(
+        master, text=<span class="pystring">"Color image"</span>, variable=var,
+        onvalue=<span class="pystring">"RGB"</span>, offvalue=<span class="pystring">"L"</span>
+        )</pre>
+                                <p>If you need to keep track of both the variable and the widget,
+                                    you can simplify your code somewhat by attaching the variable to
+                                    the widget reference object.</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+    v = IntVar()
+    c = Checkbutton(master, text=<span class="pystring">"Don't show this again"</span>, variable=v)
+    c.var = v</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>If your Tkinter code is already placed in a class (as it should
+                                    be), it is probably cleaner to store the variable in an attribute,
+                                    and use a bound method as callback:</p>
+                                <pre class="python">
+    <span class="pykeyword">def</span> <span class="pyfunction">__init__</span>(self, master):
+        self.var = IntVar()
+        c = Checkbutton(
+            master, text=<span class="pystring">"Enable Tab"</span>,
+            variable=self.var,
+            command=self.cb)
+        c.pack()
+
+    <span class="pykeyword">def</span> <span class="pyfunction">cb</span>(self, event):
+        <span class="pykeyword">print</span> <span class="pystring">"variable is"</span>, self.var.get()</pre>
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Checkbutton(master=None, **options)</b> (class) [<a
+                                                href="#Tkinter.Checkbutton-class">#</a>]</dt>
+                                        <dd>
+                                            <p>A toggle button.</p>
+                                            <dl>
+                                                <dt><i>master</i></dt>
+                                                <dd>
+                                                    Parent widget.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options. See the description of
+                                                    the <a class="link"
+                                                        href="#checkbutton.Checkbutton.config-method"><b>config</b></a>
+                                                    method for a list of available
+                                                    options.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Checkbutton.config-method"
+                                                name="Tkinter.Checkbutton.config-method"><b>config(**options)</b></a>
+                                            [<a href="#Tkinter.Checkbutton.config-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies one or more widget options. If no options are given,
+                                                the method returns a dictionary containing all current option
+                                                values.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options.</dd>
+                                                <dt><i>activebackground=</i></dt>
+                                                <dd>
+                                                    The background color to use when the
+                                                    button is activated. Default value is system specific.
+                                                    (the database name is activeBackground, the class is Foreground)
+                                                </dd>
+                                                <dt><i>activeforeground=</i></dt>
+                                                <dd>
+                                                    The foreground color to use when the
+                                                    button is activated. Default value is system specific.
+                                                    (activeForeground/Background)</dd>
+                                                <dt><i>anchor=</i></dt>
+                                                <dd>
+                                                    Controls where in the button the text (or image)
+                                                    should be located. Use one of <b>N</b>, <b>NE</b>, <b>E</b>,
+                                                    <b>SE</b>, <b>S</b>, <b>SW</b>, <b>W</b>, <b>NW</b>, or
+                                                    <b>CENTER</b>. Default is <b>CENTER</b>. If you change this,
+                                                    it is probably a good idea to add some padding as well, using
+                                                    the <b>padx</b> and/or <b>pady</b> options.
+                                                    (anchor/Anchor)
+                                                </dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                    The button background color. The default is
+                                                    system specific.
+                                                    (background/Background)</dd>
+                                                <dt><i>bg=</i></dt>
+                                                <dd>
+                                                    Same as <b>background</b>.
+                                                </dd>
+                                                <dt><i>bitmap=</i></dt>
+                                                <dd>
+                                                    The bitmap to display in the widget. If the
+                                                    <b>image</b> option is given, this option is ignored.
+                                                    <br />
+                                                    You can either use a built-in bitmap, or load a bitmap from
+                                                    an XBM file. To load the bitmap from file, just prefix the
+                                                    filename with an at-sign (for example &#8220;@sample.xbm&#8221;).
+                                                    (bitmap/Bitmap)
+                                                </dd>
+                                                <dt><i>borderwidth=</i></dt>
+                                                <dd>
+                                                    The width of the button border. The
+                                                    default is system specific, but is usually one or two pixels.
+                                                    (borderWidth/BorderWidth)</dd>
+                                                <dt><i>bd=</i></dt>
+                                                <dd>
+                                                    Same as <b>borderwidth</b>.
+                                                </dd>
+                                                <dt><i>command=</i></dt>
+                                                <dd>
+                                                    A function or method that is called when the
+                                                    button is pressed. The callback can be a function, bound
+                                                    method, or any other callable Python object. No default.
+                                                    (command/Command)</dd>
+                                                <dt><i>compound=</i></dt>
+                                                <dd>
+                                                    Default is NONE. (compound/Compound)</dd>
+                                                <dt><i>cursor=</i></dt>
+                                                <dd>
+                                                    The cursor to show when the mouse pointer is moved
+                                                    over the button.
+                                                    (cursor/Cursor)</dd>
+                                                <dt><i>disabledforeground=</i></dt>
+                                                <dd>
+                                                    The color to use when the button is
+                                                    disabled. The background is shown in the <b>background</b>
+                                                    color.
+                                                    (disabledForeground/DisabledForeground)
+                                                </dd>
+                                                <dt><i>font=</i></dt>
+                                                <dd>
+                                                    The font to use in the button. The button can only
+                                                    contain text in a single font. The default is system specific.
+                                                    (font/Font)</dd>
+                                                <dt><i>foreground=</i></dt>
+                                                <dd>
+                                                    The button foreground color. The default is
+                                                    system specific.
+                                                    (foreground/Foreground)</dd>
+                                                <dt><i>fg=</i></dt>
+                                                <dd>
+                                                    Same as <b>foreground</b>.
+                                                </dd>
+                                                <dt><i>height=</i></dt>
+                                                <dd>
+                                                    The size of the button. If the button displays
+                                                    text, the size is given in text units. If the button displays
+                                                    an image, the size is given in pixels (or screen units). If
+                                                    the size is omitted, it is calculated based on the button
+                                                    contents.
+                                                    (height/Height)</dd>
+                                                <dt><i>highlightbackground=</i></dt>
+                                                <dd>
+                                                    Default value is system specific.
+                                                    (highlightBackground/HighlightBackground)</dd>
+                                                <dt><i>highlightcolor=</i></dt>
+                                                <dd>
+                                                    Default value is system specific.
+                                                    (highlightColor/HighlightColor)</dd>
+                                                <dt><i>highlightthickness=</i></dt>
+                                                <dd>
+                                                    Default value is 1.
+                                                    (highlightThickness/HighlightThickness)</dd>
+                                                <dt><i>image=</i></dt>
+                                                <dd>
+                                                    The image to display in the widget. If specified,
+                                                    this takes precedence over the <b>text</b> and <b>bitmap</b>
+                                                    options. No default.
+                                                    (image/Image)
+                                                </dd>
+                                                <dt><i>indicatoron=</i></dt>
+                                                <dd>
+                                                    Controls if the indicator should be drawn
+                                                    or not. This is on by default.
+                                                    <br />
+                                                    Setting this option to false means that the relief will be
+                                                    used as the indicator. If the button is selected, it is
+                                                    drawn as <b>SUNKEN</b> instead of <b>RAISED</b>.
+                                                    (indicatorOn/IndicatorOn)
+                                                </dd>
+                                                <dt><i>justify=</i></dt>
+                                                <dd>
+                                                    Defines how to align multiple lines of text.
+                                                    Use <b>LEFT</b>, <b>RIGHT</b>, or <b>CENTER</b> (default).
+                                                    (justify/Justify)
+                                                </dd>
+                                                <dt><i>offrelief=</i></dt>
+                                                <dd>
+                                                    Default is raised. (offRelief/OffRelief)</dd>
+                                                <dt><i>offvalue=</i></dt>
+                                                <dd>
+                                                    The value corresponding to a non-checked
+                                                    button. The default is 0.
+                                                    (offValue/Value)</dd>
+                                                <dt><i>onvalue=</i></dt>
+                                                <dd>
+                                                    The value corresponding to a checked button.
+                                                    The default is 1.
+                                                    (onValue/Value)</dd>
+                                                <dt><i>overrelief=</i></dt>
+                                                <dd>
+                                                    No default value. (overRelief/OverRelief)</dd>
+                                                <dt><i>padx=</i></dt>
+                                                <dd>
+                                                    Button padding. Default value is 1.
+                                                    (padX/Pad)</dd>
+                                                <dt><i>pady=</i></dt>
+                                                <dd>
+                                                    Button padding. Default value is 1.
+                                                    (padY/Pad)</dd>
+                                                <dt><i>relief=</i></dt>
+                                                <dd>
+                                                    Border decoration. This is usually <b>FLAT</b>
+                                                    for checkbuttons, unless they use the border as indicator
+                                                    (via the <b>indicatoron</b> option).
+                                                    (relief/Relief)
+                                                </dd>
+                                                <dt><i>selectcolor=</i></dt>
+                                                <dd>
+                                                    Color to use for the selector. Default
+                                                    value is system specific.
+                                                    (selectColor/Background)</dd>
+                                                <dt><i>selectimage=</i></dt>
+                                                <dd>
+                                                    Graphic image to use for the selector.
+                                                    No default.
+                                                    (selectImage/SelectImage)</dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Button state. One of <b>NORMAL</b>, <b>ACTIVE</b>
+                                                    or <b>DISABLED</b>. Default is <b>NORMAL</b>.
+                                                    (state/State)
+                                                </dd>
+                                                <dt><i>takefocus=</i></dt>
+                                                <dd>
+                                                    Indicates that the user can use the <b>Tab</b>
+                                                    key to move to this button. Default is an empty string, which
+                                                    means that the button accepts focus only if it has any keyboard
+                                                    bindings (default is on, in other words).
+                                                    (takeFocus/TakeFocus)
+                                                </dd>
+                                                <dt><i>text=</i></dt>
+                                                <dd>
+                                                    The text to display in the button. The text can
+                                                    contain newlines. If the <b>bitmap</b> or <b>image</b> options
+                                                    are used, this option is ignored.
+                                                    (text/Text)
+                                                </dd>
+                                                <dt><i>textvariable=</i></dt>
+                                                <dd>
+                                                    Associates a Tkinter variable (usually a
+                                                    <b>StringVar</b>) with the button. If the variable is changed,
+                                                    the button text is updated.
+                                                    <br />
+                                                    Also see the <b>variable</b> option.
+                                                    (textVariable/Variable)
+                                                </dd>
+                                                <dt><i>underline=</i></dt>
+                                                <dd>
+                                                    Which character to underline, if any. Default
+                                                    value is -1 (no underline).
+                                                    (underline/Underline)</dd>
+                                                <dt><i>variable=</i></dt>
+                                                <dd>
+                                                    Associates a Tkinter variable to the button.
+                                                    When the button is pressed, the variable is toggled between
+                                                    <b>offvalue</b> and <b>onvalue</b>. Explicit changes to the
+                                                    variable are automatically reflected by the buttons.
+                                                    (variable/Variable)
+                                                </dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    The size of the button. See <b>height</b> for
+                                                    details.
+                                                    (width/Width)
+                                                </dd>
+                                                <dt><i>wraplength=</i></dt>
+                                                <dd>
+                                                    Determines when a button&#8217;s text should be
+                                                    wrapped into multiple lines. This is given in screen units.
+                                                    Default is no wrapping.
+                                                    (wrapLength/WrapLength)</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Checkbutton.deselect-method"
+                                                name="Tkinter.Checkbutton.deselect-method"><b>deselect()</b></a> [<a
+                                                href="#Tkinter.Checkbutton.deselect-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Deselects the checkbox; that is, sets the value to <b>offvalue</b>.
+
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Checkbutton.flash-method"
+                                                name="Tkinter.Checkbutton.flash-method"><b>flash()</b></a> [<a
+                                                href="#Tkinter.Checkbutton.flash-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Redraws the button several times, alternating between active and
+                                                normal appearance.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Checkbutton.invoke-method"
+                                                name="Tkinter.Checkbutton.invoke-method"><b>invoke()</b></a> [<a
+                                                href="#Tkinter.Checkbutton.invoke-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Calls the command associated with the button.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Checkbutton.select-method"
+                                                name="Tkinter.Checkbutton.select-method"><b>select()</b></a> [<a
+                                                href="#Tkinter.Checkbutton.select-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Selects the button; that is, sets the value to <b>onvalue</b>.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Checkbutton.toggle-method"
+                                                name="Tkinter.Checkbutton.toggle-method"><b>toggle()</b></a> [<a
+                                                href="#Tkinter.Checkbutton.toggle-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Toggles the button.</p>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="canvas.htm">back</a>&#160;<a href="entry.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>
