@@ -1,3 +1,5 @@
+This is a copy of text from https://effbot.org/copyright.htm ([archive](https://web.archive.org/web/20200222101148/http://www.effbot.org/zone/copyright.htm))
+
 # Copyright
 
 All text on this site is copyrighted, and cannot be republished or otherwise used without explicit permission by the author.
