@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>Data&nbsp;Entry</title>
+</head>
+
+<body data-page-id="2001">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <h1 class="maintitle">Data&nbsp;Entry</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <i>tkSimpleDialog</i> module provides an interface to the
+                                    following simple dialogs.</p>
+                                <h2><a id="AEN1168" name="AEN1168">Strings</a></h2>
+                                <p>The <i>askstring</i> function in the <i>tkSimpleDialog</i>
+                                    module prompts the user for a string. You specify the dialog title
+                                    and the prompt string, and the function returns when the user
+                                    closes the dialog. The prompt string may include newline
+                                    characters.</p>
+                                <p><tt>tkSimpleDialog.askstring(title, prompt [,options])</tt>. Ask
+                                    the user to enter an string value. If the user pressed Enter, or
+                                    clicked OK, the function returns the string. If the user closed the
+                                    dialog by pressing Escape, clicking Cancel, or explicitly via the
+                                    window manager, this function returns <i>None</i>.</p>
+                                <p><b>Figure 9-4. askstring</b></p>
+                                <p><img alt="media/cache/2d8a15afdeca8af74877f8f786c30697.gif" width="178" /></p>
+                                <p>The following options can be used with this function:</p>
+                                <p><b>Table 9-2. askstring Options</b></p>
+                                <table border="1">
+                                    <tr>
+                                        <th align="LEFT" valign="TOP" width="20%">
+                                            <p>Option</p>
+                                        </th>
+                                        <th align="LEFT" valign="TOP" width="20%">
+                                            <p>Type</p>
+                                        </th>
+                                        <th align="LEFT" valign="TOP" width="60%">
+                                            <p>Description</p>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p><tt>initialvalue</tt></p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p>string</p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="60%">
+                                            <p>Initial value, if any. Default is an empty string.</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p><tt>parent</tt></p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p>widget</p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="60%">
+                                            <p>Which window to place the dialog on top of. When the dialog is
+                                                closed, the focus is returned to the parent window.</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <h2><a id="AEN1211" name="AEN1211">Numeric
+                                        Values</a></h2>
+                                <p>The <i>askinteger</i> and <i>askfloat</i> functions is similar
+                                    to <i>askstring</i>, but they only accept integers and float
+                                    values, respectively. You can also use the <i>minvalue</i> and <i>
+                                        maxvalue</i> options to limit the input range:</p>
+                                <p><tt>tkSimpleDialog.askinteger(title, prompt [,options])</tt>.
+                                    Ask the user to enter an integer value. If the entered value is not
+                                    a valid integer or floating point value, a message box is
+                                    displayed, and the dialog is not closed. As with the <i>
+                                        askstring</i> function, the function returns <i>None</i> if the
+                                    dialog box is cancelled.</p>
+                                <p><tt>tkSimpleDialog.askfloat(title, prompt [,options])</tt>.
+                                    Same, but returns a floating point value.</p>
+                                <p><b>Figure 9-5. askinteger, askfloat</b></p>
+                                <p><img alt="media/cache/5def924a8cbba611a0f22b7bb9c7e577.gif" width="178" /></p>
+                                <p><img alt="media/cache/29d237259c0f82e524937153a4164c08.gif" width="178" /></p>
+                                <p>The following options can be used with these functions:</p>
+                                <p><b>Table 9-3. askinteger and askfloat options</b></p>
+                                <table border="1">
+                                    <tr>
+                                        <th align="LEFT" valign="TOP" width="20%">
+                                            <p>Option</p>
+                                        </th>
+                                        <th align="LEFT" valign="TOP" width="20%">
+                                            <p>Type</p>
+                                        </th>
+                                        <th align="LEFT" valign="TOP" width="60%">
+                                            <p>Description</p>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p><tt>initialvalue</tt></p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p>integer or float</p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="60%">
+                                            <p>Initial value, if any. Default is an empty string.</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p><tt>parent</tt></p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p>widget</p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="60%">
+                                            <p>Which window to place the dialog on top of. When the dialog is
+                                                closed, the focus is returned to the parent window.</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p><tt>minvalue</tt></p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p>integer or float</p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="60%">
+                                            <p>Minimum value. If exceeded, a message box is shown when the user
+                                                clicks OK, and the dialog will not be closed. Default is no
+                                                check.</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p><tt>maxvalue</tt></p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="20%">
+                                            <p>integer or float</p>
+                                        </td>
+                                        <td align="LEFT" valign="TOP" width="60%">
+                                            <p>Maximum value. If exceeded, a message box is shown when the user
+                                                clicks OK, and the dialog will not be closed. Default is no
+                                                check.</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

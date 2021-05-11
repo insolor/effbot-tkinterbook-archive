@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter Message&nbsp;Widget</title>
+</head>
+
+<body data-page-id="1930">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="menubutton.htm">back</a>&#160;<a href="optionmenu.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter Message&nbsp;Widget</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>Message</b> widget is a variant of the <a
+                                        href="tag/Tkinter.Label"><b>Label</b></a>, designed to display multiline
+                                    messages. The message widget can wrap text, and adjust its width to
+                                    maintain a given aspect ratio.</p>
+                                <h2>When to use the Message Widget</h2>
+                                <p>The widget can be used to display short text messages, using a
+                                    single font. You can often use a plain <a href="tag/Tkinter.Label"><b>Label</b></a>
+                                    instead. If you need to
+                                    display text in multiple fonts, use a <a href="tag/Tkinter.Text"><b>Text</b></a>
+                                    widget.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>To create a message, all you have to do is to pass in a text
+                                    string. The widget will automatically break the lines, if
+                                    necessary.</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+master = Tk()
+
+w = Message(master, text=<span class="pystring">"this is a message"</span>)
+w.pack()
+
+mainloop()</pre>
+                                <p>If you don&#8217;t specify anything else, the widget attepts to format
+                                    the text to keep a given aspect ratio. If you don&#8217;t want that
+                                    behaviour, you can specify a width:</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+w = Message(master, text=<span class="pystring">"this is a relatively long message"</span>, width=50)
+w.pack()</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Message(master=None, **options)</b> (class) [<a
+                                                href="#Tkinter.Message-class">#</a>]</dt>
+                                        <dd>
+                                            <p>A multi-line text message.</p>
+                                            <dl>
+                                                <dt><i>master</i></dt>
+                                                <dd>
+                                                    Parent widget.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options. See the description of
+                                                    the <a class="link"
+                                                        href="#message.Message.config-method"><b>config</b></a> method
+                                                    for a list of available
+                                                    options.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Message.config-method"
+                                                name="Tkinter.Message.config-method"><b>config(**options)</b></a> [<a
+                                                href="#Tkinter.Message.config-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies one or more widget options. If no options are given,
+                                                the method returns a dictionary containing all current option
+                                                values.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options.</dd>
+                                                <dt><i>anchor=</i></dt>
+                                                <dd>
+                                                    Where in the message widget the text should be
+                                                    placed. Use one of <b>N</b>, <b>NE</b>, <b>E</b>, <b>SE</b>,
+                                                    <b>S</b>, <b>SW</b>, <b>W</b>, <b>NW</b>, or <b>CENTER</b>.
+                                                    Default is <b>CENTER</b>.
+                                                    (the database name is anchor, the class is Anchor)
+                                                </dd>
+                                                <dt><i>aspect=</i></dt>
+                                                <dd>
+                                                    Aspect ratio, given as the width/height relation
+                                                    in percent. The default is 150, which means that the message
+                                                    will be 50% wider than it is high. Note that if the <b>width</b>
+                                                    is explicitly set, this option is ignored.
+                                                    (aspect/Aspect)
+                                                </dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                    Message background color. The default value
+                                                    is system specific.
+                                                    (background/Background)</dd>
+                                                <dt><i>bg=</i></dt>
+                                                <dd>
+                                                    Same as <b>background</b>.
+                                                </dd>
+                                                <dt><i>borderwidth=</i></dt>
+                                                <dd>
+                                                    Border width. Default value is 2.
+                                                    (borderWidth/BorderWidth)</dd>
+                                                <dt><i>bd=</i></dt>
+                                                <dd>
+                                                    Same as <b>borderwidth</b>.
+                                                </dd>
+                                                <dt><i>cursor=</i></dt>
+                                                <dd>
+                                                    What cursor to show when the mouse is moved
+                                                    over the message widget. The default is to use the standard
+                                                    cursor.
+                                                    (cursor/Cursor)</dd>
+                                                <dt><i>font=</i></dt>
+                                                <dd>
+                                                    Message font. The default value is system specific.
+                                                    (font/Font)</dd>
+                                                <dt><i>foreground=</i></dt>
+                                                <dd>
+                                                    Text color. The default value is system specific.
+                                                    (foreground/Foreground)</dd>
+                                                <dt><i>fg=</i></dt>
+                                                <dd>
+                                                    Same as <b>foreground</b>.
+                                                </dd>
+                                                <dt><i>highlightbackground=</i></dt>
+                                                <dd>
+                                                    Together with <b>highlightcolor</b>
+                                                    and <b>highlightthickness</b>, this option controls how to draw
+                                                    the highlight region.
+                                                    (highlightBackground/HighlightBackground)
+                                                </dd>
+                                                <dt><i>highlightcolor=</i></dt>
+                                                <dd>
+                                                    See <b>highlightbackground</b>.
+                                                    (highlightColor/HighlightColor)
+                                                </dd>
+                                                <dt><i>highlightthickness=</i></dt>
+                                                <dd>
+                                                    See <b>highlightbackground</b>.
+                                                    (highlightThickness/HighlightThickness)
+                                                </dd>
+                                                <dt><i>justify=</i></dt>
+                                                <dd>
+                                                    Defines how to align multiple lines of text.
+                                                    Use <b>LEFT</b>, <b>RIGHT</b>, or <b>CENTER</b>. Note that
+                                                    to position the text inside the widget, use the <b>anchor</b>
+                                                    option. Default is <b>LEFT</b>.
+                                                    (justify/Justify)
+                                                </dd>
+                                                <dt><i>padx=</i></dt>
+                                                <dd>
+                                                    Horizontal padding. Default is -1 (no padding).
+                                                    (padX/Pad)</dd>
+                                                <dt><i>pady=</i></dt>
+                                                <dd>
+                                                    Vertical padding. Default is -1 (no padding).
+                                                    (padY/Pad)</dd>
+                                                <dt><i>relief=</i></dt>
+                                                <dd>
+                                                    Border decoration. The default is <b>FLAT</b>.
+                                                    Other possible values are <b>SUNKEN</b>, <b>RAISED</b>,
+                                                    <b>GROOVE</b>, and <b>RIDGE</b>.
+                                                    (relief/Relief)
+                                                </dd>
+                                                <dt><i>takefocus=</i></dt>
+                                                <dd>
+                                                    If true, the widget accepts input focus.
+                                                    The default is false.
+                                                    (takeFocus/TakeFocus)</dd>
+                                                <dt><i>text=</i></dt>
+                                                <dd>
+                                                    Message text. The widget inserts line breaks if
+                                                    necessary to get the requested aspect ratio.
+                                                    (text/Text)</dd>
+                                                <dt><i>textvariable=</i></dt>
+                                                <dd>
+                                                    Associates a Tkinter variable (usually
+                                                    a <b>StringVar</b>) with the message. If the variable is
+                                                    changed, the message text is updated.
+                                                    (textVariable/Variable)
+                                                </dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Widget width, in character units. If omitted,
+                                                    the widget picks a suitable width based on the <b>aspect</b>
+                                                    setting.
+                                                    (width/Width)
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="menubutton.htm">back</a>&#160;<a href="optionmenu.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>Application&nbsp;Windows</title>
+</head>
+
+<body data-page-id="1964">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="tkinter-events-and-bindings.htm">back</a>&#160;<a
+                                    href="tkinter-standard-dialogs.htm">next</a></p>
+                            <h1 class="maintitle">Application&nbsp;Windows</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <h2>Base Windows</h2>
+                                <p>In the simple examples we&#8217;ve used this far, there&#8217;s only one
+                                    window on the screen; the root window. This is automatically
+                                    created when you call the <b>Tk</b> constructor, and is of course
+                                    very convenient for simple applications:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+<span class="pycomment"># create window contents as children to root...</span>
+
+root.mainloop()</pre>
+                                <p>If you need to create additional windows, you can use the
+                                    <b>Toplevel</b> widget. It simply creates a new window on the screen,
+                                    a window that looks and behaves pretty much like the original root
+                                    window:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+<span class="pycomment"># create root window contents...</span>
+
+top = Toplevel()
+
+<span class="pycomment"># create top window contents...</span>
+
+root.mainloop()</pre>
+                                <p>There&#8217;s no need to use pack to display the <b>Toplevel</b>,
+                                    since it is automatically displayed by the window manager (in fact,
+                                    you&#8217;ll get an error message if you try to use <b>pack</b> or any
+                                    other geometry manager with a <b>Toplevel</b> widget).</p>
+                                <h2>Menus</h2>
+                                <p>Tkinter provides a special widget type for menus. To create a
+                                    menu, you create an instance of the <b>Menu</b> class, and use
+                                    <b>add</b> methods to add entries to it:</p>
+                                <ul>
+                                    <li>
+                                        <p><b>add_command(label=string, command=callback)</b> adds an
+                                            ordinary menu entry.</p>
+                                    </li>
+                                    <li>
+                                        <p><b>add_separator()</b> adds an separator line. This is used to
+                                            group menu entries.</p>
+                                    </li>
+                                    <li>
+                                        <p><b>add_cascade(label=string, menu=menu instance)</b> adds a
+                                            submenu (another <b>Menu</b> instance). This is either a
+                                            pull-down menu or a fold-out menu, depending on the parent.</p>
+                                    </li>
+                                </ul>
+                                <p>Here&#8217;s an example:</p>
+                                <div class="example">
+                                    <b>Creating a small menu</b>
+                                    <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+<span class="pykeyword">def</span> <span class="pyfunction">callback</span>():
+    <span class="pykeyword">print</span> <span class="pystring">"called the callback!"</span>
+
+root = Tk()
+
+<span class="pycomment"># create a menu</span>
+menu = Menu(root)
+root.config(menu=menu)
+
+filemenu = Menu(menu)
+menu.add_cascade(label=<span class="pystring">"File"</span>, menu=filemenu)
+filemenu.add_command(label=<span class="pystring">"New"</span>, command=callback)
+filemenu.add_command(label=<span class="pystring">"Open..."</span>, command=callback)
+filemenu.add_separator()
+filemenu.add_command(label=<span class="pystring">"Exit"</span>, command=callback)
+
+helpmenu = Menu(menu)
+menu.add_cascade(label=<span class="pystring">"Help"</span>, menu=helpmenu)
+helpmenu.add_command(label=<span class="pystring">"About..."</span>, command=callback)
+
+mainloop()</pre>
+                                </div>
+                                <p>In this example, we start out by creating a <b>Menu</b>
+                                    instance, and we then use the <b>config</b> method to attach it
+                                    to the root window. The contents of that menu will be used to
+                                    create a menubar at the top of the root window. You don&#8217;t have to
+                                    pack the menu, since it is automatically displayed by Tkinter.</p>
+                                <p>Next, we create a new <b>Menu</b> instance, using the menubar
+                                    as the widget parent, and the <b>add_cascade</b> method to make
+                                    it a pulldown menu. We then call <b>add_command</b> to add
+                                    commands to the menu (note that all commands in this example use
+                                    the same callback), and <b>add_separator</b> to add a line
+                                    between the file commands and the exit command.</p>
+                                <p>Finally, we create a small help menu in the same fashion.</p>
+                                <h2>Toolbars</h2>
+                                <p>Many applications place a toolbar just under the menubar, which
+                                    typically contains a number of buttons for common functions like
+                                    open file, print, undo, etc.</p>
+                                <p>In the following example, we use a <b>Frame</b> widget as the
+                                    toolbar, and pack a number of ordinary buttons into it.</p>
+                                <div class="example">
+                                    <b>Creating a simple toolbar</b>
+                                    <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+root = Tk()
+
+<span class="pykeyword">def</span> <span class="pyfunction">callback</span>():
+    <span class="pykeyword">print</span> <span class="pystring">"called the callback!"</span>
+
+<span class="pycomment"># create a toolbar</span>
+toolbar = Frame(root)
+
+b = Button(toolbar, text=<span class="pystring">"new"</span>, width=6, command=callback)
+b.pack(side=LEFT, padx=2, pady=2)
+
+b = Button(toolbar, text=<span class="pystring">"open"</span>, width=6, command=callback)
+b.pack(side=LEFT, padx=2, pady=2)
+
+toolbar.pack(side=TOP, fill=X)
+
+mainloop()</pre>
+                                </div>
+                                <p>The buttons are packed against the left side, and the toolbar
+                                    itself is packed against the topmost side, with the <b>fill</b>
+                                    option set to <b>X</b>. As a result, the widget is resized if
+                                    necssary, to cover the full with of the parent widget.</p>
+                                <p>Also note that I&#8217;ve used text labels rather than icons, to keep
+                                    things simple. To display an icon, you can use the <b>PhotoImage</b>
+                                    constructor to load a small image from disk, and use the <b>image</b>
+                                    option to display it.</p>
+                                <h2>Status Bars</h2>
+                                <p>Finally, most applications sport a status bar at the bottom of
+                                    each application window. Implementing a status bar with Tkinter is
+                                    trivial: you can simply use a suitably configured <b>Label</b>
+                                    widget, and reconfigure the <b>text</b> option now and then.
+                                    Here&#8217;s one way to do it:</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+status = Label(master, text=<span class="pystring">""</span>, bd=1, relief=SUNKEN, anchor=W)
+status.pack(side=BOTTOM, fill=X)</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>If you wish to be fancy, you can use the following class
+                                    instead. It wraps a label widget in a convenience class, and
+                                    provides <b>set</b> and <b>clear</b> methods to modify the
+                                    contents.</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <div class="example wide">
+                                <b>A Status Bar Class (File: tkSimpleStatusBar.py)</b>
+                                <pre class="python wide">
+<span class="pykeyword">class</span> <span class="pyclass">StatusBar</span>(Frame):
+
+    <span class="pykeyword">def</span> <span class="pyfunction">__init__</span>(self, master):
+        Frame.__init__(self, master)
+        self.label = Label(self, bd=1, relief=SUNKEN, anchor=W)
+        self.label.pack(fill=X)
+
+    <span class="pykeyword">def</span> <span class="pyfunction">set</span>(self, format, *args):
+        self.label.config(text=format % args)
+        self.label.update_idletasks()
+
+    <span class="pykeyword">def</span> <span class="pyfunction">clear</span>(self):
+        self.label.config(text=<span class="pystring">""</span>)
+        self.label.update_idletasks()</pre>
+                            </div>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>set</b> method works like C&#8217;s <b>printf</b> function;
+                                    it takes a format string, possibly followed by a set of arguments
+                                    (a drawback is that if you wish to print an arbitrary string, you
+                                    must do that as <b>set(&#8220;%s&#8221;, string)</b>). Also note that this
+                                    method calls the <b>update_idletasks</b> method, to make sure
+                                    pending draw operations (like the status bar update) are carried
+                                    out immediately.</p>
+                                <p>But the real trick here is that we&#8217;ve inherited from the
+                                    <b>Frame</b> widget. At the cost of a somewhat awkward call to the
+                                    frame widget&#8217;s constructor, we&#8217;ve created a new kind of custom widget
+                                    that can be treated as any other widget. You can create and display
+                                    the status bar using the usual widget syntax:</p>
+                                <pre class="python">
+status = StatusBar(root)
+status.pack(side=BOTTOM, fill=X)</pre>
+                                <p>We could have inherited from the Label widget itself, and just
+                                    extended it with <b>set</b> and <b>clear</b> methods. This approach
+                                    have a few drawbacks, though:</p>
+                                <ul>
+                                    <li>
+                                        <p>It makes it harder to maintain the status bar&#8217;s integrity. Some
+                                            team members may cheat, and use <b>config</b> instead of <b>set</b>.
+                                            That&#8217;s not a big deal, until the day you decide to do some extra
+                                            processing in the <b>set</b> method. Or the day you decide to use a
+                                            <b>Canvas</b> widget to implement a fancier status bar.</p>
+                                    </li>
+                                    <li>
+                                        <p>It increases the risk that your additional methods conflict with
+                                            attributes or methods used by Tkinter. While the <b>Frame</b> and
+                                            <b>Toplevel</b> widgets have relatively few methods, other widgets can
+                                            have several dozens of widget specific attributes and methods.</p>
+                                    </li>
+                                    <li>
+                                        <p>Future versions of Tkinter may use factory functions rather than
+                                            class constructors for most widgets. However, it&#8217;s more or less
+                                            guaranteed that such versions will still provide <b>Frame</b> and
+                                            <b>Toplevel</b> classes. Better safe than sorry, in other words.</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="tkinter-events-and-bindings.htm">back</a>&#160;<a
+                                    href="tkinter-standard-dialogs.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

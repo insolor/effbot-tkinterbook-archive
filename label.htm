@@ -1,0 +1,358 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter Label&nbsp;Widget</title>
+</head>
+
+<body data-page-id="1925">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="frame.htm">back</a>&#160;<a href="labelframe.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter Label&nbsp;Widget</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>Label</b> widget is a standard Tkinter widget used to
+                                    display a text or image on the screen. The label can only display
+                                    text in a single font, but the text may span more than one line. In
+                                    addition, one of the characters can be underlined, for example to
+                                    mark a keyboard shortcut.</p>
+                                <h2>When to use the Label Widget</h2>
+                                <p>Labels are used to display texts and images. The label widget
+                                    uses double buffering, so you can update the contents at any time,
+                                    without annoying flicker.</p>
+                                <p>To display data that the user can manipulate in place, it&#8217;s
+                                    probably easier to use the <a href="canvas.htm"><b>Canvas</b></a> widget.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>To use a label, you just have to specify what to display in it
+                                    (this can be text, a bitmap, or an image):</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> Tkinter <span class="pykeyword">import</span> *
+
+master = Tk()
+
+w = Label(master, text=<span class="pystring">"Hello, world!"</span>)
+w.pack()
+
+mainloop()</pre>
+                                <p>If you don&#8217;t specify a size, the label is made just large enough
+                                    to hold its contents. You can also use the <b>height</b> and
+                                    <b>width</b> options to explicitly set the size. If you display
+                                    text in the label, these options define the size of the label in
+                                    text units. If you display bitmaps or images instead, they define
+                                    the size in pixels (or other screen units). See the <a
+                                        href="button.htm"><b>Button</b></a> description for an example
+                                    how to specify the size in pixels also for text labels.</p>
+                                <p>You can specify which color to use for the label with the
+                                    <b>foreground</b> (or <b>fg</b>) and <b>background</b> (or
+                                    <b>bg</b>) options. You can also choose which font to use in the
+                                    label (the following example uses Tk 8.0 font descriptors). Use
+                                    colors and fonts sparingly; unless you have a good reason to do
+                                    otherwise, you should stick to the default values.</p>
+                                <pre class="python">
+w = Label(master, text=<span class="pystring">"Rouge"</span>, fg=<span class="pystring">"red"</span>)
+w = Label(master, text=<span class="pystring">"Helvetica"</span>, font=(<span class="pystring">"Helvetica"</span>, 16))</pre>
+                                <p>Labels can display multiple lines of text. You can use newlines
+                                    or use the <b>wraplength</b> option to make the label wrap text by
+                                    itself. When wrapping text, you might wish to use the <b>anchor</b>
+                                    and <b>justify</b> options to make things look exactly as you wish.
+                                    An example:</p>
+                                <pre class="python">
+w = Label(master, text=longtext, anchor=W, justify=LEFT)</pre>
+                                <p>You can associate a Tkinter variable with a label. When the
+                                    contents of the variable changes, the label is automatically
+                                    updated:</p>
+                                <pre class="python">
+v = StringVar()
+Label(master, textvariable=v).pack()
+
+v.set(<span class="pystring">"New Text!"</span>)</pre>
+                                <p>You can use the label to display <a href="photoimage.htm"><b>PhotoImage</b></a> and
+                                    <a href="bitmapimage.htm"><b>BitmapImage</b></a> objects. When
+                                    doing this, make sure you keep a reference to the image object, to
+                                    prevent it from being garbage collected by Python&#8217;s memory
+                                    allocator. You can use a global variable or an instance attribute,
+                                    or easier, just add an attribute to the widget instance:</p>
+                                <pre class="python">
+photo = PhotoImage(file=<span class="pystring">"icon.gif"</span>)
+w = Label(parent, image=photo)
+w.photo = photo
+w.pack()</pre>
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Label(master=None, **options)</b> (class) [<a
+                                                href="#Tkinter.Label-class">#</a>]</dt>
+                                        <dd>
+                                            <p>Display a single line of text, or an image.</p>
+                                            <dl>
+                                                <dt><i>master</i></dt>
+                                                <dd>
+                                                    Parent widget.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options. See the description of
+                                                    the <a class="link"
+                                                        href="#label.Label.config-method"><b>config</b></a> method for a
+                                                    list of available
+                                                    options.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Label.config-method"
+                                                name="Tkinter.Label.config-method"><b>config(**options)</b></a> [<a
+                                                href="#Tkinter.Label.config-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies one or more widget options. If no options are given,
+                                                the method returns a dictionary containing all current option
+                                                values.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options.</dd>
+                                                <dt><i>activebackground=</i></dt>
+                                                <dd>
+                                                    What background color to use when
+                                                    the label is active (set with the state option). The default
+                                                    is platform specific.
+                                                    (the option database name is activeBackground, the class is
+                                                    Foreground)</dd>
+                                                <dt><i>activeforeground=</i></dt>
+                                                <dd>
+                                                    What foreground color to use when
+                                                    the label is active. The default is platform specific.
+                                                    (activeForeground/Background)</dd>
+                                                <dt><i>anchor=</i></dt>
+                                                <dd>
+                                                    Controls where in the label the text (or
+                                                    image) should be located. Use one of <b>N</b>, <b>NE</b>,
+                                                    <b>E</b>, <b>SE</b>, <b>S</b>, <b>SW</b>, <b>W</b>,
+                                                    <b>NW</b>, or <b>CENTER</b>. Default is <b>CENTER</b>.
+                                                    (anchor/Anchor)
+                                                </dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                    The background color. The default is
+                                                    platform specific.
+                                                    (background/Background)</dd>
+                                                <dt><i>bg=</i></dt>
+                                                <dd>
+                                                    Same as <b>background</b>.
+                                                </dd>
+                                                <dt><i>bitmap=</i></dt>
+                                                <dd>
+                                                    The bitmap to display in the widget. If the
+                                                    <b>image</b> option is given, this option is ignored.
+                                                    (bitmap/Bitmap)
+                                                </dd>
+                                                <dt><i>borderwidth=</i></dt>
+                                                <dd>
+                                                    The width of the label border. The default
+                                                    is system specific, but is usually one or two pixels.
+                                                    (borderWidth/BorderWidth)</dd>
+                                                <dt><i>bd=</i></dt>
+                                                <dd>
+                                                    Same as <b>borderwidth</b>.
+                                                </dd>
+                                                <dt><i>compound=</i></dt>
+                                                <dd>
+                                                    Controls how to combine text and image in the
+                                                    label. By default, if an image or bitmap is given, it is drawn
+                                                    instead of the text. If this option is set to <b>CENTER</b>,
+                                                    the text is drawn on top of the image. If this option is set
+                                                    to one of <b>BOTTOM</b>, <b>LEFT</b>, <b>RIGHT</b>, or <b>TOP</b>,
+                                                    the image is drawn besides the text (use <b>BOTTOM</b> to draw
+                                                    the image under the text, etc.). Default is <b>NONE</b>.
+                                                    (compound/Compound)
+                                                </dd>
+                                                <dt><i>cursor=</i></dt>
+                                                <dd>
+                                                    What cursor to show when the mouse is moved
+                                                    over the label. The default is to use the standard cursor.
+                                                    (cursor/Cursor)</dd>
+                                                <dt><i>disabledforeground=</i></dt>
+                                                <dd>
+                                                    What foreground color to use when
+                                                    the label is disabled. The default is system specific.
+                                                    (disabledForeground/DisabledForeground)</dd>
+                                                <dt><i>font=</i></dt>
+                                                <dd>
+                                                    The font to use in the label. The label can only
+                                                    contain text in single font. The default is system specific.
+                                                    (font/Font)</dd>
+                                                <dt><i>foreground=</i></dt>
+                                                <dd>
+                                                    The label color, used for for text and
+                                                    bitmap labels. The default is system specific.
+                                                    (foreground/Foreground)</dd>
+                                                <dt><i>fg=</i></dt>
+                                                <dd>
+                                                    Same as <b>foreground</b>.
+                                                </dd>
+                                                <dt><i>height=</i></dt>
+                                                <dd>
+                                                    The height of the label. If the label displays
+                                                    text, the size is given in text units. If the label displays
+                                                    an image, the size is given in pixels (or screen units). If
+                                                    the size is set to 0, or omitted, it is calculated based on
+                                                    the label contents.
+                                                    (height/Height)</dd>
+                                                <dt><i>highlightbackground=</i></dt>
+                                                <dd>
+                                                    What color to use for the highlight
+                                                    border when the widget does not have focus. The default is
+                                                    system specific, but usually the same as the standard background
+                                                    color.
+                                                    (highlightBackground/HighlightBackground)</dd>
+                                                <dt><i>highlightcolor=</i></dt>
+                                                <dd>
+                                                    What color to use for the highlight border
+                                                    when the widget has focus. The default is system specific.
+                                                    (highlightColor/HighlightColor)</dd>
+                                                <dt><i>highlightthickness=</i></dt>
+                                                <dd>
+                                                    The width of the highlight border.
+                                                    The default is 0 (no highlight border).
+                                                    (highlightThickness/HighlightThickness)</dd>
+                                                <dt><i>image=</i></dt>
+                                                <dd>
+                                                    The image to display in the widget. The value
+                                                    should be a PhotoImage, BitmapImage, or a compatible object.
+                                                    If specified, this takes precedence over the <b>text</b> and
+                                                    <b>bitmap</b> options.
+                                                    (image/Image)
+                                                </dd>
+                                                <dt><i>justify=</i></dt>
+                                                <dd>
+                                                    Defines how to align multiple lines of text.
+                                                    Use <b>LEFT</b>, <b>RIGHT</b>, or <b>CENTER</b>. Note that
+                                                    to position the text inside the widget, use the <b>anchor</b>
+                                                    option. Default is <b>CENTER</b>.
+                                                    (justify/Justify)
+                                                </dd>
+                                                <dt><i>padx=</i></dt>
+                                                <dd>
+                                                    Extra horizontal padding to add around the text.
+                                                    The default is 1 pixel.
+                                                    (padX/Pad)</dd>
+                                                <dt><i>pady=</i></dt>
+                                                <dd>
+                                                    Extra vertical padding to add around the text.
+                                                    The default is 1 pixel.
+                                                    (padY/Pad)</dd>
+                                                <dt><i>relief=</i></dt>
+                                                <dd>
+                                                    Border decoration. The default is <b>FLAT</b>.
+                                                    Other possible values are <b>SUNKEN</b>, <b>RAISED</b>,
+                                                    <b>GROOVE</b>, and <b>RIDGE</b>.
+                                                    (relief/Relief)
+                                                </dd>
+                                                <dt><i>state=</i></dt>
+                                                <dd>
+                                                    Label state. This option controls how the label
+                                                    is rendered. The default is <b>NORMAL</b>. Other possible
+                                                    values are <b>ACTIVE</b> and <b>DISABLED</b>.
+                                                    (state/State)
+                                                </dd>
+                                                <dt><i>takefocus=</i></dt>
+                                                <dd>
+                                                    If true, the widget accepts input focus.
+                                                    The default is false.
+                                                    (takeFocus/TakeFocus)</dd>
+                                                <dt><i>text=</i></dt>
+                                                <dd>
+                                                    The text to display in the label. The text can
+                                                    contain newlines. If the <b>bitmap</b> or <b>image</b> options
+                                                    are used, this option is ignored.
+                                                    (text/Text)
+                                                </dd>
+                                                <dt><i>textvariable=</i></dt>
+                                                <dd>
+                                                    Associates a Tkinter variable (usually
+                                                    a <b>StringVar</b>) with the label. If the variable is changed,
+                                                    the label text is updated.
+                                                    (textVariable/Variable)
+                                                </dd>
+                                                <dt><i>underline=</i></dt>
+                                                <dd>
+                                                    Used with the <b>text</b> option to indicate
+                                                    that a character should be underlined (e.g. for keyboard
+                                                    shortcuts). Default is -1 (no underline).
+                                                    (underline/Underline)
+                                                </dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    The width of the label. If the label displays
+                                                    text, the size is given in text units. If the label displays
+                                                    an image, the size is given in pixels (or screen units). If
+                                                    the size is set to 0, or omitted, it is calculated based on
+                                                    the label contents.
+                                                    (width/Width)</dd>
+                                                <dt><i>wraplength=</i></dt>
+                                                <dd>
+                                                    Determines when a label&#8217;s text should be
+                                                    wrapped into multiple lines. This is given in screen units.
+                                                    Default is 0 (no wrapping).
+                                                    (wrapLength/WrapLength)</dd>
+                                            </dl><br />
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="frame.htm">back</a>&#160;<a href="labelframe.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

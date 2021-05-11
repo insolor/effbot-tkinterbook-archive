@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter PhotoImage&nbsp;Class</title>
+</head>
+
+<body data-page-id="1934">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="bitmapimage.htm">back</a>&#160;<a href="variable.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter PhotoImage&nbsp;Class</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>PhotoImage</b> class is used to display images (either
+                                    grayscale or true color images) in labels, buttons, canvases, and
+                                    text widgets.</p>
+                                <h2>When to use the PhotoImage Class</h2>
+                                <p>You can use the PhotoImage class whenever you need to display
+                                    an icon or an image in a Tkinter application.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <p>The PhotoImage class can read GIF and PGM/PPM images from files:</p>
+                                <pre class="python">
+photo = PhotoImage(file=<span class="pystring">"image.gif"</span>)
+
+photo = PhotoImage(file=<span class="pystring">"lenna.pgm"</span>)</pre>
+                                <p>The PhotoImage can also read base64-encoded GIF files from strings.
+                                    You can use this to embed images in Python source code (use functions
+                                    in the <b>base64</b> module to convert binary data to base64-encoded
+                                    strings):</p>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <pre class="python wide wide">
+photo = <span class="pystring">"""</span>
+R0lGODdhEAAQAIcAAAAAAAEBAQICAgMDAwQEBAUFBQYGBgcHBwgICAkJCQoKCgsLCwwMDA0NDQ4O
+Dg8PDxAQEBERERISEhMTExQUFBUVFRYWFhcXFxgYGBkZGRoaGhsbGxwcHB0dHR4eHh8fHyAgICEh
+...
+AfjHtq1bAP/i/gPwry4AAP/yAtj77x+Af4ABAwDwrzAAAP8SA/j3DwCAfwAA/JsM4J/lfwD+/QMA
+4B8AAP9Ci/4HoLTpfwD+qV4NoHVAADs=
+"""
+
+photo = PhotoImage(data=photo)</pre>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>If you need to work with other file formats, the <a href="
+http://www.pythonware.com/products/pil">Python Imaging Library</a>
+                                    (PIL) contains classes that lets you load images in over 30 formats,
+                                    and convert them to Tkinter-compatible image objects:</p>
+                                <pre class="python">
+<span class="pykeyword">from</span> PIL <span class="pykeyword">import</span> Image, ImageTk
+
+image = Image.open(<span class="pystring">"lenna.jpg"</span>)
+photo = ImageTk.PhotoImage(image)</pre>
+                                <p>You can use a PhotoImage instance everywhere Tkinter accepts an
+                                    image object. An example:</p>
+                                <pre class="python">
+label = Label(image=photo)
+label.image = photo <span class="pycomment"># keep a reference!</span>
+label.pack()</pre>
+                                <p>You must keep a reference to the image object in your Python program, either by
+                                    storing it in a
+                                    global variable, or by attaching it to another object.</p>
+                                <div class="note" id="note">
+                                    <p><b>Note:</b> When a PhotoImage object is garbage-collected by
+                                        Python (e.g. when you return from a function which stored an image in
+                                        a local variable), the image is cleared even if it&#8217;s being displayed
+                                        by a Tkinter widget.</p>
+                                    <p>To avoid this, the program must keep an extra reference to the
+                                        image object. A simple way to do this is to assign the image to a
+                                        widget attribute, like this:</p>
+                                    <pre class="python">
+label = Label(image=photo)
+label.image = photo <span class="pycomment"># keep a reference!</span>
+label.pack()</pre>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="bitmapimage.htm">back</a>&#160;<a href="variable.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

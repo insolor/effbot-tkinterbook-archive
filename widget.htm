@@ -1,0 +1,1601 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>Basic Widget&nbsp;Methods</title>
+</head>
+
+<body data-page-id="1977">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="toplevel.htm">back</a>&#160;<a href="wm.htm">next</a></p>
+                            <h1 class="maintitle">Basic Widget&nbsp;Methods</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The following methods are provided by all widgets (including the
+                                    root window).</p>
+                                <p>The root window and other <b>Toplevel</b> windows provide
+                                    additional methods. See the <a href="wm.htm"><i>Window
+                                            Methods</i></a> section for more information.</p>
+                                <h2>Patterns</h2>
+                                <h3>Configuration</h3>
+                                <pre class="python">
+w.config(option=value)
+value = w.cget(<span class="pystring">"option"</span>)
+k = w.keys()</pre>
+                                <h3>Event processing</h3>
+                                <pre class="python">
+mainloop()
+w.mainloop()
+w.quit()
+w.wait_variable(var)
+w.wait_visibility(window)
+w.wait_window(window)
+w.update()
+w.update_idletasks()</pre>
+                                <h3>Event callbacks</h3>
+                                <pre class="python">
+w.bind(event, callback)
+w.unbind(event)
+w.bind_class(event, callback)
+w.bindtags()
+w.bindtags(tags)</pre>
+                                <h3>Alarm handlers and other non-event callbacks</h3>
+                                <pre class="python">
+id = w.after(time, callback)
+id = w.after_idle(callback)
+w.after_cancel(id)</pre>
+                                <h3>Window management</h3>
+                                <pre class="python">
+w.lift()
+w.lower()</pre>
+                                <h3>Window-related information</h3>
+                                <pre class="python">
+w.winfo_width(), w.winfo_height()
+w.winfo_reqwidth(), w.winfo_reqheight()
+w.winfo_id()</pre>
+                                <h3>The option database</h3>
+                                <pre class="python">
+w.option_add(pattern, value)
+w.option_get(name, <span class="pykeyword">class</span>)</pre>
+                                <h2>Reference</h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Widget</b> (class) [<a href="#Tkinter.Widget-class">#</a>]</dt>
+                                        <dd>
+                                            <p>Widget implementation class. This class is used as a mixin by all
+                                                widget classes.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.after-method"
+                                                name="Tkinter.Widget.after-method"><b>after(delay_ms, callback=None,
+                                                    *args)</b></a> [<a href="#Tkinter.Widget.after-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Registers an alarm callback that is called after a given
+                                                time.
+                                            </p>
+                                            <p>
+                                                This method registers a callback function that will
+                                                be called after a given number of milliseconds. Tkinter
+                                                only guarantees that the callback will not be called earlier
+                                                than that; if the system is busy, the actual delay may be
+                                                much longer.
+                                            </p>
+                                            <p>
+                                                The callback is only called once for each call to this
+                                                method. To keep calling the callback, you need to reregister
+                                                the callback inside itself:
+                                                <pre class="python">
+<span class="pykeyword">class</span> <span class="pyclass">App</span>:
+    <span class="pykeyword">def</span> <span class="pyfunction">__init__</span>(self, master):
+        self.master = master
+        self.poll() <span class="pycomment"># start polling</span>
+
+    <span class="pykeyword">def</span> <span class="pyfunction">poll</span>(self):
+        ... do something ...
+        self.master.after(100, self.poll)</pre><a class="link"
+                                                    href="#widget.Widget.after_cancel-method"><b>after_cancel</b></a> to
+                                                cancel the callback.
+                                            </p>
+                                            <p>
+                                                You can also omit the callback. If you do, this method simply
+                                                waits for the given number of milliseconds, without serving any
+                                                events (same as <b>time.sleep(delay_ms*0.001))</b>.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>delay_ms</i></dt>
+                                                <dd>
+                                                    Delay, in milliseconds.</dd>
+                                                <dt><i>callback</i></dt>
+                                                <dd>
+                                                    The callback. This can be any callable object.</dd>
+                                                <dt><i>*args</i></dt>
+                                                <dd>
+                                                    Optional arguments that are passed to the callback.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    An alarm identifier.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.after_cancel-method"
+                                                name="Tkinter.Widget.after_cancel-method"><b>after_cancel(id)</b></a>
+                                            [<a href="#Tkinter.Widget.after_cancel-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Cancels an alarm callback.</p>
+                                            <dl>
+                                                <dt><i>id</i></dt>
+                                                <dd>
+                                                    Alarm identifier.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.after_idle-method"
+                                                name="Tkinter.Widget.after_idle-method"><b>after_idle(callback,
+                                                    *args)</b></a> [<a href="#Tkinter.Widget.after_idle-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Registers a callback that is called when the system is idle.
+                                                The callback will be called there are no more events to process
+                                                in the mainloop. The callback is only called once for each call
+                                                to <a class="link"
+                                                    href="#widget.Widget.after_idle-method"><b>after_idle</b></a>.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>callback</i></dt>
+                                                <dd>
+                                                    The callback. This can be any callable object.</dd>
+                                                <dt><i>*args</i></dt>
+                                                <dd>
+                                                    Optional arguments that are passed to the callback.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    An alarm identifier.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.bbox-method"
+                                                name="Tkinter.Widget.bbox-method"><b>bbox(column=None, row=None,
+                                                    col2=None, row2=None)</b></a> [<a
+                                                href="#Tkinter.Widget.bbox-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The bbox method.</p>
+                                            <dl>
+                                                <dt><i>column</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>row</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>col2</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>row2</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.bell-method"
+                                                name="Tkinter.Widget.bell-method"><b>bell(displayof=0)</b></a> [<a
+                                                href="#Tkinter.Widget.bell-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Generate a system-dependent sound (typically a short beep).</p>
+                                            <dl>
+                                                <dt><i>displayof</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.bind-method"
+                                                name="Tkinter.Widget.bind-method"><b>bind(sequence=None, func=None,
+                                                    add=None)</b></a> [<a href="#Tkinter.Widget.bind-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds an event binding to this widget. Usually, the new binding
+                                                replaces any existing binding for the same event sequence. By
+                                                passing in &#8220;+&#8221; as the third argument, the new callback is
+                                                added
+                                                to the existing binding.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.bind_all-method"
+                                                name="Tkinter.Widget.bind_all-method"><b>bind_all(sequence=None,
+                                                    func=None, add=None)</b></a> [<a
+                                                href="#Tkinter.Widget.bind_all-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds an event binding to the application level. Usually, the
+                                                new binding replaces any existing binding for the same event
+                                                sequence. By passing in &#8220;+&#8221; as the third argument, the new
+                                                function is added to the existing binding.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.bind_class-method"
+                                                name="Tkinter.Widget.bind_class-method"><b>bind_class(className,
+                                                    sequence=None, func=None, add=None)</b></a> [<a
+                                                href="#Tkinter.Widget.bind_class-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds an event binding to the given widget class. Usually, the
+                                                new binding replaces any existing binding for the same event
+                                                sequence. By passing in &#8220;+&#8221; as the third argument, the new
+                                                function is added to the existing binding.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.bindtags-method"
+                                                name="Tkinter.Widget.bindtags-method"><b>bindtags(tagList=None)</b></a>
+                                            [<a href="#Tkinter.Widget.bindtags-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Sets or gets the binding search order for this widget.
+                                            </p>
+                                            <p>
+                                                If called without an argument, this method returns a tuple
+                                                containing the binding search order used for this widget. By
+                                                default, this tuple contains the widget&#8217;s name (str(self)), the
+                                                widget class (e.g. Button), the root window&#8217;s name, and finally
+                                                the special name all which refers to the application level.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.cget-method"
+                                                name="Tkinter.Widget.cget-method"><b>cget(key)</b></a> [<a
+                                                href="#Tkinter.Widget.cget-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the current value for an option.
+                                            </p>
+                                            <p>
+                                                Note that option values are always returned as strings (also if
+                                                you gave a nonstring value when you configured the widget). Use
+                                                <b>int</b> and <b>float</b> where appropriate.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.clipboard_append-method"
+                                                name="Tkinter.Widget.clipboard_append-method"><b>clipboard_append(string,
+                                                    **options)</b></a> [<a
+                                                href="#Tkinter.Widget.clipboard_append-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Adds text to the clipboard.</p>
+                                            <dl>
+                                                <dt><i>string</i></dt>
+                                                <dd>
+                                                    The text to add.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.clipboard_clear-method"
+                                                name="Tkinter.Widget.clipboard_clear-method"><b>clipboard_clear(**options)</b></a>
+                                            [<a href="#Tkinter.Widget.clipboard_clear-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Clears the clipboard.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.colormodel-method"
+                                                name="Tkinter.Widget.colormodel-method"><b>colormodel(value=None)</b></a>
+                                            [<a href="#Tkinter.Widget.colormodel-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The colormodel method.</p>
+                                            <dl>
+                                                <dt><i>value</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.columnconfigure-method"
+                                                name="Tkinter.Widget.columnconfigure-method"><b>columnconfigure(index,
+                                                    cnf={}, **kw)</b></a> [<a
+                                                href="#Tkinter.Widget.columnconfigure-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The columnconfigure method.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>cnf</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**kw</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.config-method"
+                                                name="Tkinter.Widget.config-method"><b>config(cnf=None, **kw)</b></a>
+                                            [<a href="#Tkinter.Widget.config-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies one or more widget options.
+                                            </p>
+                                            <p>
+                                                If called without an argument, this method returns a dictionary
+                                                containing the current settings for all widget options. For each
+                                                option key in the dictionary, the value is either a five-tuple
+                                                (option, option database key, option database class, default
+                                                value, current value), or a two-tuple (option alias,
+                                                option). The latter case is used for aliases like <b>bg</b>
+                                                (background) and <b>bd</b> (borderwidth).
+                                            </p>
+                                            <p>
+                                                Note that the value fields aren&#8217;t correctly formatted for some
+                                                option types. See the description of the <a class="link"
+                                                    href="#widget.Widget.keys-method"><b>keys</b></a>
+                                                method for more information, and a workaround.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.configure-method"
+                                                name="Tkinter.Widget.configure-method"><b>configure(cnf=None,
+                                                    **kw)</b></a> [<a href="#Tkinter.Widget.configure-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Same as <a class="link"
+                                                    href="#widget.Widget.config-method"><b>config</b></a>.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.deletecommand-method"
+                                                name="Tkinter.Widget.deletecommand-method"><b>deletecommand(name)</b></a>
+                                            [<a href="#Tkinter.Widget.deletecommand-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The deletecommand method.</p>
+                                            <dl>
+                                                <dt><i>name</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.destroy-method"
+                                                name="Tkinter.Widget.destroy-method"><b>destroy()</b></a> [<a
+                                                href="#Tkinter.Widget.destroy-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Destroys the widget. The widget is removed from the screen, and
+                                                all resources associated with the widget are released.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.event_add-method"
+                                                name="Tkinter.Widget.event_add-method"><b>event_add(virtual,
+                                                    *sequences)</b></a> [<a
+                                                href="#Tkinter.Widget.event_add-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The event_add method.</p>
+                                            <dl>
+                                                <dt><i>virtual</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>*sequences</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.event_delete-method"
+                                                name="Tkinter.Widget.event_delete-method"><b>event_delete(virtual,
+                                                    *sequences)</b></a> [<a
+                                                href="#Tkinter.Widget.event_delete-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The event_delete method.</p>
+                                            <dl>
+                                                <dt><i>virtual</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>*sequences</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.event_generate-method"
+                                                name="Tkinter.Widget.event_generate-method"><b>event_generate(sequence,
+                                                    **kw)</b></a> [<a
+                                                href="#Tkinter.Widget.event_generate-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The event_generate method.</p>
+                                            <dl>
+                                                <dt><i>sequence</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**kw</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.event_info-method"
+                                                name="Tkinter.Widget.event_info-method"><b>event_info(virtual=None)</b></a>
+                                            [<a href="#Tkinter.Widget.event_info-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The event_info method.</p>
+                                            <dl>
+                                                <dt><i>virtual</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.focus-method"
+                                                name="Tkinter.Widget.focus-method"><b>focus()</b></a> [<a
+                                                href="#Tkinter.Widget.focus-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The focus method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.focus_displayof-method"
+                                                name="Tkinter.Widget.focus_displayof-method"><b>focus_displayof()</b></a>
+                                            [<a href="#Tkinter.Widget.focus_displayof-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The focus_displayof method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.focus_force-method"
+                                                name="Tkinter.Widget.focus_force-method"><b>focus_force()</b></a> [<a
+                                                href="#Tkinter.Widget.focus_force-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The focus_force method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.focus_get-method"
+                                                name="Tkinter.Widget.focus_get-method"><b>focus_get()</b></a> [<a
+                                                href="#Tkinter.Widget.focus_get-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The focus_get method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.focus_lastfor-method"
+                                                name="Tkinter.Widget.focus_lastfor-method"><b>focus_lastfor()</b></a>
+                                            [<a href="#Tkinter.Widget.focus_lastfor-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The focus_lastfor method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.focus_set-method"
+                                                name="Tkinter.Widget.focus_set-method"><b>focus_set()</b></a> [<a
+                                                href="#Tkinter.Widget.focus_set-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Moves the keyboard focus to this widget. This means that all
+                                                keyboard events sent to the application will be routed to this
+                                                widget.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.getboolean-method"
+                                                name="Tkinter.Widget.getboolean-method"><b>getboolean(s)</b></a> [<a
+                                                href="#Tkinter.Widget.getboolean-method">#</a>]</dt>
+                                        <dd>
+                                            <p>(Internal) Converts a Tk string to a boolean (flag) value.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.getvar-method"
+                                                name="Tkinter.Widget.getvar-method"><b>getvar(name=&#8217;PY_VAR&#8217;)</b></a>
+                                            [<a href="#Tkinter.Widget.getvar-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The getvar method.</p>
+                                            <dl>
+                                                <dt><i>name</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.grab_current-method"
+                                                name="Tkinter.Widget.grab_current-method"><b>grab_current()</b></a> [<a
+                                                href="#Tkinter.Widget.grab_current-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The grab_current method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.grab_release-method"
+                                                name="Tkinter.Widget.grab_release-method"><b>grab_release()</b></a> [<a
+                                                href="#Tkinter.Widget.grab_release-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Releases the event grab.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.grab_set-method"
+                                                name="Tkinter.Widget.grab_set-method"><b>grab_set()</b></a> [<a
+                                                href="#Tkinter.Widget.grab_set-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Routes all events for this application to this widget.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.grab_set_global-method"
+                                                name="Tkinter.Widget.grab_set_global-method"><b>grab_set_global()</b></a>
+                                            [<a href="#Tkinter.Widget.grab_set_global-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Routes all events for the entire screen to this widget.
+                                            </p>
+                                            <p>
+                                                This should only be used in very special circumstances, since it
+                                                blocks all other applications running on the same screen. And
+                                                that probably includes your development environment, so you
+                                                better make sure your application won&#8217;t crash or lock up until
+                                                it has properly released the grab.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.grab_status-method"
+                                                name="Tkinter.Widget.grab_status-method"><b>grab_status()</b></a> [<a
+                                                href="#Tkinter.Widget.grab_status-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The grab_status method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.image_names-method"
+                                                name="Tkinter.Widget.image_names-method"><b>image_names()</b></a> [<a
+                                                href="#Tkinter.Widget.image_names-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The image_names method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.image_types-method"
+                                                name="Tkinter.Widget.image_types-method"><b>image_types()</b></a> [<a
+                                                href="#Tkinter.Widget.image_types-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The image_types method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.keys-method"
+                                                name="Tkinter.Widget.keys-method"><b>keys()</b></a> [<a
+                                                href="#Tkinter.Widget.keys-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns a tuple containing the options available for this
+                                                widget. You can use <a class="link"
+                                                    href="#widget.Widget.cget-method"><b>cget</b></a> to get the
+                                                corresponding value for each option.
+                                            </p>
+                                            <p>
+                                                Note that the tuple currently include option aliases (like
+                                                <b>bd</b>, <b>bg</b>, and <b>fg</b>). To avoid this, you can
+                                                use <a class="link"
+                                                    href="#widget.Widget.config-method"><b>config</b></a> instead. On
+                                                the other hand, <a class="link"
+                                                    href="#widget.Widget.config-method"><b>config</b></a> doesn&#8217;t
+                                                return valid option values for some
+                                                option types (such as font names), so the best way is to use a
+                                                combination of <a class="link"
+                                                    href="#widget.Widget.config-method"><b>config</b></a> and <a
+                                                    class="link" href="#widget.Widget.cget-method"><b>cget</b></a>:
+                                                <pre class="python">
+<span class="pykeyword">for</span> item <span class="pykeyword">in</span> w.config():
+    <span class="pykeyword">if</span> len(item) == 5:
+        option = item[0]
+        value = w.cget(option)
+        <span class="pykeyword">print</span> option, value</pre>
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.lift-method"
+                                                name="Tkinter.Widget.lift-method"><b>lift(aboveThis=None)</b></a> [<a
+                                                href="#Tkinter.Widget.lift-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Moves the widget to the top of the window stack. If the widget
+                                                is a child window, it is moved to the top of it&#8217;s toplevel
+                                                window. If it is a toplevel window (the root or a Toplevel
+                                                window), it is moved in front of all other windows on the
+                                                display. If an argument is given, the widget (or window) is
+                                                moved so it&#8217;s just above the given widget (window).</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.lower-method"
+                                                name="Tkinter.Widget.lower-method"><b>lower(belowThis=None)</b></a> [<a
+                                                href="#Tkinter.Widget.lower-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Moves the window to the bottom of the window stack. Same as
+                                                <a class="link" href="#widget.Widget.lift-method"><b>lift</b></a>, but
+                                                moves the widget to the bottom of the
+                                                stack (or places it just under the belowThis widget).
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.mainloop-method"
+                                                name="Tkinter.Widget.mainloop-method"><b>mainloop(n=0)</b></a> [<a
+                                                href="#Tkinter.Widget.mainloop-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Enters Tkinter&#8217;s main event loop. To leave the event loop, use
+                                                the <a class="link" href="#widget.Widget.quit-method"><b>quit</b></a>
+                                                method. Event loops can be nested; it&#8217;s
+                                                ok to call mainloop from within an event handler.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.nametowidget-method"
+                                                name="Tkinter.Widget.nametowidget-method"><b>nametowidget(name)</b></a>
+                                            [<a href="#Tkinter.Widget.nametowidget-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Gets the widget object corresponding to a widget name.</p>
+                                            <dl>
+                                                <dt><i>name</i></dt>
+                                                <dd>
+                                                    The widget name.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The corresponding widget object, if known.</dd>
+                                                <dt>Raises <b>KeyError</b>:</dt>
+                                                <dd>
+                                                    If the widget could not be found.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.option_add-method"
+                                                name="Tkinter.Widget.option_add-method"><b>option_add(pattern, value,
+                                                    priority=None)</b></a> [<a
+                                                href="#Tkinter.Widget.option_add-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The option_add method.</p>
+                                            <dl>
+                                                <dt><i>pattern</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>value</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>priority</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.option_clear-method"
+                                                name="Tkinter.Widget.option_clear-method"><b>option_clear()</b></a> [<a
+                                                href="#Tkinter.Widget.option_clear-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The option_clear method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.option_get-method"
+                                                name="Tkinter.Widget.option_get-method"><b>option_get(name,
+                                                    className)</b></a> [<a
+                                                href="#Tkinter.Widget.option_get-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The option_get method.</p>
+                                            <dl>
+                                                <dt><i>name</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>className</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.option_readfile-method"
+                                                name="Tkinter.Widget.option_readfile-method"><b>option_readfile(fileName,
+                                                    priority=None)</b></a> [<a
+                                                href="#Tkinter.Widget.option_readfile-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The option_readfile method.</p>
+                                            <dl>
+                                                <dt><i>fileName</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>priority</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.pack_propagate-method"
+                                                name="Tkinter.Widget.pack_propagate-method"><b>pack_propagate(flag=[&#8216;_noarg_&#8217;])</b></a>
+                                            [<a href="#Tkinter.Widget.pack_propagate-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The pack_propagate method.</p>
+                                            <dl>
+                                                <dt><i>flag</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.pack_slaves-method"
+                                                name="Tkinter.Widget.pack_slaves-method"><b>pack_slaves()</b></a> [<a
+                                                href="#Tkinter.Widget.pack_slaves-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The pack_slaves method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.place_slaves-method"
+                                                name="Tkinter.Widget.place_slaves-method"><b>place_slaves()</b></a> [<a
+                                                href="#Tkinter.Widget.place_slaves-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The place_slaves method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.propagate-method"
+                                                name="Tkinter.Widget.propagate-method"><b>propagate(flag=[&#8216;_noarg_&#8217;])</b></a>
+                                            [<a href="#Tkinter.Widget.propagate-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The propagate method.</p>
+                                            <dl>
+                                                <dt><i>flag</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.quit-method"
+                                                name="Tkinter.Widget.quit-method"><b>quit()</b></a> [<a
+                                                href="#Tkinter.Widget.quit-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The quit method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.register-method"
+                                                name="Tkinter.Widget.register-method"><b>register(func, subst=None,
+                                                    needcleanup=1)</b></a> [<a
+                                                href="#Tkinter.Widget.register-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Registers a Tcl to Python callback. Returns the name of a Tcl
+                                                wrapper procedure. When that procedure is called from a Tcl
+                                                program, it will call the corresponding Python function with the
+                                                arguments given to the Tcl procedure. Values returned from the
+                                                Python callback are converted to strings, and returned to the
+                                                Tcl program.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.rowconfigure-method"
+                                                name="Tkinter.Widget.rowconfigure-method"><b>rowconfigure(index, cnf={},
+                                                    **kw)</b></a> [<a href="#Tkinter.Widget.rowconfigure-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>The rowconfigure method.</p>
+                                            <dl>
+                                                <dt><i>index</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>cnf</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**kw</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.selection_clear-method"
+                                                name="Tkinter.Widget.selection_clear-method"><b>selection_clear(**kw)</b></a>
+                                            [<a href="#Tkinter.Widget.selection_clear-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The selection_clear method.</p>
+                                            <dl>
+                                                <dt><i>**kw</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.selection_get-method"
+                                                name="Tkinter.Widget.selection_get-method"><b>selection_get(**kw)</b></a>
+                                            [<a href="#Tkinter.Widget.selection_get-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The selection_get method.</p>
+                                            <dl>
+                                                <dt><i>**kw</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.selection_handle-method"
+                                                name="Tkinter.Widget.selection_handle-method"><b>selection_handle(command,
+                                                    **kw)</b></a> [<a
+                                                href="#Tkinter.Widget.selection_handle-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The selection_handle method.</p>
+                                            <dl>
+                                                <dt><i>command</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**kw</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.selection_own-method"
+                                                name="Tkinter.Widget.selection_own-method"><b>selection_own(**kw)</b></a>
+                                            [<a href="#Tkinter.Widget.selection_own-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The selection_own method.</p>
+                                            <dl>
+                                                <dt><i>**kw</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.selection_own_get-method"
+                                                name="Tkinter.Widget.selection_own_get-method"><b>selection_own_get(**kw)</b></a>
+                                            [<a href="#Tkinter.Widget.selection_own_get-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The selection_own_get method.</p>
+                                            <dl>
+                                                <dt><i>**kw</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.send-method"
+                                                name="Tkinter.Widget.send-method"><b>send(interp, cmd, *args)</b></a>
+                                            [<a href="#Tkinter.Widget.send-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The send method.</p>
+                                            <dl>
+                                                <dt><i>interp</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>cmd</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>*args</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.setvar-method"
+                                                name="Tkinter.Widget.setvar-method"><b>setvar(name=&#8217;PY_VAR&#8217;,
+                                                    value=&#8216;1&#8217;)</b></a> [<a
+                                                href="#Tkinter.Widget.setvar-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The setvar method.</p>
+                                            <dl>
+                                                <dt><i>name</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>value</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.size-method"
+                                                name="Tkinter.Widget.size-method"><b>size()</b></a> [<a
+                                                href="#Tkinter.Widget.size-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The size method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.slaves-method"
+                                                name="Tkinter.Widget.slaves-method"><b>slaves()</b></a> [<a
+                                                href="#Tkinter.Widget.slaves-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The slaves method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.tk_bisque-method"
+                                                name="Tkinter.Widget.tk_bisque-method"><b>tk_bisque()</b></a> [<a
+                                                href="#Tkinter.Widget.tk_bisque-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The tk_bisque method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.tk_focusFollowsMouse-method"
+                                                name="Tkinter.Widget.tk_focusFollowsMouse-method"><b>tk_focusFollowsMouse()</b></a>
+                                            [<a href="#Tkinter.Widget.tk_focusFollowsMouse-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The tk_focusFollowsMouse method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.tk_focusNext-method"
+                                                name="Tkinter.Widget.tk_focusNext-method"><b>tk_focusNext()</b></a> [<a
+                                                href="#Tkinter.Widget.tk_focusNext-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the next widget (following self) that should have focus.
+                                                This is used by the default bindings for the <b>Tab</b> key.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.tk_focusPrev-method"
+                                                name="Tkinter.Widget.tk_focusPrev-method"><b>tk_focusPrev()</b></a> [<a
+                                                href="#Tkinter.Widget.tk_focusPrev-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the previous widget (preceding self) that should have
+                                                focus. This is used by the default bindings for the
+                                                <b>Shift-Tab</b> key.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.tk_menuBar-method"
+                                                name="Tkinter.Widget.tk_menuBar-method"><b>tk_menuBar(*args)</b></a> [<a
+                                                href="#Tkinter.Widget.tk_menuBar-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The tk_menuBar method.</p>
+                                            <dl>
+                                                <dt><i>*args</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.tk_setPalette-method"
+                                                name="Tkinter.Widget.tk_setPalette-method"><b>tk_setPalette(*args,
+                                                    **kw)</b></a> [<a href="#Tkinter.Widget.tk_setPalette-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>The tk_setPalette method.</p>
+                                            <dl>
+                                                <dt><i>*args</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>**kw</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.tk_strictMotif-method"
+                                                name="Tkinter.Widget.tk_strictMotif-method"><b>tk_strictMotif(boolean=None)</b></a>
+                                            [<a href="#Tkinter.Widget.tk_strictMotif-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The tk_strictMotif method.</p>
+                                            <dl>
+                                                <dt><i>boolean</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.tkraise-method"
+                                                name="Tkinter.Widget.tkraise-method"><b>tkraise(aboveThis=None)</b></a>
+                                            [<a href="#Tkinter.Widget.tkraise-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The tkraise method.</p>
+                                            <dl>
+                                                <dt><i>aboveThis</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.unbind-method"
+                                                name="Tkinter.Widget.unbind-method"><b>unbind(sequence,
+                                                    funcid=None)</b></a> [<a href="#Tkinter.Widget.unbind-method">#</a>]
+                                        </dt>
+                                        <dd>
+                                            <p>Removes any bindings for the given event sequence, for this widget.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.unbind_all-method"
+                                                name="Tkinter.Widget.unbind_all-method"><b>unbind_all(sequence)</b></a>
+                                            [<a href="#Tkinter.Widget.unbind_all-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The unbind_all method.</p>
+                                            <dl>
+                                                <dt><i>sequence</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.unbind_class-method"
+                                                name="Tkinter.Widget.unbind_class-method"><b>unbind_class(className,
+                                                    sequence)</b></a> [<a
+                                                href="#Tkinter.Widget.unbind_class-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The unbind_class method.</p>
+                                            <dl>
+                                                <dt><i>className</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>sequence</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.update-method"
+                                                name="Tkinter.Widget.update-method"><b>update()</b></a> [<a
+                                                href="#Tkinter.Widget.update-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Processes all pending events, calls event callbacks, completes
+                                                any pending geometry management, redraws widgets as necessary,
+                                                and calls all pending idle tasks. This method should be used
+                                                with care, since it may lead to really nasty race conditions if
+                                                called from the wrong place (from within an event callback, for
+                                                example, or from a function that can in any way be called from
+                                                an event callback, etc.). When in doubt, use <a class="link"
+                                                    href="#widget.Widget.update_idletasks-method"><b>update_idletasks</b></a>
+                                                instead.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.update_idletasks-method"
+                                                name="Tkinter.Widget.update_idletasks-method"><b>update_idletasks()</b></a>
+                                            [<a href="#Tkinter.Widget.update_idletasks-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Calls all pending idle tasks, without processing any other
+                                                events. This can be used to carry out geometry management and
+                                                redraw widgets if necessary, without calling any callbacks.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.wait_variable-method"
+                                                name="Tkinter.Widget.wait_variable-method"><b>wait_variable(name)</b></a>
+                                            [<a href="#Tkinter.Widget.wait_variable-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Waits for the given Tkinter variable to change. This method
+                                                enters a local event loop, so other parts of the application
+                                                will still be responsive. The local event loop is terminated
+                                                when the variable is updated (setting it to it&#8217;s current value
+                                                also counts).</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.wait_visibility-method"
+                                                name="Tkinter.Widget.wait_visibility-method"><b>wait_visibility(window=None)</b></a>
+                                            [<a href="#Tkinter.Widget.wait_visibility-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Wait for the given widget to become visible. This is typically
+                                                used to wait until a new toplevel window appears on the screen.
+                                                Like <a class="link"
+                                                    href="#widget.Widget.wait_variable-method"><b>wait_variable</b></a>,
+                                                this method enters a local
+                                                event loop, so other parts of the application will still work as
+                                                usual.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.wait_window-method"
+                                                name="Tkinter.Widget.wait_window-method"><b>wait_window(window=None)</b></a>
+                                            [<a href="#Tkinter.Widget.wait_window-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Waits for the given widget to be destroyed. This is typically
+                                                used to wait until a destroyed window disappears from the
+                                                screen. Like <a class="link"
+                                                    href="#widget.Widget.wait_variable-method"><b>wait_variable</b></a>
+                                                and <a class="link"
+                                                    href="#widget.Widget.wait_visibility-method"><b>wait_visibility</b></a>,
+                                                this method enters a local event loop,
+                                                so other parts of the application will still work as usual.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.waitvar-method"
+                                                name="Tkinter.Widget.waitvar-method"><b>waitvar(name=&#8217;PY_VAR&#8217;)</b></a>
+                                            [<a href="#Tkinter.Widget.waitvar-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The waitvar method.</p>
+                                            <dl>
+                                                <dt><i>name</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_atom-method"
+                                                name="Tkinter.Widget.winfo_atom-method"><b>winfo_atom(name,
+                                                    displayof=0)</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_atom-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Maps the given string to a unique integer. Every time you call
+                                                this method with the same string, the same integer will be
+                                                returned.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_atomname-method"
+                                                name="Tkinter.Widget.winfo_atomname-method"><b>winfo_atomname(id,
+                                                    displayof=0)</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_atomname-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the string corresponding to the given integer (obtained
+                                                by a call to <a class="link"
+                                                    href="#widget.Widget.winfo_atom-method"><b>winfo_atom</b></a>). If
+                                                the integer isn&#8217;t
+                                                in use, Tkinter raises a TclError exception. Note that Tkinter
+                                                predefines a bunch of integers (typically 1-80 or so). If
+                                                you&#8217;re curious, you can use this method to find out what they
+                                                are used for.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_cells-method"
+                                                name="Tkinter.Widget.winfo_cells-method"><b>winfo_cells()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_cells-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the number of &#8220;cells&#8221; in the color map for self. This
+                                                is typically a value between 2 and 256 (also for true color
+                                                displays, for some odd reason).</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_children-method"
+                                                name="Tkinter.Widget.winfo_children-method"><b>winfo_children()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_children-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns a list containing widget instances for all children of
+                                                this widget. The windows are returned in stacking order from
+                                                bottom to top. If the order doesn&#8217;t matter, you can get the
+                                                same information from the children widget attribute (it&#8217;s a
+                                                dictionary mapping Tk widget names to widget instances, so
+                                                widget.children.values() gives you a list of instances).</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_class-method"
+                                                name="Tkinter.Widget.winfo_class-method"><b>winfo_class()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_class-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the Tkinter widget class name for this widget. If the
+                                                widget is a Tkinter base widget, widget.winfo_class() is the
+                                                same as widget.__class__.__name__.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_colormapfull-method"
+                                                name="Tkinter.Widget.winfo_colormapfull-method"><b>winfo_colormapfull()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_colormapfull-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns true if the color map for this widget is full.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_containing-method"
+                                                name="Tkinter.Widget.winfo_containing-method"><b>winfo_containing(rootX,
+                                                    rootY, displayof=0)</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_containing-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the widget at the given position, or None if there is no
+                                                such window, or it isn&#8217;t owned by this application. The
+                                                coordinates are given relative to the screen&#8217;s upper left
+                                                corner.</p>
+                                            <dl>
+                                                <dt><i>rootX</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>rootY</i></dt>
+                                                <dd>
+                                                </dd>
+                                                <dt><i>displayof</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_depth-method"
+                                                name="Tkinter.Widget.winfo_depth-method"><b>winfo_depth()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_depth-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the bit depth used to display this widget. This is
+                                                typically 8 for a 256-color display device, 15 or 16 for a
+                                                &#8220;hicolor&#8221; display, and 24 or 32 for a true color display.
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_exists-method"
+                                                name="Tkinter.Widget.winfo_exists-method"><b>winfo_exists()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_exists-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns true if there is Tk window corresponding to this
+                                                widget. Unless you&#8217;ve done something really strange, this method
+                                                should always return true.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_fpixels-method"
+                                                name="Tkinter.Widget.winfo_fpixels-method"><b>winfo_fpixels(distance)</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_fpixels-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Converts the given distance (in any form accepted by Tkinter)
+                                                to the corresponding number of pixels.</p>
+                                            <dl>
+                                                <dt><i>distance</i></dt>
+                                                <dd>
+                                                    The screen distance.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The corresponding number of screen pixels, as a floating
+                                                    point number.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_geometry-method"
+                                                name="Tkinter.Widget.winfo_geometry-method"><b>winfo_geometry()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_geometry-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns a string describing the widget&#8217;s &#8220;geometry&#8221;.
+                                                The string
+                                                has the following format:
+                                                <pre class="python">
+<span class="pystring">"%dx%d%+d%+d"</span> % (width, height, xoffset, yoffset)</pre>
+                                            </p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_height-method"
+                                                name="Tkinter.Widget.winfo_height-method"><b>winfo_height()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_height-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the height of this widget, in pixels. Note that if the
+                                                window isn&#8217;t managed by a geometry manager, this method returns
+                                                1. To you get the real value, you may have to call <a class="link"
+                                                    href="#widget.Widget.update_idletasks-method"><b>update_idletasks</b></a>
+                                                first. You can also use <a class="link"
+                                                    href="#widget.Widget.winfo_reqheight-method"><b>winfo_reqheight</b></a>
+                                                to get the widget&#8217;s requested height
+                                                (that is, the &#8220;natural&#8221; size as defined by the widget itself
+                                                based on it&#8217;s contents).
+
+                                            </p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The widget&#8217;s current height, in pixels.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_id-method"
+                                                name="Tkinter.Widget.winfo_id-method"><b>winfo_id()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_id-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get a system-specific window identifier for this widget. For
+                                                Unix, this is the X window identifier. For Windows, this is the
+                                                HWND cast to a long integer.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The window identifier.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_interps-method"
+                                                name="Tkinter.Widget.winfo_interps-method"><b>winfo_interps(displayof=0)</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_interps-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_interps method.</p>
+                                            <dl>
+                                                <dt><i>displayof</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_ismapped-method"
+                                                name="Tkinter.Widget.winfo_ismapped-method"><b>winfo_ismapped()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_ismapped-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Check if the window has been created. This method checks if
+                                                Tkinter has created a window corresponding to the widget in the
+                                                underlying window system (an X window, a Windows HWND, etc).</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A true value if a window has been created.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_manager-method"
+                                                name="Tkinter.Widget.winfo_manager-method"><b>winfo_manager()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_manager-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Return the name of the geometry manager used to keep manage this
+                                                widget (typically one of grid, pack, place, canvas, or text).</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_name-method"
+                                                name="Tkinter.Widget.winfo_name-method"><b>winfo_name()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_name-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the Tk widget name. This is the same as the last part of
+                                                the full widget name (which you can get via <b>str(widget)</b>).
+
+                                            </p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The widget name.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_parent-method"
+                                                name="Tkinter.Widget.winfo_parent-method"><b>winfo_parent()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_parent-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the full widget name of this widget&#8217;s parent. This method
+                                                returns an empty string if the widget doesn&#8217;t have a parent (if
+                                                it&#8217;s a root window or a toplevel, that is).
+                                            </p>
+                                            <p>
+                                                To get the widget instance instead, you can simply use the
+                                                <b>master</b> attribute instead of calling this method (the
+                                                <b>master</b> attribute is <b>None</b> for the root window).
+                                                Or if you insist, use <b>nametowidget</b> to map the full
+                                                widget name to a widget instance.
+
+                                            </p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The widget name, as a string.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_pathname-method"
+                                                name="Tkinter.Widget.winfo_pathname-method"><b>winfo_pathname(id,
+                                                    displayof=0)</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_pathname-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the full window name for the window having the given
+                                                identity (see <b>winfo_id</b> for details). If the window
+                                                doesn&#8217;t exist, or it isn&#8217;t owned by this application,
+                                                Tkinter
+                                                raises a <b>TclError</b> exception.
+                                            </p>
+                                            <p>
+                                                To convert the full name to a widget instance, use
+                                                <b>nametowidget</b>.
+
+                                            </p>
+                                            <dl>
+                                                <dt><i>id</i></dt>
+                                                <dd>
+                                                    The window identifier.</dd>
+                                                <dt><i>displayof</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_pixels-method"
+                                                name="Tkinter.Widget.winfo_pixels-method"><b>winfo_pixels(distance)</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_pixels-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Convert the given distance (in any form accepted by Tkinter)
+                                                to the corresponding number of pixels.</p>
+                                            <dl>
+                                                <dt><i>distance</i></dt>
+                                                <dd>
+                                                    The screen distance.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The corresponding number of screen pixels, as an integer.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_pointerx-method"
+                                                name="Tkinter.Widget.winfo_pointerx-method"><b>winfo_pointerx()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_pointerx-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_pointerx method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_pointerxy-method"
+                                                name="Tkinter.Widget.winfo_pointerxy-method"><b>winfo_pointerxy()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_pointerxy-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_pointerxy method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_pointery-method"
+                                                name="Tkinter.Widget.winfo_pointery-method"><b>winfo_pointery()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_pointery-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_pointery method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_reqheight-method"
+                                                name="Tkinter.Widget.winfo_reqheight-method"><b>winfo_reqheight()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_reqheight-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the &#8220;natural&#8221; height for this widget. The natural
+                                                size
+                                                is the minimal size needed to display the widget&#8217;s contents,
+                                                including padding, borders, etc. This size is calculated by the
+                                                widget itself, based on the given options. The actual widget
+                                                size is then determined by the widget&#8217;s geometry manager, based
+                                                on this value, the size of the widget&#8217;s master, and the options
+                                                given to the geometry manager.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_reqwidth-method"
+                                                name="Tkinter.Widget.winfo_reqwidth-method"><b>winfo_reqwidth()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_reqwidth-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the &#8220;natural&#8221; width for this widget. The natural size
+                                                is the minimal size needed to display the widget&#8217;s contents,
+                                                including padding, borders, etc. This size is calculated by the
+                                                widget itself, based on the given options. The actual widget
+                                                size is then determined by the widget&#8217;s geometry manager, based
+                                                on this value, the size of the widget&#8217;s master, and the options
+                                                given to the geometry manager.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_rgb-method"
+                                                name="Tkinter.Widget.winfo_rgb-method"><b>winfo_rgb(color)</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_rgb-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Convert a color string (in any form accepted by Tkinter) to
+                                                an RGB tuple.</p>
+                                            <dl>
+                                                <dt><i>color</i></dt>
+                                                <dd>
+                                                    A colour string. This can be a colour name, a
+                                                    string containing an rgb specifier (&#8220;#rrggbb&#8221;), or any
+                                                    other syntax supported by Tkinter.</dd>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A 3-tuple containing the corresponding red, green, and
+                                                    blue components. Note that the tuple contains 16-bit values
+                                                    (0..65535).</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_rootx-method"
+                                                name="Tkinter.Widget.winfo_rootx-method"><b>winfo_rootx()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_rootx-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the pixel coordinate for the widget&#8217;s left edge, relative
+                                                to the screen&#8217;s upper left corner.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The root coordinate.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_rooty-method"
+                                                name="Tkinter.Widget.winfo_rooty-method"><b>winfo_rooty()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_rooty-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the pixel coordinates for the widget&#8217;s upper edge, relative
+                                                to the screen&#8217;s upper left corner.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The root coordinate.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_screen-method"
+                                                name="Tkinter.Widget.winfo_screen-method"><b>winfo_screen()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_screen-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the X window screen name for the current window. The screen
+                                                name is a string having the format &#8220;:display.screen&#8221;, where
+                                                display
+                                                and screen are decimal numbers.
+                                            </p>
+                                            <p>
+                                                On Windows and Macintosh, this is always &#8220;:0.0&#8221;.
+
+                                            </p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The screen name.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_screencells-method"
+                                                name="Tkinter.Widget.winfo_screencells-method"><b>winfo_screencells()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_screencells-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the number of &#8220;color cells&#8221; in the default color map
+                                                for this widget&#8217;s screen.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The number of color cells.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_screendepth-method"
+                                                name="Tkinter.Widget.winfo_screendepth-method"><b>winfo_screendepth()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_screendepth-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the default bit depth for this widget&#8217;s screen.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The bit depth.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_screenheight-method"
+                                                name="Tkinter.Widget.winfo_screenheight-method"><b>winfo_screenheight()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_screenheight-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the height of this widget&#8217;s screen, in pixels.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The height, in pixels.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_screenmmheight-method"
+                                                name="Tkinter.Widget.winfo_screenmmheight-method"><b>winfo_screenmmheight()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_screenmmheight-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the height of this widget&#8217;s screen, in millimetres.
+                                                This may not be accurate on all platforms.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The height, in millimetres.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_screenmmwidth-method"
+                                                name="Tkinter.Widget.winfo_screenmmwidth-method"><b>winfo_screenmmwidth()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_screenmmwidth-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the width of this widget&#8217;s screen, in millimetres.
+                                                This may not be accurate on all platforms.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The width, in millimetres.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_screenvisual-method"
+                                                name="Tkinter.Widget.winfo_screenvisual-method"><b>winfo_screenvisual()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_screenvisual-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the &#8220;visual&#8221; type used for this widget. This is typically
+                                                &#8220;pseudocolor&#8221; (for 256-color displays) or
+                                                &#8220;truecolor&#8221; (for 16-
+                                                or 24-bit displays).</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    A string containing the visual type. This is one of
+                                                    &#8220;pseudocolor&#8221;, &#8220;truecolor&#8221;,
+                                                    &#8220;directcolor&#8221;, &#8220;staticcolor&#8221;,
+                                                    &#8220;grayscale&#8221;, or &#8220;staticgray&#8221;.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_screenwidth-method"
+                                                name="Tkinter.Widget.winfo_screenwidth-method"><b>winfo_screenwidth()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_screenwidth-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the width of this widget&#8217;s screen, in pixels.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The width, in pixels.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_server-method"
+                                                name="Tkinter.Widget.winfo_server-method"><b>winfo_server()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_server-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_server method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_toplevel-method"
+                                                name="Tkinter.Widget.winfo_toplevel-method"><b>winfo_toplevel()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_toplevel-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the toplevel window (or root) window for this widget, as
+                                                a widget instance.</p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The toplevel parent widget. This is either a Tk
+                                                    instance, or a Toplevel instance.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_viewable-method"
+                                                name="Tkinter.Widget.winfo_viewable-method"><b>winfo_viewable()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_viewable-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_viewable method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_visual-method"
+                                                name="Tkinter.Widget.winfo_visual-method"><b>winfo_visual()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_visual-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Same as winfo_screenvisual.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_visualid-method"
+                                                name="Tkinter.Widget.winfo_visualid-method"><b>winfo_visualid()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_visualid-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_visualid method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_visualsavailable-method"
+                                                name="Tkinter.Widget.winfo_visualsavailable-method"><b>winfo_visualsavailable(includeids=0)</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_visualsavailable-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_visualsavailable method.</p>
+                                            <dl>
+                                                <dt><i>includeids</i></dt>
+                                                <dd>
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_vrootheight-method"
+                                                name="Tkinter.Widget.winfo_vrootheight-method"><b>winfo_vrootheight()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_vrootheight-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_vrootheight method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_vrootwidth-method"
+                                                name="Tkinter.Widget.winfo_vrootwidth-method"><b>winfo_vrootwidth()</b></a>
+                                            [<a href="#Tkinter.Widget.winfo_vrootwidth-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_vrootwidth method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_vrootx-method"
+                                                name="Tkinter.Widget.winfo_vrootx-method"><b>winfo_vrootx()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_vrootx-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_vrootx method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_vrooty-method"
+                                                name="Tkinter.Widget.winfo_vrooty-method"><b>winfo_vrooty()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_vrooty-method">#</a>]</dt>
+                                        <dd>
+                                            <p>The winfo_vrooty method.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_width-method"
+                                                name="Tkinter.Widget.winfo_width-method"><b>winfo_width()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_width-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Get the width of this widget, in pixels. Note that if the
+                                                window isn&#8217;t managed by a geometry manager, this method returns
+                                                1. To you get the real value, you may have to call <a class="link"
+                                                    href="#widget.Widget.update_idletasks-method"><b>update_idletasks</b></a>
+                                                first. You can also use <a class="link"
+                                                    href="#widget.Widget.winfo_reqwidth-method"><b>winfo_reqwidth</b></a>
+                                                to get the widget&#8217;s requested width (that
+                                                is, the &#8220;natural&#8221; size as defined by the widget itself based
+                                                on
+                                                it&#8217;s contents).
+
+                                            </p>
+                                            <dl>
+                                                <dt>Returns:</dt>
+                                                <dd>
+                                                    The widget&#8217;s current width, in pixels.</dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_x-method"
+                                                name="Tkinter.Widget.winfo_x-method"><b>winfo_x()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_x-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the pixel coordinates for the widgets&#8217;s left corner,
+                                                relative to its parent&#8217;s left corner.</p>
+                                        </dd>
+                                        <dt><a id="Tkinter.Widget.winfo_y-method"
+                                                name="Tkinter.Widget.winfo_y-method"><b>winfo_y()</b></a> [<a
+                                                href="#Tkinter.Widget.winfo_y-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Returns the pixel coordinates for the widgets&#8217;s upper corner,
+                                                relative to its parent&#8217;s upper corner.</p>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="toplevel.htm">back</a>&#160;<a href="wm.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+    <link rel="media/img/effbot.ico">
+    <link rel="stylesheet" href="media/css/effbot-min.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="media/css/effbotprint-min.css" type="text/css" media="print">
+    <title>The Tkinter Toplevel&nbsp;Widget</title>
+</head>
+
+<body data-page-id="1975">
+    <div id="doc2" class="yui-t2">
+        <div id="hd"></div>
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="content">
+                        <div class="yui-g">
+                            <p><a href="text.htm">back</a>&#160;<a href="widget.htm">next</a></p>
+                            <h1 class="maintitle">The Tkinter Toplevel&nbsp;Widget</h1>
+                        </div>
+                        <div class="yui-ge">
+                            <div class="yui-u first">
+                                <p>The <b>Toplevel</b> widget work pretty much like <b>Frame</b>,
+                                    but it is displayed in a separate, top-level window. Such windows
+                                    usually have title bars, borders, and other &#8220;window
+                                    decorations&#8221;.</p>
+                                <h2>When to use the Toplevel Widget</h2>
+                                <p>The Toplevel widget is used to display extra application
+                                    windows, dialogs, and other &#8220;pop-up&#8221; windows.</p>
+                                <h2 id="patterns">Patterns&#160;<a class="nav" href="#patterns" title="bookmark!">#</a>
+                                </h2>
+                                <pre class="python">
+...
+
+top = Toplevel()
+top.title(<span class="pystring">"About this application..."</span>)
+
+msg = Message(top, text=about_message)
+msg.pack()
+
+button = Button(top, text=<span class="pystring">"Dismiss"</span>, command=top.destroy)
+button.pack()</pre>
+                                <pre>
+<img alt="" height="97" src="data:image/png;base64, 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 SUVORK5CYII= " width="112"/>
+</pre>
+                                <p class="fixme">FIXME: add more patterns</p>
+                                <h2 id="reference">Reference&#160;<a class="nav" href="#reference"
+                                        title="bookmark!">#</a></h2>
+                                <div class="zone:include">
+                                    <dl>
+                                        <dt><b>Toplevel(master=None, **options)</b> (class) [<a
+                                                href="#Tkinter.Toplevel-class">#</a>]</dt>
+                                        <dd>
+                                            <p>A widget container placed in a new top level window.</p>
+                                            <dl>
+                                                <dt><i>master</i></dt>
+                                                <dd>
+                                                    Parent widget.</dd>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options. See the description of
+                                                    the <a class="link"
+                                                        href="#toplevel.Toplevel.config-method"><b>config</b></a> method
+                                                    for a list of available
+                                                    options.
+                                                </dd>
+                                            </dl><br />
+                                        </dd>
+                                        <dt><a id="Tkinter.Toplevel.config-method"
+                                                name="Tkinter.Toplevel.config-method"><b>config(**options)</b></a> [<a
+                                                href="#Tkinter.Toplevel.config-method">#</a>]</dt>
+                                        <dd>
+                                            <p>Modifies one or more widget options. If no options are given,
+                                                the method returns a dictionary containing all current option
+                                                values.</p>
+                                            <dl>
+                                                <dt><i>**options</i></dt>
+                                                <dd>
+                                                    Widget options.</dd>
+                                                <dt><i>background=</i></dt>
+                                                <dd>
+                                                    The background color to use in this toplevel.
+                                                    This defaults to the application background color. To prevent
+                                                    updates, set the color to an empty string.
+                                                    (the option database name is background, the class is Background)
+                                                </dd>
+                                                <dt><i>bg=</i></dt>
+                                                <dd>
+                                                    Same as <b>background</b>.
+                                                </dd>
+                                                <dt><i>borderwidth=</i></dt>
+                                                <dd>
+                                                    Width of the 3D border. Defaults to 0
+                                                    (no border).
+                                                    (borderWidth/BorderWidth)</dd>
+                                                <dt><i>bd=</i></dt>
+                                                <dd>
+                                                    Same as <b>borderwidth</b>.
+                                                </dd>
+                                                <dt><i>class=</i></dt>
+                                                <dd>
+                                                    Default value is Toplevel.
+                                                    (class/Class)</dd>
+                                                <dt><i>colormap=</i></dt>
+                                                <dd>
+                                                    Some displays support only 256 colors
+                                                    (some use even less). Such displays usually provide a
+                                                    color map to specify which 256 colors to use. This
+                                                    option allows you to specify which color map to use
+                                                    for this toplevel window, and its child widgets.
+                                                    <br />
+                                                    By default, a new toplevel window uses the same color
+                                                    map as the root window. Using this option, you can
+                                                    reuse the color map of another window instead (this
+                                                    window must be on the same screen and have the same
+                                                    visual characteristics). You can also use the value
+                                                    &#8220;new&#8221; to allocate a new color map for this window.
+                                                    <br />
+                                                    You cannot change this option once you&#8217;ve created the
+                                                    window.
+                                                    (colormap/Colormap)
+                                                </dd>
+                                                <dt><i>container=</i></dt>
+                                                <dd>
+                                                    Default value is 0.
+                                                    (container/Container)</dd>
+                                                <dt><i>cursor=</i></dt>
+                                                <dd>
+                                                    The cursor to show when the mouse pointer
+                                                    is located over the toplevel widget. Default is a system
+                                                    specific arrow cursor.
+                                                    (cursor/Cursor)</dd>
+                                                <dt><i>height=</i></dt>
+                                                <dd>
+                                                    Window height, in pixels. If omitted, the
+                                                    widget is made large enough to hold its contents.
+                                                    (height/Height)</dd>
+                                                <dt><i>highlightbackground=</i></dt>
+                                                <dd>
+                                                    The color to use for the highlight
+                                                    region when the widget doesn&#8217;t have focus. The default is
+                                                    system specific.
+                                                    (highlightBackground/HighlightBackground)</dd>
+                                                <dt><i>highlightcolor=</i></dt>
+                                                <dd>
+                                                    The color to use for the highlight
+                                                    region when the widget has focus. The default is system
+                                                    specific.
+                                                    (highlightColor/HighlightColor)</dd>
+                                                <dt><i>highlightthickness=</i></dt>
+                                                <dd>
+                                                    The width of the highlight region.
+                                                    Default is 0 (no region).
+                                                    (highlightThickness/HighlightThickness)</dd>
+                                                <dt><i>menu=</i></dt>
+                                                <dd>
+                                                    A menu to associate with this toplevel window.
+                                                    On Unix and Windows, the menu is placed at the top of the
+                                                    toplevel window itself. On Macs, the menu is displayed at
+                                                    the top of the screen when the toplevel window is selected.
+                                                    (menu/Menu)</dd>
+                                                <dt><i>padx=</i></dt>
+                                                <dd>
+                                                    Horizontal padding. Default is 0. (padX/Pad)</dd>
+                                                <dt><i>pady=</i></dt>
+                                                <dd>
+                                                    Vertical padding. Default is 0. (padY/Pad)</dd>
+                                                <dt><i>relief=</i></dt>
+                                                <dd>
+                                                    Border decoration: either <b>FLAT</b>,
+                                                    <b>SUNKEN</b>, <b>RAISED</b>, <b>GROOVE</b>, or <b>RIDGE</b>.
+                                                    The default is <b>FLAT</b>.
+                                                    (relief/Relief)
+                                                </dd>
+                                                <dt><i>screen=</i></dt>
+                                                <dd>
+                                                    No default value.
+                                                    (screen/Screen)</dd>
+                                                <dt><i>takefocus=</i></dt>
+                                                <dd>
+                                                    Indicates that the user can use the
+                                                    <b>Tab</b> key to move to this widget. Default is false.
+                                                    (takeFocus/TakeFocus)
+                                                </dd>
+                                                <dt><i>use=</i></dt>
+                                                <dd>
+                                                    No default value.
+                                                    (use/Use)</dd>
+                                                <dt><i>visual=</i></dt>
+                                                <dd>
+                                                    Controls the &#8220;visual&#8221; type to use for this
+                                                    window. This option should usually be omitted. In that
+                                                    case, the visual type is inherited from the root window.
+                                                    <br />
+                                                    Some more advanced displays support &#8220;mixed visuals&#8221;.
+                                                    This typically means that the root window is a 256-color
+                                                    display (the &#8220;pseudocolor&#8221; visual type), but that
+                                                    individual windows can be displayed as true 24-bit color
+                                                    (the &#8220;truecolor&#8221; visual type). On such displays, you may
+                                                    wish to explicitly set the visual option to &#8220;truecolor&#8221;
+                                                    for any windows used to display full-color images.
+                                                    <br />
+                                                    Other possible values include &#8220;directcolor&#8221;,
+                                                    &#8220;staticcolor&#8221;,
+                                                    &#8220;grayscale&#8221;, or &#8220;staticgray&#8221;. See your X
+                                                    window documentation
+                                                    for details.
+                                                    <br />
+                                                    You cannot change this option once you&#8217;ve created the
+                                                    window.
+                                                    (visual/Visual)
+                                                </dd>
+                                                <dt><i>width=</i></dt>
+                                                <dd>
+                                                    Window width, in pixels. If omitted, the
+                                                    widget is made large enough to hold its contents.</dd>
+                                            </dl><br />
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <div class="yui-u">&#160;</div>
+                        </div>
+                        <div class="yui-g">
+                            <p><a href="text.htm">back</a>&#160;<a href="widget.htm">next</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yui-b">
+                <div id="menu">
+                    <ul>
+                        <li><b><a href="https://effbot.org" title="Go to effbot.org.">::: effbot.org</a></b></li>
+                        <li><b><a href="index.html" title="Go to tkinterbook index page.">::: tkinterbook :::</a></b>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li><b>::: contents</b></li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <ul>
+                                <li><a href="#patterns">Patterns</a></li>
+                                <li><a href="#reference">Reference</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="ft">
+            <p><a href="https://www.djangoproject.com/"><img
+                        src="media/img/djangosite80x15.gif" border="0" alt="A Django site." title="A Django site."
+                        style="vertical-align: bottom;" width="80" height="15"></a>
+                rendered by a <a
+                    href="https://www.djangoproject.com/">django</a>
+                application. hosted by <a
+                    href="https://www.webfaction.com/shared_hosting?affiliate=slab">webfaction</a>.
+            </p>
+        </div>
+    </div>
+    <script src="media/js/effbot-min.js" type="text/javascript"></script>
+</body>
+
+</html>
