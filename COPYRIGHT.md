@@ -6,7 +6,7 @@ Unless otherwise noted, source code can be be used freely. Examples, test script
 
 For downloads without a specific license, and for other larger scripts and modules on this site, the following Python-style license apply:
 
-> Copyright © 1995-2014 by Fredrik Lundh
+> **Copyright © 1995-2014 by Fredrik Lundh**
 >
 > By obtaining, using, and/or copying this software and/or its associated documentation, you agree that you have read, understood, and will comply with the following terms and conditions:
 >
